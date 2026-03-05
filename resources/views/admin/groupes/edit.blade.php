@@ -30,8 +30,8 @@
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="yearLabel">Année</label>
                             <select name="annee" class="w-full border-gray-300 rounded-md">
-                                <option value="1" {{ $groupe->annee == 1 ? 'selected' : '' }} data-i18n-app="firstYearLabel">1ère Année</option>
-                                <option value="2" {{ $groupe->annee == 2 ? 'selected' : '' }} data-i18n-app="secondYearLabel">2ème Année</option>
+                                <option value="1ère" {{ in_array((string) old('annee', $groupe->annee), ['1', '1ère'], true) ? 'selected' : '' }} data-i18n-app="firstYearLabel">1ère Année</option>
+                                <option value="2ème" {{ in_array((string) old('annee', $groupe->annee), ['2', '2ème'], true) ? 'selected' : '' }} data-i18n-app="secondYearLabel">2ème Année</option>
                             </select>
                         </div>
 

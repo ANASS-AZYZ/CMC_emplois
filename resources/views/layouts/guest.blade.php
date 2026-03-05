@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Emploi du Temps - CMC</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('favicon-cmcm.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-100 font-sans antialiased">

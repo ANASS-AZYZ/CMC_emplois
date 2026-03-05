@@ -10,6 +10,7 @@ use App\Models\Salle;
 use App\Models\Formateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class SeanceController extends Controller
 {
@@ -38,23 +39,34 @@ class SeanceController extends Controller
         $validated = $request->validate([
             'groupe_id' => 'required|exists:groupes,id',
             'formateur_id' => 'required|exists:formateurs,id',
-            'salle_id' => 'required|exists:salles,id',
+            'salle_id' => ['nullable', Rule::requiredIf(fn() => $request->input('mode') === 'presentiel'), 'exists:salles,id'],
             'jour' => 'required|string',
             'creneau' => 'required|string',
+            'mode' => 'required|in:presentiel,distance',
         ]);
 
-        $conflit = Seance::where('jour', $request->jour)
-            ->where('creneau', $request->creneau)
-            ->where(function ($q) use ($request) {
-                $q->where('groupe_id', $request->groupe_id)
-                    ->orWhere('formateur_id', $request->formateur_id)
-                    ->orWhere('salle_id', $request->salle_id);
-            })
-            ->exists();
+        if ($validated['mode'] === 'distance') {
+            $validated['salle_id'] = null;
+        }
 
-        if ($conflit) {
+        $baseQuery = Seance::where('jour', $request->jour)
+            ->where('creneau', $request->creneau);
+
+        $issues = [];
+        if ((clone $baseQuery)->where('groupe_id', $request->groupe_id)->exists()) {
+            $issues[] = 'Le groupe est deja occupe sur ce jour/creneau.';
+        }
+        if ((clone $baseQuery)->where('formateur_id', $request->formateur_id)->exists()) {
+            $issues[] = 'Le formateur est deja affecte sur ce jour/creneau.';
+        }
+        if (($validated['mode'] ?? null) === 'presentiel' && !empty($validated['salle_id'])
+            && (clone $baseQuery)->where('salle_id', $validated['salle_id'])->exists()) {
+            $issues[] = 'La salle est deja reservee sur ce jour/creneau.';
+        }
+
+        if (!empty($issues)) {
             return back()->withErrors([
-                'conflit' => 'Conflit detecte ! Impossible de planifier le meme formateur ou la meme salle au meme jour et creneau.',
+                'conflit' => 'Conflit detecte: ' . implode(' ', $issues),
             ])->withInput();
         }
 
@@ -80,24 +92,35 @@ class SeanceController extends Controller
         $validated = $request->validate([
             'groupe_id' => 'required|exists:groupes,id',
             'formateur_id' => 'required|exists:formateurs,id',
-            'salle_id' => 'required|exists:salles,id',
+            'salle_id' => ['nullable', Rule::requiredIf(fn() => $request->input('mode') === 'presentiel'), 'exists:salles,id'],
             'jour' => 'required|string',
             'creneau' => 'required|string',
+            'mode' => 'required|in:presentiel,distance',
         ]);
 
-        $conflit = Seance::where('jour', $request->jour)
-            ->where('creneau', $request->creneau)
-            ->where('id', '!=', $seance->id)
-            ->where(function ($q) use ($request) {
-                $q->where('groupe_id', $request->groupe_id)
-                    ->orWhere('formateur_id', $request->formateur_id)
-                    ->orWhere('salle_id', $request->salle_id);
-            })
-            ->exists();
+        if ($validated['mode'] === 'distance') {
+            $validated['salle_id'] = null;
+        }
 
-        if ($conflit) {
+        $baseQuery = Seance::where('jour', $request->jour)
+            ->where('creneau', $request->creneau)
+            ->where('id', '!=', $seance->id);
+
+        $issues = [];
+        if ((clone $baseQuery)->where('groupe_id', $request->groupe_id)->exists()) {
+            $issues[] = 'Le groupe est deja occupe sur ce jour/creneau.';
+        }
+        if ((clone $baseQuery)->where('formateur_id', $request->formateur_id)->exists()) {
+            $issues[] = 'Le formateur est deja affecte sur ce jour/creneau.';
+        }
+        if (($validated['mode'] ?? null) === 'presentiel' && !empty($validated['salle_id'])
+            && (clone $baseQuery)->where('salle_id', $validated['salle_id'])->exists()) {
+            $issues[] = 'La salle est deja reservee sur ce jour/creneau.';
+        }
+
+        if (!empty($issues)) {
             return back()->withErrors([
-                'conflit' => 'Conflit detecte ! Impossible de planifier le meme formateur ou la meme salle au meme jour et creneau.',
+                'conflit' => 'Conflit detecte: ' . implode(' ', $issues),
             ])->withInput();
         }
 
@@ -110,6 +133,19 @@ class SeanceController extends Controller
     {
         $seance->delete();
         return redirect()->route('seances.index')->with('success', 'Séance annulée !');
+    }
+
+    public function toggleAbsence(Seance $seance)
+    {
+        $seance->update([
+            'formateur_present' => ! (bool) $seance->formateur_present,
+        ]);
+
+        $message = $seance->formateur_present
+            ? 'Formateur marque present pour cette seance.'
+            : 'Formateur marque absent pour cette seance.';
+
+        return redirect()->route('seances.index')->with('success', $message);
     }
 
     
@@ -130,10 +166,19 @@ class SeanceController extends Controller
         $selectedFormateur = $request->input('formateur_id');
         $selectedSalle = $request->input('salle_id');
         $selectedType = $request->input('type', 'groupe');
+        $selectedModeFilter = $request->input('mode_filter');
 
         $groupesQuery = Groupe::query()->orderBy('code');
         if ($selectedFiliere) {
-            $groupesQuery->where('filiere_id', $selectedFiliere);
+            $selectedFiliereModel = Filiere::find($selectedFiliere);
+            if ($selectedFiliereModel) {
+                $nom = trim($selectedFiliereModel->nom);
+                $niveau = trim($selectedFiliereModel->niveau);
+                $groupesQuery->whereHas('filiere', function ($q) use ($nom, $niveau) {
+                    $q->whereRaw('TRIM(nom) = ?', [$nom])
+                      ->whereRaw('TRIM(niveau) = ?', [$niveau]);
+                });
+            }
         }
         $groupes = $groupesQuery->get();
 
@@ -150,6 +195,9 @@ class SeanceController extends Controller
         }
         if ($selectedType === 'salle' && $selectedSalle) {
             $query->where('salle_id', $selectedSalle);
+        }
+        if (Auth::check() && in_array($selectedModeFilter, ['presentiel', 'distance'], true)) {
+            $query->where('mode', $selectedModeFilter);
         }
 
         $seances = $query->get();
@@ -168,6 +216,9 @@ class SeanceController extends Controller
                 if ($formateur) {
                     $seancesPerso = Seance::with(['groupe', 'salle'])
                         ->where('formateur_id', $formateur->id)
+                        ->when(Auth::check() && in_array($selectedModeFilter, ['presentiel', 'distance'], true), function ($q) use ($selectedModeFilter) {
+                            $q->where('mode', $selectedModeFilter);
+                        })
                         ->get();
                     foreach ($seancesPerso as $s) {
                         $emploi[$s->jour][$s->creneau] = $s;
@@ -185,6 +236,7 @@ class SeanceController extends Controller
                 'selectedGroupe',
                 'selectedFormateur',
                 'selectedSalle',
+                'selectedModeFilter',
                 'jours',
                 'creneaux',
                 'emploi'
@@ -196,6 +248,7 @@ class SeanceController extends Controller
             'groupes',
             'selectedFiliere',
             'selectedGroupe',
+            'selectedModeFilter',
             'jours',
             'creneaux',
             'emploi'
@@ -204,8 +257,18 @@ class SeanceController extends Controller
 
     public function groupesByFiliere(Filiere $filiere)
     {
-        return response()->json(
-            $filiere->groupes()->select('id', 'code')->orderBy('code')->get()
-        );
+        $nom = trim($filiere->nom);
+        $niveau = trim($filiere->niveau);
+
+        $groupes = Groupe::query()
+            ->select('groupes.id', 'groupes.code')
+            ->join('filieres', 'filieres.id', '=', 'groupes.filiere_id')
+            ->whereRaw('TRIM(filieres.nom) = ?', [$nom])
+            ->whereRaw('TRIM(filieres.niveau) = ?', [$niveau])
+            ->orderBy('groupes.code')
+            ->distinct()
+            ->get();
+
+        return response()->json($groupes);
     }
 }

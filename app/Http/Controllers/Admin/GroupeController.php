@@ -29,8 +29,10 @@ class GroupeController extends Controller
         $validated = $request->validate([
             'code'       => 'required|unique:groupes,code|max:50', // Code unique ex: DEVOWFS201 [cite: 55]
             'filiere_id' => 'required|exists:filieres,id',        // Doit appartenir à une filière 
-            'annee'      => 'required|in:1,2'                     // 1ère ou 2ème année 
+            'annee'      => 'required|in:1,2,1ère,2ème'           // 1ère ou 2ème année 
         ]);
+
+        $validated['annee'] = in_array((string) $validated['annee'], ['1', '1ère'], true) ? '1ère' : '2ème';
 
         Groupe::create($validated);
 
@@ -50,8 +52,10 @@ class GroupeController extends Controller
         $validated = $request->validate([
             'code'       => 'required|max:50|unique:groupes,code,' . $groupe->id,
             'filiere_id' => 'required|exists:filieres,id',
-            'annee'      => 'required|in:1,2'
+            'annee'      => 'required|in:1,2,1ère,2ème'
         ]);
+
+        $validated['annee'] = in_array((string) $validated['annee'], ['1', '1ère'], true) ? '1ère' : '2ème';
 
         $groupe->update($validated);
 

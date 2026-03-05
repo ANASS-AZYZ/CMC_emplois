@@ -63,6 +63,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
         Route::resource('salles', SalleController::class);
         Route::resource('formateurs', FormateurController::class);
         Route::resource('seances', SeanceController::class);
+        Route::patch('seances/{seance}/toggle-absence', [SeanceController::class, 'toggleAbsence'])->name('seances.toggle-absence');
 
         Route::get('messages', [MessageController::class, 'index'])->name('admin.messages.index');
         Route::patch('messages/{message}/read', [MessageController::class, 'markAsRead'])->name('admin.messages.read');

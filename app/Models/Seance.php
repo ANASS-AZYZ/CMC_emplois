@@ -13,9 +13,11 @@ class Seance extends Model
         'salle_id',
         'jour',
         'creneau',
+        'mode',
+        'formateur_present',
     ];
 
     public function groupe(): BelongsTo { return $this->belongsTo(Groupe::class); }
     public function formateur(): BelongsTo { return $this->belongsTo(Formateur::class); }
-    public function salle(): BelongsTo { return $this->belongsTo(Salle::class); }
+    public function salle(): BelongsTo { return $this->belongsTo(Salle::class)->withDefault(['code' => 'N/A']); }
 }

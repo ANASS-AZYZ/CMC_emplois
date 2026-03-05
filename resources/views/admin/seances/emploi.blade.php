@@ -64,15 +64,22 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 14px;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 12px;
             font-weight: 600;
+            color: #8a94a0;
+            background: #eef1f4;
+            border: 1px solid #d4dbe3;
             margin: 4px 0 8px;
-            padding: 0 6px;
+            padding: 6px 10px;
         }
 
         .doc-meta b {
-            font-size: 16px;
+            font-size: 15px;
             margin-left: 6px;
+            color: #355f88;
+            font-weight: 800;
         }
 
         .group-table {
@@ -109,6 +116,7 @@
 
         .day-cell {
             background-color: #d7e2e9 !important;
+            color: #334155;
             font-weight: 700;
             width: 110px;
             font-size: 13px;
@@ -155,18 +163,18 @@
         }
 
         body.theme-dark .emploi-shell label {
-            color: #dbe7ff !important;
+            color: #f8fafc !important;
         }
 
         body.theme-dark .emploi-shell select {
-            background: #0f1a2e !important;
-            border-color: #334155 !important;
-            color: #e5edff !important;
+            background: #ffffff !important;
+            border-color: #64748b !important;
+            color: #0f172a !important;
         }
 
         body.theme-dark .emploi-shell select option {
-            background: #0f1a2e;
-            color: #e5edff;
+            background: #ffffff;
+            color: #0f172a;
         }
 
         body.theme-dark .emploi-shell button[type="submit"] {
@@ -311,10 +319,20 @@
                                         @foreach($creneaux as $creneau)
                                             <td>
                                                 @if(isset($emploi[$jour][$creneau]))
-                                                    <div class="slot-card">
-                                                        <div class="slot-title">{{ $emploi[$jour][$creneau]->groupe->code }}</div>
-                                                        <div><span data-i18n-app="formateurLabel">FORMATEUR</span> : {{ $emploi[$jour][$creneau]->formateur->nom }} {{ $emploi[$jour][$creneau]->formateur->prenom }}</div>
-                                                        <div><span data-i18n-app="salleLabel">SALLE</span> : {{ $emploi[$jour][$creneau]->salle->code }}</div>
+                                                    @php
+                                                        $isAbsent = !($emploi[$jour][$creneau]->formateur_present ?? true);
+                                                        $isDistance = (($emploi[$jour][$creneau]->mode ?? 'presentiel') === 'distance');
+                                                        $formateurName = trim(($emploi[$jour][$creneau]->formateur->nom ?? '') . ' ' . ($emploi[$jour][$creneau]->formateur->prenom ?? ''));
+                                                    @endphp
+                                                    <div class="slot-card" style="@if($isAbsent) background:#facc15 !important; color:#1f2937 !important; @elseif($isDistance) background:#1f3648 !important; color:#ffffff !important; @else background:#4d8cc3 !important; color:#ffffff !important; @endif">
+                                                        <div style="font-weight:700;">{{ $formateurName }}</div>
+                                                        @if($isAbsent)
+                                                            <div style="font-weight:800; color:#7c2d12;">ABSENT</div>
+                                                        @elseif($isDistance)
+                                                            <div style="font-weight:700;">A distance</div>
+                                                        @else
+                                                            <div style="font-weight:700;">{{ $emploi[$jour][$creneau]->salle->code ?? '' }}</div>
+                                                        @endif
                                                     </div>
                                                 @else
                                                     -
@@ -344,10 +362,21 @@
 
             async function loadGroupesByFiliere() {
                 if (!filiereEl || !groupeEl || !filiereEl.value) {
+                    const promptText = document.documentElement.lang === 'ar'
+                        ? '-- اختر --'
+                        : (document.documentElement.lang === 'en' ? '-- Select --' : '-- Selectionner --');
+                    if (groupeEl) {
+                        groupeEl.innerHTML = '<option value="">' + promptText + '</option>';
+                    }
                     return;
                 }
 
-                const response = await fetch('/filieres/' + filiereEl.value + '/groupes');
+                let response;
+                try {
+                    response = await fetch('/filieres/' + filiereEl.value + '/groupes');
+                } catch (e) {
+                    return;
+                }
                 if (!response.ok) {
                     return;
                 }
@@ -376,7 +405,12 @@
                     if (!filiereEl.value) {
                         return;
                     }
-                    const response = await fetch('/filieres/' + filiereEl.value + '/groupes');
+                    let response;
+                    try {
+                        response = await fetch('/filieres/' + filiereEl.value + '/groupes');
+                    } catch (e) {
+                        return;
+                    }
                     if (!response.ok) {
                         return;
                     }

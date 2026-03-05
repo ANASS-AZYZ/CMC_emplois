@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CMC Planning</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('favicon-cmcm.png') }}">
     <script>
         (function () {
             try {
@@ -120,7 +121,8 @@
         }
 
         .sidebar-link:hover {
-            background: var(--sidebar-hover);
+            background: transparent !important;
+            color: inherit !important;
         }
 
         .sidebar-link-active {
@@ -177,7 +179,10 @@
             color: #0f172a;
         }
 
-        .ui-lang-item:hover { background: #f1f5f9; }
+        .ui-lang-item:hover {
+            background: transparent !important;
+            color: inherit !important;
+        }
         .ui-lang-item.active { background: #dbeafe; color: #1e3a8a; }
 
         body.theme-dark .ui-lang-menu {
@@ -210,6 +215,11 @@
             box-shadow: inherit !important;
         }
 
+        a,
+        button {
+            transition: none !important;
+        }
+
         [class*="hover\\:bg-"]:hover,
         [class*="hover\\:text-"]:hover,
         [class*="hover\\:border-"]:hover,
@@ -232,6 +242,20 @@
             color: currentColor !important;
             border-color: currentColor !important;
             box-shadow: none !important;
+        }
+
+        /* Keep form dropdown text readable in dark theme. */
+        body.theme-dark select,
+        body.theme-dark input,
+        body.theme-dark textarea {
+            background: #ffffff !important;
+            color: #0f172a !important;
+            border-color: #94a3b8 !important;
+        }
+
+        body.theme-dark select option {
+            background: #ffffff;
+            color: #0f172a;
         }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -644,6 +668,10 @@
             function applyTheme(theme) {
                 var dark = theme === 'dark';
                 document.body.classList.toggle('theme-dark', dark);
+                document.documentElement.classList.toggle('theme-dark-preload', dark);
+                if (!dark) {
+                    document.documentElement.classList.remove('theme-dark-preload');
+                }
                 localStorage.setItem('cmc_theme', dark ? 'dark' : 'light');
                 if (themeToggle) {
                     themeToggle.textContent = dark ? '☀️' : '🌙';

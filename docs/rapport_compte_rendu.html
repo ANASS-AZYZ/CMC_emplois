@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rapport Emploi du Temps</title>
+  <style>
+    @page { size: A4; margin: 16mm; }
+    body {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: #0f172a;
+      line-height: 1.5;
+      font-size: 12px;
+      margin: 0;
+      background: #ffffff;
+    }
+    .cover {
+      border: 1px solid #cbd5e1;
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+    h1, h2, h3 { margin: 0 0 8px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 16px; margin-top: 20px; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; }
+    h3 { font-size: 13px; margin-top: 12px; }
+    p { margin: 0 0 8px; }
+    ul { margin: 6px 0 10px 20px; }
+    .meta p { margin: 2px 0; }
+    .badge {
+      display: inline-block;
+      background: #e2e8f0;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 2px 8px;
+      margin-right: 6px;
+      font-size: 11px;
+    }
+    .section { margin-bottom: 12px; }
+    .uml-box {
+      border: 1px dashed #64748b;
+      padding: 10px;
+      background: #f8fafc;
+      white-space: pre-wrap;
+      font-family: Consolas, monospace;
+      font-size: 11px;
+    }
+    .footer-note {
+      margin-top: 20px;
+      font-size: 11px;
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <h1>Application de gestion des emplois du temps</h1>
+    <p><strong>CITE DES METIERS ET DES COMPETENCES RABAT - SALE - KENITRA</strong></p>
+    <div class="meta">
+      <p><strong>Filiere / Module :</strong> 2eme annee - Web Full Stack / M205 : Developper en Backend</p>
+      <p><strong>Annee de formation :</strong> 2025 / 2026</p>
+      <p><strong>Stagiaire :</strong> ANASS AZYZ</p>
+      <p><strong>Groupe :</strong> A renseigner</p>
+      <p><strong>Encadrant / Formateur :</strong> A renseigner</p>
+    </div>
+    <p style="margin-top:12px;"><span class="badge">Laravel</span><span class="badge">MySQL</span><span class="badge">Blade</span><span class="badge">Vite</span></p>
+  </div>
+
+  <h2>A. Presentation du projet</h2>
+  <div class="section">
+    <h3>Contexte</h3>
+    <p>Ce projet repond au besoin de digitaliser la planification hebdomadaire des seances au sein du CMC. Il permet de centraliser la creation des emplois, la consultation par role et la communication entre formateurs et administration.</p>
+    <h3>Objectifs</h3>
+    <ul>
+      <li>Faciliter la creation et la gestion des emplois du temps.</li>
+      <li>Eviter les conflits de planification (salle/formateur/groupe).</li>
+      <li>Permettre la consultation claire des emplois pour Admin et Formateur.</li>
+      <li>Offrir une interface moderne multilingue (FR/EN/AR) avec theme clair/sombre.</li>
+    </ul>
+  </div>
+
+  <h2>B. Perimetre fonctionnel</h2>
+  <div class="section">
+    <h3>Role Admin</h3>
+    <ul>
+      <li>Gestion des filieres, groupes, salles, formateurs.</li>
+      <li>Planification des seances avec controle des conflits.</li>
+      <li>Consultation, impression et export visuel des emplois.</li>
+      <li>Gestion des messages recus depuis les formateurs (Inbox / Archive).</li>
+    </ul>
+
+    <h3>Role Formateur</h3>
+    <ul>
+      <li>Consultation du propre emploi du temps.</li>
+      <li>Impression de l'emploi du temps.</li>
+      <li>Envoi de messages vers l'administration.</li>
+    </ul>
+
+    <h3>Mode consultation (Stagiaire/Invite)</h3>
+    <ul>
+      <li>Consultation des emplois selon les vues autorisees.</li>
+    </ul>
+  </div>
+
+  <h2>C. Diagramme de classes UML (resume)</h2>
+  <div class="section">
+    <p>Le diagramme de classes detaille doit etre joint dans la version finale du rapport. Resume textuel des entites principales :</p>
+    <div class="uml-box">User (id, name, email, password, role)
+  1..1 -> Formateur (user_id)
+
+Filiere (id, nom, niveau)
+  1..* -> Groupe (filiere_id)
+
+Groupe (id, code, annee, filiere_id)
+  1..* -> Seance (groupe_id)
+
+Salle (id, code, type, capacite)
+  1..* -> Seance (salle_id)
+
+Formateur (id, matricule, nom, prenom, email_professionnel, specialite, user_id)
+  1..* -> Seance (formateur_id)
+
+Seance (id, jour, creneau, groupe_id, salle_id, formateur_id)
+
+FormateurMessage (id, sender_id, email_professionnel, subject, message, read_at)
+  *..1 -> User (sender)</div>
+  </div>
+
+  <h2>D. Captures d'ecran commentees</h2>
+  <div class="section">
+    <p>Captures a integrer dans la version finale PDF :</p>
+    <ul>
+      <li>Ecran de connexion (choix Admin/Formateur, theme, langue).</li>
+      <li>Dashboard Admin (statistiques globales).</li>
+      <li>Gestion des ressources (Groupes, Salles, Formateurs).</li>
+      <li>Planning global (creation, modification, suppression, conflits).</li>
+      <li>Vue emploi formateur + impression.</li>
+      <li>Messagerie Admin (Inbox / Archive).</li>
+    </ul>
+  </div>
+
+  <h2>E. Conclusion</h2>
+  <div class="section">
+    <p>Le projet a permis de realiser une application complete de gestion des emplois du temps avec des regles metier claires, une interface moderne et des fonctionnalites de consultation/impression adaptees aux besoins du CMC.</p>
+    <h3>Difficultes rencontrees</h3>
+    <ul>
+      <li>Harmonisation UI (dark mode, lisibilite, responsive).</li>
+      <li>Couverture complete de la traduction (FR/EN/AR).</li>
+      <li>Gestion stricte des conflits de planification.</li>
+    </ul>
+    <h3>Ameliorations possibles</h3>
+    <ul>
+      <li>Notifications email et in-app en temps reel.</li>
+      <li>Export PDF automatique des emplois par role.</li>
+      <li>Tableau de bord analytique plus avance.</li>
+    </ul>
+  </div>
+
+  <div class="footer-note">
+    Document genere automatiquement pour livrable academique.
+  </div>
+</body>
+</html>

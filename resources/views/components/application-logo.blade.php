@@ -1,1 +1,1 @@
-<img src="{{ asset('images/logo-cmc.png') }}" alt="CMC" {{ $attributes }}>
+<img src="{{ asset('images/logo-ofppt-clean.png') }}" alt="CMCM" {{ $attributes }}>

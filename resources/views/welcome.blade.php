@@ -4,10 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Back - CMC Planning</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('favicon-cmcm.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
             transition: background-color 0.25s ease, color 0.25s ease;
+            font-family: "Poppins", "Segoe UI", Tahoma, Arial, sans-serif;
+        }
+
+        .portal-shell {
+            width: 100%;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            letter-spacing: -0.02em;
+            line-height: 1.02;
+        }
+
+        .page-subtitle {
+            max-width: 560px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .login-card {
+            border-radius: 2rem;
+            border: 1px solid #334a68;
+            box-shadow: 0 20px 40px rgba(8, 15, 30, 0.25);
+        }
+
+        .switch-wrap {
+            border-radius: 0.9rem;
+        }
+
+        .role-tab {
+            border-radius: 0.75rem;
         }
 
         body.theme-dark {
@@ -29,12 +62,12 @@
         }
 
         body.theme-dark .login-card {
-            background: #111827;
-            border-color: #334155;
+            background: #101b31;
+            border-color: #334a68;
         }
 
         body.theme-dark .switch-wrap {
-            background: #1e293b;
+            background: #22314b;
         }
 
         body.theme-dark .role-tab {
@@ -51,20 +84,20 @@
         }
 
         body.theme-dark .login-input {
-            background: #1e293b;
-            color: #e2e8f0;
+            background: #dbe4ef;
+            color: #0f172a;
         }
 
         body.theme-dark .login-input::placeholder {
-            color: #94a3b8;
-        }
-
-        body.theme-dark .suffix {
             color: #64748b;
         }
 
-        body.theme-dark .remember-text {
+        body.theme-dark .suffix {
             color: #94a3b8;
+        }
+
+        body.theme-dark .remember-text {
+            color: #c1d0e5;
         }
 
         body.theme-dark .portal-text {
@@ -119,10 +152,6 @@
             color: #0f172a;
         }
 
-        .lang-item:hover {
-            background: #f1f5f9;
-        }
-
         .lang-item.active {
             background: #dbeafe;
             color: #1e3a8a;
@@ -148,10 +177,6 @@
             color: #e2e8f0;
         }
 
-        body.theme-dark .lang-item:hover {
-            background: #334155;
-        }
-
         body.theme-dark .lang-item.active {
             background: #1d4ed8;
             color: #ffffff;
@@ -160,8 +185,8 @@
 </head>
 <body class="bg-slate-100 antialiased font-sans text-slate-900">
     <div class="min-h-screen flex items-center justify-center px-4 py-10">
-        <div class="w-full max-w-5xl">
-            <div class="mx-auto w-full max-w-xl flex justify-end gap-2 sm:gap-3 mb-4">
+        <div class="portal-shell">
+            <div class="mx-auto w-full max-w-xl flex justify-end gap-2 sm:gap-3 mb-5">
                 <button id="theme-toggle" type="button" class="theme-control icon-control" title="Dark mode">
                     🌙
                 </button>
@@ -177,27 +202,27 @@
                 </div>
             </div>
 
-            <div class="mx-auto w-full max-w-xl text-center mb-8">
-                <div class="logo-chip inline-flex items-center gap-3 sm:gap-5 rounded-2xl bg-white/80 border border-slate-200 px-4 sm:px-6 py-3 shadow-sm">
-                    <img src="{{ asset('images/logo-cmc.png') }}" alt="CMC" class="h-9 sm:h-10 w-auto object-contain">
+            <div class="mx-auto w-full max-w-xl text-center mb-7">
+                <div class="logo-chip inline-flex items-center gap-3 sm:gap-4 rounded-2xl bg-white/80 border border-slate-200 px-4 sm:px-5 py-2.5 shadow-sm">
+                    <img src="{{ asset('images/logo-cmc.png') }}" alt="CMC" class="h-8 sm:h-9 w-auto object-contain">
                     <div class="h-8 sm:h-9 w-px bg-slate-200"></div>
-                    <img src="{{ asset('images/logo-ofppt.png') }}" alt="OFPPT" class="h-9 sm:h-10 w-auto object-contain max-w-[175px] sm:max-w-[220px]">
+                    <img src="{{ asset('images/logo-ofppt-clean.png') }}" alt="OFPPT" class="h-8 sm:h-9 w-auto object-contain max-w-[165px] sm:max-w-[205px]">
                 </div>
-                <h1 data-i18n="welcomeTitle" class="page-title mt-7 text-5xl sm:text-6xl font-black tracking-tight text-slate-950">CMC Academic Portal</h1>
-                <p data-i18n="subtitle" class="page-subtitle mt-3 text-slate-600 font-medium text-base sm:text-lg">Secure access to scheduling and planning services</p>
+                <h1 data-i18n="welcomeTitle" class="page-title mt-6 text-[2.75rem] sm:text-[3.35rem] font-extrabold text-slate-950">CMC Academic Portal</h1>
+                <p data-i18n="subtitle" class="page-subtitle mt-3 text-slate-600 font-medium text-base sm:text-[1.08rem]">Secure access to scheduling and planning services</p>
             </div>
 
-            <div class="login-card mx-auto w-full max-w-xl rounded-[2rem] bg-white border border-slate-200 p-6 sm:p-8 shadow-lg">
-                <div class="switch-wrap flex p-1.5 bg-slate-100 rounded-2xl mb-7">
-                    <button type="button" data-role="formateur" data-i18n="formateurLogin" class="role-tab flex-1 py-2.5 text-base font-bold text-slate-900 bg-white rounded-xl shadow-sm transition">
+            <div class="login-card mx-auto w-full max-w-xl bg-white p-6 sm:p-8">
+                <div class="switch-wrap flex p-1.5 bg-slate-100 mb-7">
+                    <button type="button" data-role="formateur" data-i18n="formateurLogin" class="role-tab flex-1 py-2.5 text-base font-bold text-slate-900 bg-white shadow-sm transition">
                         Formateur Login
                     </button>
-                    <button type="button" data-role="admin" data-i18n="adminLogin" class="role-tab flex-1 py-2.5 text-base font-bold text-slate-500 rounded-xl transition">
+                    <button type="button" data-role="admin" data-i18n="adminLogin" class="role-tab flex-1 py-2.5 text-base font-bold text-slate-500 transition">
                         Admin Login
                     </button>
                 </div>
 
-                <form method="POST" action="{{ route('login') }}" class="space-y-6">
+                <form method="POST" action="{{ route('login') }}" class="space-y-5">
                     @csrf
                     <input type="hidden" name="login_as" id="login_as" value="{{ old('login_as', 'formateur') }}">
 
@@ -205,8 +230,8 @@
                         <label data-i18n="academicEmail" class="form-label block text-sm font-bold text-slate-800 mb-2">Academic Email</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">@</span>
-                            <input type="email" name="email" value="{{ old('email') }}" placeholder="admin@cmc.ma" required
-                                   class="login-input block w-full pl-10 pr-4 sm:pr-36 py-3.5 bg-slate-100 border border-transparent rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                            <input id="email_input" type="email" name="email" value="{{ old('email') }}" placeholder="formateur@cmc.ma" required
+                                class="login-input block w-full pl-10 pr-4 sm:pr-36 py-3.5 bg-slate-100 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                             <span class="suffix absolute inset-y-0 right-0 pr-3 hidden sm:flex items-center text-slate-300 text-sm font-semibold">
                                 @ofppt-edu.ma
                             </span>
@@ -226,7 +251,7 @@
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-xs">🔒</span>
                             <input type="password" name="password" placeholder="••••••••" required
-                                   class="login-input block w-full pl-10 py-3.5 bg-slate-100 border border-transparent rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                                class="login-input block w-full pl-10 py-3.5 bg-slate-100 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                         </div>
                         @error('password')
                             <p class="mt-2 text-sm font-semibold text-red-600">{{ $message }}</p>
@@ -238,7 +263,7 @@
                         <span data-i18n="remember">Keep me logged in on this device</span>
                     </label>
 
-                    <button type="submit" class="w-full py-3.5 bg-blue-300 text-blue-900 font-black rounded-xl hover:bg-blue-400 transition flex items-center justify-center gap-2 uppercase tracking-[0.2em] text-xl">
+                    <button type="submit" class="w-full py-3.5 bg-blue-300 text-blue-900 font-extrabold rounded-xl transition flex items-center justify-center gap-2 tracking-[0.08em] text-lg shadow-[0_10px_24px_rgba(125,190,255,0.24)]">
                         <span data-i18n="signIn">Sign In</span> <span>→</span>
                     </button>
                 </form>
@@ -260,6 +285,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var loginAsInput = document.getElementById('login_as');
+            var emailInput = document.getElementById('email_input');
             var tabs = document.querySelectorAll('.role-tab');
             var themeToggle = document.getElementById('theme-toggle');
             var langToggle = document.getElementById('lang-toggle');
@@ -317,6 +343,10 @@
 
             function setRole(role) {
                 loginAsInput.value = role;
+
+                if (emailInput) {
+                    emailInput.setAttribute('placeholder', role === 'admin' ? 'admin@cmc.ma' : 'formateur@cmc.ma');
+                }
 
                 tabs.forEach(function (tab) {
                     var active = tab.getAttribute('data-role') === role;

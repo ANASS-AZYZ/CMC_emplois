@@ -23,38 +23,38 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="matriculeLabel">Matricule</label>
-                            <input type="text" name="matricule" value="{{ old('matricule') }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="text" name="matricule" value="{{ old('matricule') }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: SC-01" required>
                         </div>
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="specialityLabel">Spécialité</label>
-                            <input type="text" name="specialite" value="{{ old('specialite') }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="text" name="specialite" value="{{ old('specialite') }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: Développement Web" required>
                         </div>
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="nomLabel">Nom</label>
-                            <input type="text" name="nom" value="{{ old('nom') }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="text" name="nom" value="{{ old('nom') }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: EL OMARI" required>
                         </div>
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="prenomLabel">Prénom</label>
-                            <input type="text" name="prenom" value="{{ old('prenom') }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="text" name="prenom" value="{{ old('prenom') }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: Salma" required>
                         </div>
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="proEmailLabel">Email Professionnel</label>
-                            <input type="email" name="email_professionnel" value="{{ old('email_professionnel') }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="email" name="email_professionnel" value="{{ old('email_professionnel') }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: formateur@cmc.ma" required>
                         </div>
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="phoneLabel">Téléphone</label>
-                            <input type="text" name="telephone" value="{{ old('telephone') }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="text" name="telephone" value="{{ old('telephone') }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: 0600000000" required>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                         <div>
                             <label class="block text-gray-700 font-bold mb-2" data-i18n-app="accountPasswordLabel">Mot de passe du compte :</label>
-                            <input type="password" name="password" class="w-full border-gray-300 rounded-md shadow-sm" placeholder="Definir un mot de passe" data-i18n-app-placeholder="passwordPlaceholder" required>
+                            <input type="password" name="password" class="w-full border-gray-300 rounded-md shadow-sm text-slate-900 placeholder-slate-500" placeholder="Definir un mot de passe" data-i18n-app-placeholder="passwordPlaceholder" required>
                         </div>
                         <div>
                             <label class="block text-gray-700 font-bold mb-2" data-i18n-app="passwordConfirmLabel">Confirmation mot de passe :</label>
-                            <input type="password" name="password_confirmation" class="w-full border-gray-300 rounded-md shadow-sm" placeholder="Confirmer le mot de passe" data-i18n-app-placeholder="passwordConfirmPlaceholder" required>
+                            <input type="password" name="password_confirmation" class="w-full border-gray-300 rounded-md shadow-sm text-slate-900 placeholder-slate-500" placeholder="Confirmer le mot de passe" data-i18n-app-placeholder="passwordConfirmPlaceholder" required>
                         </div>
                     </div>
 

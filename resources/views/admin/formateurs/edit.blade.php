@@ -26,37 +26,37 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="matriculeLabel">Matricule</label>
-                            <input type="text" name="matricule" value="{{ old('matricule', $formateur->matricule) }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="text" name="matricule" value="{{ old('matricule', $formateur->matricule) }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: SC-01" required>
                         </div>
 
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="proEmailLabel">Email Professionnel</label>
-                            <input type="email" name="email_professionnel" value="{{ old('email_professionnel', $formateur->email_professionnel) }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="email" name="email_professionnel" value="{{ old('email_professionnel', $formateur->email_professionnel) }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: formateur@cmc.ma" required>
                         </div>
 
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="nomLabel">Nom</label>
-                            <input type="text" name="nom" value="{{ old('nom', $formateur->nom) }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="text" name="nom" value="{{ old('nom', $formateur->nom) }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: EL OMARI" required>
                         </div>
 
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="prenomLabel">Prénom</label>
-                            <input type="text" name="prenom" value="{{ old('prenom', $formateur->prenom) }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="text" name="prenom" value="{{ old('prenom', $formateur->prenom) }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: Salma" required>
                         </div>
 
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="phoneLabel">Telephone</label>
-                            <input type="text" name="telephone" value="{{ old('telephone', $formateur->telephone) }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="text" name="telephone" value="{{ old('telephone', $formateur->telephone) }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: 0600000000" required>
                         </div>
 
                         <div>
                             <label class="block font-bold mb-2" data-i18n-app="specialityLabel">Spécialité</label>
-                            <input type="text" name="specialite" value="{{ old('specialite', $formateur->specialite) }}" class="w-full border-gray-300 rounded-md" required>
+                            <input type="text" name="specialite" value="{{ old('specialite', $formateur->specialite) }}" class="w-full border-gray-300 rounded-md text-slate-900 placeholder-slate-500" placeholder="Ex: Développement Web" required>
                         </div>
 
                         <div class="p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
                             <label class="block text-sm font-bold text-yellow-800 mb-2" data-i18n-app="changePasswordOptionalLabel">Changer le Mot de passe (Optionnel) :</label>
-                            <input type="password" name="password" class="w-full border-gray-300 rounded-md shadow-sm" placeholder="Laisser vide pour ne pas changer" data-i18n-app-placeholder="keepPasswordPlaceholder">
+                            <input type="password" name="password" class="w-full border-gray-300 rounded-md shadow-sm text-slate-900 placeholder-slate-500" placeholder="Laisser vide pour ne pas changer" data-i18n-app-placeholder="keepPasswordPlaceholder">
                         </div>
 
                     </div>

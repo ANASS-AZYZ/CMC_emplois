@@ -47,15 +47,22 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 14px;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 12px;
             font-weight: 600;
+            color: #8a94a0;
+            background: #eef1f4;
+            border: 1px solid #d4dbe3;
             margin: 4px 0 8px;
-            padding: 0 6px;
+            padding: 6px 10px;
         }
 
         .meta b {
-            font-size: 16px;
+            font-size: 15px;
             margin-left: 6px;
+            color: #355f88;
+            font-weight: 800;
         }
 
         .table {
@@ -219,9 +226,20 @@
                             @foreach($creneaux as $creneau)
                                 <td>
                                     @if(isset($emploi[$jour][$creneau]))
-                                        <div class="slot">
-                                            <div>FORMATEUR : {{ ($emploi[$jour][$creneau]->formateur->nom ?? '') }} {{ ($emploi[$jour][$creneau]->formateur->prenom ?? '') }}</div>
-                                            <div>SALLE : {{ $emploi[$jour][$creneau]->salle->code ?? 'N/A' }}</div>
+                                        @php
+                                            $isAbsent = !($emploi[$jour][$creneau]->formateur_present ?? true);
+                                            $isDistance = (($emploi[$jour][$creneau]->mode ?? 'presentiel') === 'distance');
+                                            $formateurName = trim((($emploi[$jour][$creneau]->formateur->nom ?? '')) . ' ' . (($emploi[$jour][$creneau]->formateur->prenom ?? '')));
+                                        @endphp
+                                        <div class="slot" style="background-color: {{ $isAbsent ? '#facc15' : ((($emploi[$jour][$creneau]->mode ?? 'presentiel') === 'distance') ? '#1f3648' : '#4d8cc3') }} !important; color: {{ $isAbsent ? '#1f2937' : '#ffffff' }} !important;">
+                                            <div style="font-weight:700;">{{ $formateurName }}</div>
+                                            @if($isAbsent)
+                                                <div style="color:#7c2d12; font-weight:800;">ABSENT</div>
+                                            @elseif($isDistance)
+                                                <div style="font-weight:700;">A distance</div>
+                                            @else
+                                                <div style="font-weight:700;">{{ $emploi[$jour][$creneau]->salle->code ?? '' }}</div>
+                                            @endif
                                         </div>
                                     @else
                                         -

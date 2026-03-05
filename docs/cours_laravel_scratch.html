@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cours Laravel De Scratch</title>
+  <style>
+    @page { size: A4; margin: 14mm; }
+    body {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: #0f172a;
+      line-height: 1.45;
+      font-size: 11.5px;
+      margin: 0;
+      background: #fff;
+    }
+    h1 { font-size: 24px; margin: 0 0 8px; }
+    h2 { font-size: 16px; margin: 18px 0 8px; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; }
+    h3 { font-size: 13px; margin: 12px 0 6px; }
+    p { margin: 0 0 8px; }
+    ul, ol { margin: 0 0 10px 18px; }
+    li { margin: 2px 0; }
+    .cover {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      background: #f8fafc;
+    }
+    .muted { color: #475569; }
+    .tag {
+      display: inline-block;
+      border: 1px solid #cbd5e1;
+      border-radius: 999px;
+      padding: 2px 8px;
+      margin-right: 4px;
+      margin-bottom: 4px;
+      font-size: 10px;
+      background: #fff;
+    }
+    .box {
+      border: 1px solid #dbeafe;
+      background: #f8fbff;
+      border-radius: 6px;
+      padding: 10px;
+      margin: 8px 0;
+    }
+    pre {
+      background: #0b1220;
+      color: #e2e8f0;
+      padding: 10px;
+      border-radius: 6px;
+      overflow: auto;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 10px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      margin: 8px 0;
+    }
+    code { font-family: Consolas, "Courier New", monospace; }
+    table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+    th, td { border: 1px solid #cbd5e1; padding: 6px; text-align: left; font-size: 10.5px; }
+    th { background: #eff6ff; }
+    .footer { margin-top: 20px; font-size: 10px; color: #64748b; }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <h1>Cours Laravel Complet - De Scratch a Projet Grand Niveau</h1>
+    <p><strong>Objectif:</strong> Te faire passer du niveau debutant a la capacite de construire un projet Laravel solide, maintenable et deployable.</p>
+    <p class="muted">Auteur: GitHub Copilot | Version: 2026-03-05</p>
+    <div style="margin-top:8px;">
+      <span class="tag">PHP</span>
+      <span class="tag">Laravel</span>
+      <span class="tag">MySQL</span>
+      <span class="tag">Blade</span>
+      <span class="tag">API</span>
+      <span class="tag">Auth</span>
+      <span class="tag">Testing</span>
+      <span class="tag">Deployment</span>
+    </div>
+  </div>
+
+  <h2>0. Comment utiliser ce cours</h2>
+  <ul>
+    <li>Lis chaque module dans l ordre, sans sauter les bases.</li>
+    <li>A la fin de chaque module: fais un mini challenge.</li>
+    <li>Pratique 2 a 3 heures par jour minimum.</li>
+    <li>A la fin, construit un projet complet avec ton propre cahier des charges.</li>
+  </ul>
+
+  <h2>1. Prerequis indispensables</h2>
+  <h3>1.1 Prerequis techniques</h3>
+  <ul>
+    <li>PHP 8.2+</li>
+    <li>Composer</li>
+    <li>MySQL ou MariaDB</li>
+    <li>Node.js + npm (pour Vite/front)</li>
+    <li>VS Code</li>
+  </ul>
+  <h3>1.2 Bases a connaitre</h3>
+  <ul>
+    <li>PHP orientee objet (classes, methodes, namespaces)</li>
+    <li>SQL de base (CREATE, SELECT, JOIN, UPDATE)</li>
+    <li>HTTP (GET, POST, PUT, DELETE)</li>
+    <li>Git (commit, push, branch)</li>
+  </ul>
+
+  <h2>2. Installation Laravel de zero</h2>
+  <pre>composer create-project laravel/laravel mon-projet
+cd mon-projet
+cp .env.example .env
+php artisan key:generate
+php artisan serve</pre>
+  <p>Configurer la DB dans <code>.env</code>:</p>
+  <pre>DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ma_db
+DB_USERNAME=root
+DB_PASSWORD=</pre>
+  <pre>php artisan migrate</pre>
+
+  <h2>3. Comprendre l architecture Laravel</h2>
+  <table>
+    <tr><th>Dossier</th><th>Role</th></tr>
+    <tr><td>app/Models</td><td>Entites metier (Eloquent)</td></tr>
+    <tr><td>app/Http/Controllers</td><td>Logique de traitement des requetes</td></tr>
+    <tr><td>resources/views</td><td>Templates Blade (UI)</td></tr>
+    <tr><td>routes/web.php</td><td>Routes web</td></tr>
+    <tr><td>database/migrations</td><td>Versioning schema DB</td></tr>
+    <tr><td>database/seeders</td><td>Donnees de test</td></tr>
+    <tr><td>config</td><td>Configuration application</td></tr>
+  </table>
+
+  <h2>4. Routing + Controllers</h2>
+  <pre>// routes/web.php
+Route::get('/products', [ProductController::class, 'index']);
+Route::post('/products', [ProductController::class, 'store']);</pre>
+  <pre>php artisan make:controller ProductController</pre>
+  <div class="box">
+    Regle d or: une route doit etre claire, un controller doit rester lisible.
+  </div>
+
+  <h2>5. Blade templating</h2>
+  <ul>
+    <li>Layouts: <code>@extends</code>, <code>@section</code>, <code>@yield</code></li>
+    <li>Composants: <code>&lt;x-app-layout&gt;</code></li>
+    <li>Boucles/conditions: <code>@foreach</code>, <code>@if</code></li>
+    <li>Protection XSS par defaut avec <code>{{ }}</code></li>
+  </ul>
+
+  <h2>6. Migrations, Models, Relations</h2>
+  <h3>6.1 Creer migration + model</h3>
+  <pre>php artisan make:model Post -m</pre>
+  <h3>6.2 Exemple relation</h3>
+  <pre>// User.php
+public function posts() { return $this->hasMany(Post::class); }
+
+// Post.php
+public function user() { return $this->belongsTo(User::class); }</pre>
+  <h3>6.3 Bonnes pratiques</h3>
+  <ul>
+    <li>Noms de colonnes FK: <code>user_id</code>, <code>groupe_id</code>, etc.</li>
+    <li>Indexes sur colonnes recherchees</li>
+    <li>Migrations atomiques et reversibles</li>
+  </ul>
+
+  <h2>7. Validation des donnees</h2>
+  <pre>php artisan make:request StorePostRequest</pre>
+  <pre>public function rules(): array {
+  return [
+    'title' => ['required','string','max:255'],
+    'content' => ['required','string'],
+  ];
+}</pre>
+  <p>Utilise toujours des Form Requests dans les operations critiques.</p>
+
+  <h2>8. Authentification + roles</h2>
+  <ul>
+    <li>Installer Breeze pour auth rapide</li>
+    <li>Ajouter un champ <code>role</code> dans users</li>
+    <li>Middleware role pour proteger routes admin/formateur</li>
+  </ul>
+  <pre>Route::middleware(['auth','role:admin'])->group(function () {
+  Route::get('/admin/dashboard', ...);
+});</pre>
+
+  <h2>9. CRUD propre (pattern complet)</h2>
+  <ol>
+    <li>Route resource</li>
+    <li>Controller resource</li>
+    <li>Request validation</li>
+    <li>Views index/create/edit/show</li>
+    <li>Flash messages success/error</li>
+  </ol>
+  <pre>Route::resource('groupes', GroupeController::class);</pre>
+
+  <h2>10. Gestion des erreurs et logs</h2>
+  <ul>
+    <li>Utiliser <code>try/catch</code> seulement si necessaire</li>
+    <li>Laisser Laravel gerer les exceptions metier normales</li>
+    <li>Consulter <code>storage/logs/laravel.log</code></li>
+    <li>Messages utilisateur simples, logs techniques detailles</li>
+  </ul>
+
+  <h2>11. Eloquent avance (important projet grand)</h2>
+  <h3>11.1 Eviter N+1</h3>
+  <pre>$seances = Seance::with(['groupe','salle','formateur'])->latest()->get();</pre>
+  <h3>11.2 Scopes</h3>
+  <pre>public function scopeActif($query) {
+  return $query->where('active', true);
+}</pre>
+  <h3>11.3 Transactions</h3>
+  <pre>DB::transaction(function () {
+  // operations multiples critiques
+});</pre>
+
+  <h2>12. API avec Laravel</h2>
+  <ul>
+    <li>Routes dans <code>routes/api.php</code></li>
+    <li>Retour JSON propre et coherent</li>
+    <li>Resources API pour formatter les reponses</li>
+    <li>Auth API (Sanctum)</li>
+  </ul>
+
+  <h2>13. Files, mails, notifications</h2>
+  <ul>
+    <li>Upload fichiers: Storage</li>
+    <li>Emails: Mailables</li>
+    <li>Notifications: email, database, broadcast</li>
+  </ul>
+
+  <h2>14. Queues et jobs (projet grand)</h2>
+  <p>Mettre les taches lourdes en arriere plan: emails, exports, traitements massifs.</p>
+  <pre>php artisan queue:work</pre>
+
+  <h2>15. Caching et performances</h2>
+  <ul>
+    <li>Cache de requetes frequentes</li>
+    <li>Indexes SQL bien places</li>
+    <li>Pagination au lieu de charger tout</li>
+    <li>Profiling sur pages lentes</li>
+  </ul>
+
+  <h2>16. Testing (indispensable)</h2>
+  <pre>php artisan test</pre>
+  <ul>
+    <li>Feature tests: parcours utilisateur</li>
+    <li>Unit tests: logique metier pure</li>
+    <li>Tester auth, permissions, validations, conflits metier</li>
+  </ul>
+
+  <h2>17. Securite</h2>
+  <ul>
+    <li>CSRF actif sur formulaires</li>
+    <li>Validation stricte des inputs</li>
+    <li>Policies/Gates pour autorisations</li>
+    <li>Ne jamais exposer infos sensibles dans erreurs</li>
+    <li>Hasher mots de passe avec bcrypt (Hash::make)</li>
+  </ul>
+
+  <h2>18. Frontend dans Laravel</h2>
+  <ul>
+    <li>Blade + Vite pour SSR classique</li>
+    <li>Tailwind pour UI rapide</li>
+    <li>Possibilite SPA plus tard (Vue/React + API)</li>
+  </ul>
+
+  <h2>19. Structure d un projet grand niveau (proposition)</h2>
+  <pre>app/
+  Domain/
+    Planning/
+    Users/
+    Messaging/
+  Http/
+    Controllers/
+    Requests/
+    Middleware/
+  Services/
+  Policies/
+  Jobs/
+  Events/
+resources/views/
+routes/
+tests/</pre>
+
+  <h2>20. Methodologie pour construire un projet grand</h2>
+  <ol>
+    <li>Analyser besoin + perimetre</li>
+    <li>Modeliser DB + UML</li>
+    <li>Coder MVP complet</li>
+    <li>Ajouter regles metier</li>
+    <li>Tester, corriger, optimiser</li>
+    <li>Polish UI/UX, i18n, impressions, reporting</li>
+    <li>Preparation deployment + documentation</li>
+  </ol>
+
+  <h2>21. Roadmap 8 semaines (pratique)</h2>
+  <table>
+    <tr><th>Semaine</th><th>Focus</th><th>Resultat attendu</th></tr>
+    <tr><td>1</td><td>PHP OOP + SQL + Git</td><td>Bases solides</td></tr>
+    <tr><td>2</td><td>Laravel fundamentals (routes/controllers/views)</td><td>Mini app CRUD</td></tr>
+    <tr><td>3</td><td>Migrations, models, relations</td><td>Schema propre</td></tr>
+    <tr><td>4</td><td>Auth + roles + middleware</td><td>Acces securise par role</td></tr>
+    <tr><td>5</td><td>Validation + logique metier + tests</td><td>Flux robustes</td></tr>
+    <tr><td>6</td><td>UI/UX + i18n + impression</td><td>App utilisable</td></tr>
+    <tr><td>7</td><td>Perf + logs + security hardening</td><td>App stable</td></tr>
+    <tr><td>8</td><td>Deploy + docs + soutenance</td><td>Projet livrable</td></tr>
+  </table>
+
+  <h2>22. Exercices progressifs</h2>
+  <h3>Exercice 1 (debutant)</h3>
+  <ul><li>CRUD complet pour une entite simple (Categorie).</li></ul>
+  <h3>Exercice 2 (intermediaire)</h3>
+  <ul><li>Auth + role admin/formateur + middleware.</li></ul>
+  <h3>Exercice 3 (avance)</h3>
+  <ul><li>Regles metier anti-conflits sur planning + tests automatises.</li></ul>
+  <h3>Exercice 4 (pro)</h3>
+  <ul><li>Messagerie avec Inbox/Archive + pagination + filtres.</li></ul>
+
+  <h2>23. Commands cheatsheet</h2>
+  <pre>php artisan make:model Nom -mcr
+php artisan make:controller Admin/NomController --resource
+php artisan make:request StoreNomRequest
+php artisan migrate
+php artisan migrate:fresh --seed
+php artisan route:list
+php artisan test
+npm install
+npm run dev
+npm run build</pre>
+
+  <h2>24. Deployment resume</h2>
+  <ol>
+    <li>Mettre APP_ENV=production et APP_DEBUG=false</li>
+    <li>Configurer DB et cache</li>
+    <li><code>composer install --no-dev --optimize-autoloader</code></li>
+    <li><code>php artisan migrate --force</code></li>
+    <li><code>npm run build</code></li>
+    <li><code>php artisan config:cache route:cache view:cache</code></li>
+  </ol>
+
+  <h2>25. Conseils pour devenir fort en Laravel</h2>
+  <ul>
+    <li>Code chaque jour, meme petit.</li>
+    <li>Lis du code propre open-source.</li>
+    <li>Ecris des tests des le debut.</li>
+    <li>Fais des revues de code.</li>
+    <li>Refactor regulierement.</li>
+  </ul>
+
+  <h2>26. Plan concret pour toi (CMC Emploi)</h2>
+  <ol>
+    <li>Refaire un mini projet clone en 1 semaine.</li>
+    <li>Ajouter API mobile pour consultation emploi.</li>
+    <li>Ajouter notifications email en cas de changement de seance.</li>
+    <li>Ajouter export PDF natif serveur.</li>
+    <li>Ajouter dashboard analytique (heures par formateur/groupe).</li>
+  </ol>
+
+  <h2>Conclusion</h2>
+  <p>Si tu suis ce cours pas a pas avec pratique quotidienne, tu peux passer du niveau debutant a un niveau capable de gerer un projet Laravel grand et propre. Le secret c est: constance, structure, tests, et documentation.</p>
+
+  <div class="footer">
+    Cours genere pour apprentissage personnel - Laravel from scratch to large project.
+  </div>
+</body>
+</html>
