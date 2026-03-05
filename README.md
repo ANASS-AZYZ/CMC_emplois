@@ -1,60 +1,95 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CMC_emplois
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Application de gestion des emplois du temps (Admin / Formateur / Consultation).
 
-## About Laravel
+## 1) Prerequis
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.2+
+- Composer
+- Node.js 18+ et npm
+- MySQL / MariaDB
+- Serveur local (XAMPP, WAMP, Laragon, etc.)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 2) Etapes d'installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Cloner le projet :
 
-## Learning Laravel
+```bash
+git clone https://github.com/ANASS-AZYZ/CMC_emplois.git
+cd CMC_emplois
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+2. Installer les dependances backend/frontend :
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+composer install
+npm install
+```
 
-## Laravel Sponsors
+3. Configurer l'environnement :
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-### Premium Partners
+4. Configurer la base de donnees dans `.env` (DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD).
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+5. Initialiser la base :
 
-## Contributing
+```bash
+php artisan migrate --seed
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. Lancer l'application :
 
-## Code of Conduct
+```bash
+php artisan serve
+npm run dev
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Application disponible sur `http://127.0.0.1:8000`.
 
-## Security Vulnerabilities
+## 3) Commandes utiles
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Migration + seed : `php artisan migrate --seed`
+- Reset complet DB : `php artisan migrate:fresh --seed`
+- Build production assets : `npm run build`
+- Lancer les tests : `php artisan test`
 
-## License
+## 4) Acces aux comptes de test
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-"# CMC_emplois" 
+Les comptes suivants sont garantis par le seeding :
+
+- Admin
+	- Email: `admin@cmc.ma`
+	- Mot de passe: `password123`
+- Formateur
+	- Email: `formateur@cmc.ma`
+	- Mot de passe: `password123`
+
+## 5) Base de donnees exportee (.sql)
+
+Un export complet prêt pour phpMyAdmin est fourni ici :
+
+- `database/sql/emplois_db_full.sql`
+
+Import rapide dans phpMyAdmin:
+
+1. Ouvrir phpMyAdmin
+2. Aller dans `Import`
+3. Choisir `database/sql/emplois_db_full.sql`
+4. Executer
+
+## 6) Contenu du depot
+
+Le depot inclut :
+
+- Migrations (`database/migrations`)
+- Seeders (`database/seeders`)
+- Configuration Laravel (`config`, `.env.example`, etc.)
+- Code source complet (controllers, models, views, routes)
+
+## 7) Livrables académiques
+
+Voir `LIVRABLES.md` pour la checklist complete du depot + support physique (CD), noms de fichiers attendus et structure du rapport.

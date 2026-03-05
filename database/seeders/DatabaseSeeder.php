@@ -26,6 +26,15 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        User::updateOrCreate(
+            ['email' => 'formateur@cmc.ma'],
+            [
+                'name' => 'Formateur Demo',
+                'password' => Hash::make('password123'),
+                'role' => 'formateur',
+            ]
+        );
+
         User::query()
             ->where('role', 'admin')
             ->where('email', '!=', 'admin@cmc.ma')
