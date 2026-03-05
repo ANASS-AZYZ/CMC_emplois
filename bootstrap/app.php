@@ -10,12 +10,11 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        // Enregistrement dial l-alias dial l-middleware 'role'
-        $middleware->alias([
-            'role' => \App\Http\Middleware\RoleManager::class,
-        ]);
-    })
-    ->withExceptions(function (Exceptions $exceptions): void {
+    ->withMiddleware(function (Middleware $middleware) {
+    $middleware->alias([
+        'role' => \App\Http\Middleware\RoleManager::class,
+    ]);
+})
+    ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

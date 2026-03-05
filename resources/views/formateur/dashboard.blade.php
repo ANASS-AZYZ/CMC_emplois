@@ -1,125 +1,244 @@
 <x-app-layout>
     <style>
-        /* Configuration dyal l-Impression standard OFPPT */
+        body {
+            font-family: Trebuchet MS, Arial, sans-serif;
+        }
+
+        .paper {
+            width: 1120px;
+            margin: 10px auto;
+            background: white;
+            color: #0f172a;
+            padding: 8px;
+            border: 1px solid #cfd4da;
+        }
+
+        .header {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            border: 1px solid #cfd4da;
+        }
+
+        .header td {
+            border: 1px solid #cfd4da;
+            padding: 4px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .header-ar {
+            font-size: 16px;
+            margin: 0;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .header-fr {
+            font-size: 16px;
+            margin: 4px 0 0;
+            color: #222;
+            font-weight: 600;
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 4px 0 8px;
+            padding: 0 6px;
+        }
+
+        .meta b {
+            font-size: 16px;
+            margin-left: 6px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .table th {
+            background-color: #2f9cb7 !important;
+            color: white !important;
+            border: 1px solid #d0d5db;
+            padding: 4px;
+            font-size: 13px;
+            height: 36px;
+            font-weight: 700;
+        }
+
+        .table td {
+            border: 1px solid #d0d5db;
+            height: 60px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 11px;
+            color: #1f2937;
+            padding: 0 !important;
+            background: #f5f5f5;
+        }
+
+        .day {
+            background-color: #d7e2e9 !important;
+            color: #1f2937;
+            font-weight: bold;
+            width: 110px;
+            font-size: 13px;
+        }
+
+        .slot {
+            background-color: #5c80b9 !important;
+            color: white !important;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3px;
+            line-height: 1.25;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .times {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .btn-print {
+            margin-top: 14px;
+            text-align: center;
+        }
+
+        .btn-print button {
+            background: #1f2937;
+            color: white;
+            border: 0;
+            border-radius: 999px;
+            padding: 10px 34px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        body.theme-dark .paper {
+            background: #ffffff;
+            color: #0f172a;
+            border-color: #cbd5e1;
+        }
+
+        body.theme-dark .meta,
+        body.theme-dark .table td,
+        body.theme-dark .day,
+        body.theme-dark .header-ar,
+        body.theme-dark .header-fr {
+            color: #0f172a !important;
+        }
+
+        body.theme-dark .table td {
+            background: #f3f4f6;
+        }
+
         @media print {
-            .no-print { display: none !important; }
-            @page { size: A4 landscape; margin: 10mm; }
-            body { background: white !important; }
-            .print-container { width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; border: none !important; }
-            table { width: 100% !important; border: 2px solid black !important; }
-            th, td { border: 1px solid black !important; color: black !important; }
-            .bg-blue-600 { background-color: #2563eb !important; color: white !important; -webkit-print-color-adjust: exact; }
-            .bg-cyan-600 { background-color: #0891b2 !important; color: white !important; -webkit-print-color-adjust: exact; }
+            .no-print, nav, aside { display: none !important; }
+            @page { size: A4 landscape; margin: 5mm; }
+            .paper { width: 100% !important; margin: 0 !important; border: 0 !important; padding: 0 !important; }
+            .table th, .slot {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .table td {
+                height: 52px;
+            }
         }
     </style>
 
-    <div class="py-0 flex min-h-screen bg-gray-100">
-        <div class="w-72 bg-[#0f172a] text-white p-6 no-print shadow-2xl flex flex-col">
-            <h2 class="text-2xl font-black text-blue-400 mb-10 italic uppercase tracking-tighter border-b border-slate-700 pb-4">
-                CMC Planning
-            </h2>
-            
-            <nav class="space-y-4 flex-1">
-                <a href="{{ route('formateur.dashboard') }}" 
-                   class="flex items-center gap-3 p-4 {{ request()->routeIs('formateur.dashboard') ? 'bg-blue-600 shadow-blue-500/50' : 'hover:bg-slate-800 text-slate-400' }} rounded-xl font-bold shadow-lg transition-all duration-200">
-                    <span class="text-xl">📅</span> Mon Emploi
-                </a>
+    @php
+        $totalSeances = 0;
+        foreach($jours as $j) {
+            foreach($creneaux as $c) {
+                if(isset($emploi[$j][$c])) {
+                    $totalSeances++;
+                }
+            }
+        }
+        $totalHeures = $totalSeances * 2.5;
+    @endphp
 
-                <a href="{{ route('stagiaire.emploi') }}" 
-                   class="flex items-center gap-3 p-4 hover:bg-slate-800 rounded-xl transition text-slate-400 font-bold">
-                    <span class="text-xl">👥</span> Emplois des Groupes
-                </a>
+    <div class="py-6 bg-gray-200">
+        <div class="paper">
+            <table class="header">
+                <tr>
+                    <td style="width:200px;">
+                        <img src="{{ asset('images/logo-cmc.png') }}" style="height:70px; object-fit:contain;">
+                    </td>
+                    <td>
+                        <p class="header-ar">مكتب التكوين المهني و إنعاش الشغل</p>
+                        <p class="header-fr">Office de la formation professionnelle et de la promotion du travail</p>
+                    </td>
+                    <td style="width:200px;">
+                        <img src="{{ asset('images/logo-ofppt.png') }}" style="height:60px; object-fit:contain;">
+                    </td>
+                </tr>
+            </table>
 
-                <a href="mailto:admin@cmc.ma?subject=Demande de Modification" 
-                   class="flex items-center gap-3 p-4 hover:bg-slate-800 rounded-xl transition text-slate-400 font-bold">
-                    <span class="text-xl">📧</span> Contacter l'Admin
-                </a>
-            </nav>
-
-            <div class="pt-6 border-t border-slate-700 text-[10px] text-slate-500 text-center uppercase tracking-widest">
-                © 2026 Pôle Digital & IA
+            <div class="meta">
+                <div><span data-i18n-app="trainerNameLabel">Nom du Formateur</span> : <b>{{ strtoupper($formateur->nom) }} {{ strtoupper($formateur->prenom) }}</b></div>
+                <div><span data-i18n-app="weeklyHoursLabel">Masse Horaire Hebdomadaire</span> : <b>{{ rtrim(rtrim(number_format($totalHeures, 1), '0'), '.') }}h</b></div>
+                <div><span data-i18n-app="trainingYearLabel">Année de Formation</span> : <b>2025 / 2026</b></div>
             </div>
-        </div>
 
-        <div class="flex-1 p-10 overflow-y-auto">
-            <div class="bg-white p-10 shadow-2xl border-t-[12px] border-blue-900 rounded-lg print-container relative overflow-hidden">
-                
-                <div class="flex justify-between items-center mb-10 pb-6 border-b-2 border-gray-100">
-                    <div class="flex flex-col items-center">
-                        <div class="w-16 h-16 bg-gray-200 rounded flex items-center justify-center text-[10px] text-gray-500 italic">Logo CMC</div>
-                        <p class="text-[8px] mt-1 font-bold">Cité des Métiers et des Compétences</p>
-                    </div>
-                    
-                    <div class="text-center">
-                        <h1 class="text-2xl font-black uppercase tracking-widest text-gray-800">Emploi du Temps Formateur</h1>
-                        <p class="text-blue-700 font-extrabold text-2xl mt-2 underline underline-offset-8 decoration-4 italic uppercase tracking-tighter">
-                            {{ $formateur->prenom }} {{ $formateur->nom }}
-                        </p>
-                    </div>
-
-                    <div class="flex flex-col items-center text-right">
-                        <div class="w-16 h-8 bg-gray-200 rounded flex items-center justify-center text-[8px] text-gray-500 font-bold">OFPPT</div>
-                        <p class="text-[7px] mt-1 uppercase font-medium">La Voie de l'Avenir</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-3 gap-6 mb-8 bg-slate-50 p-5 rounded-lg border-2 border-slate-100 font-black text-slate-700 uppercase text-[11px] tracking-tight">
-                    <div class="flex items-center gap-2">
-                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">MATRICULE :</span>
-                        <span class="text-blue-900 text-sm">{{ $formateur->matricule }}</span>
-                    </div>
-                    <div class="text-center self-center underline decoration-blue-200 decoration-2">
-                        Année de Formation : 2025 / 2026
-                    </div>
-                    <div class="text-right self-center italic text-slate-400">
-                        Masse Horaire : Hebdomadaire (25h)
-                    </div>
-                </div>
-
-                <div class="overflow-x-auto border-2 border-gray-200 rounded-xl">
-                    <table class="w-full border-collapse">
-                        <thead class="bg-cyan-700 text-white uppercase text-[11px] font-black tracking-widest">
-                            <tr class="divide-x-2 divide-cyan-600">
-                                <th class="p-5 w-40 italic bg-cyan-800">Jour / Horaire</th>
-                                <th class="p-5">08:30 - 11:00 (S1)</th>
-                                <th class="p-5">11:00 - 13:30 (S2)</th>
-                                <th class="p-5">13:30 - 16:00 (S3)</th>
-                                <th class="p-5">16:00 - 18:30 (S4)</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y-2 divide-gray-100">
-                            @foreach($jours as $j)
-                                <tr class="h-28 divide-x-2 divide-gray-100 hover:bg-slate-50 transition-colors">
-                                    <td class="bg-slate-100 font-black text-center text-blue-900 italic uppercase text-xs border-r-2 border-gray-200">
-                                        {{ $j }}
-                                    </td>
-                                    @foreach($creneaux as $c)
-                                        <td class="p-1 text-center relative min-w-[180px]">
-                                            @if(isset($emploi[$j][$c]))
-                                                <div class="absolute inset-1 bg-blue-600 text-white flex flex-col justify-center items-center rounded-lg shadow-md transform hover:scale-[1.02] transition-transform cursor-default">
-                                                    <p class="font-black text-sm uppercase mb-1">{{ $emploi[$j][$c]->groupe->code }}</p>
-                                                    <div class="w-3/4 h-[1px] bg-blue-400 opacity-40 mb-1"></div>
-                                                    <p class="text-[10px] font-bold tracking-widest italic opacity-90 uppercase">
-                                                        Salle: {{ $emploi[$j][$c]->salle->code }}
-                                                    </p>
-                                                </div>
-                                            @else 
-                                                <span class="text-gray-200 text-2xl font-thin">—</span> 
-                                            @endif
-                                        </td>
-                                    @endforeach
-                                </tr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="day" data-i18n-app="dayHourHeader">Jour / Horaire</th>
+                        <th><div class="times"><span>08:30</span><span>11:00</span></div></th>
+                        <th><div class="times"><span>11:00</span><span>13:30</span></div></th>
+                        <th><div class="times"><span>13:30</span><span>16:00</span></div></th>
+                        <th><div class="times"><span>16:00</span><span>18:30</span></div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($jours as $j)
+                        <tr>
+                            @php
+                                $dayMap = [
+                                    'Lundi' => 'dayMonday',
+                                    'Mardi' => 'dayTuesday',
+                                    'Mercredi' => 'dayWednesday',
+                                    'Jeudi' => 'dayThursday',
+                                    'Vendredi' => 'dayFriday',
+                                    'Samedi' => 'daySaturday',
+                                ];
+                                $dayKey = $dayMap[$j] ?? null;
+                            @endphp
+                            <td class="day" @if($dayKey) data-i18n-app="{{ $dayKey }}" @endif>{{ $j }}</td>
+                            @foreach($creneaux as $c)
+                                <td>
+                                    @if(isset($emploi[$j][$c]))
+                                        <div class="slot">
+                                            <div>{{ $emploi[$j][$c]->groupe->code }}</div>
+                                            <div><span data-i18n-app="salleLabel">SALLE</span> : {{ $emploi[$j][$c]->salle->code }}</div>
+                                        </div>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                             @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
 
-                <div class="mt-12 text-center no-print">
-                    <button onclick="window.print()" 
-                            class="bg-blue-700 hover:bg-blue-800 text-white px-12 py-4 rounded-full font-black text-sm uppercase tracking-widest shadow-xl hover:shadow-blue-500/20 transition-all active:scale-95 flex items-center gap-3 mx-auto">
-                        <span>🖨️</span> Imprimer mon Emploi du temps
-                    </button>
-                </div>
+            <div class="btn-print no-print">
+                <button onclick="window.print()">🖨️ <span data-i18n-app="printTimetableBtn">Imprimer l'emploi du temps</span></button>
             </div>
         </div>
     </div>

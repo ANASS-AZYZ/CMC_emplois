@@ -7,9 +7,7 @@ use Illuminate\Database\Seeder;
 
 class FiliereSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    
     public function run(): void
 {
     $filieres = [
@@ -26,7 +24,14 @@ class FiliereSeeder extends Seeder
     ];
 
     foreach ($filieres as $filiere) {
-        \App\Models\Filiere::create($filiere);
+        \App\Models\Filiere::updateOrCreate(
+            [
+                'nom' => $filiere['nom'],
+                'niveau' => $filiere['niveau'],
+            ],
+            $filiere
+        );
     }
 }
 }
+

@@ -12,9 +12,7 @@ class Filiere extends Model
         'niveau'
     ];
 
-    /**
-     * Une filière possède plusieurs groupes.
-     */
+    
     public function groupes(): HasMany
     {
         return $this->hasMany(Groupe::class);

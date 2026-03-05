@@ -7,12 +7,9 @@ use Illuminate\Database\Seeder;
 
 class GroupeSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    
     public function run(): void
 {
-    // Ghadi n-akhdou l-ID dyal Web Full Stack
     $filiereWFS = \App\Models\Filiere::where('nom', 'Web Full Stack')->first();
 
     \App\Models\Groupe::create([
@@ -28,3 +25,4 @@ class GroupeSeeder extends Seeder
     ]);
 }
 }
+

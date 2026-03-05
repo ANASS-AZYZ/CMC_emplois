@@ -1,47 +1,83 @@
 <x-guest-layout>
-    <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-5xl font-black text-slate-900 text-center tracking-tight">Welcome Back</h1>
+        <p class="text-center text-slate-600 text-2xl mt-4 mb-10">Access the CMC scheduling and planning system</p>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <form method="POST" action="{{ route('login') }}" class="rounded-[2rem] border border-slate-200 bg-white/90 p-8 shadow-sm">
+            @csrf
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+            <input type="hidden" name="login_as" id="login_as" value="{{ old('login_as', 'formateur') }}">
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+            <div class="mb-8 rounded-2xl bg-slate-100 p-2 grid grid-cols-2 gap-2">
+                <button type="button" data-role="formateur" class="role-tab rounded-xl px-4 py-3 text-xl font-bold transition">
+                    Formateur Login
+                </button>
+                <button type="button" data-role="admin" class="role-tab rounded-xl px-4 py-3 text-xl font-bold text-slate-500 transition">
+                    Admin Login
+                </button>
+            </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <div>
+                <x-input-label for="email" class="text-2xl font-bold" :value="__('Academic Email')" />
+                <x-text-input id="email" class="block mt-3 w-full rounded-2xl border-0 bg-slate-100 px-5 py-4 text-xl"
+                    type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+            <div class="mt-8">
+                <div class="flex items-center justify-between">
+                    <x-input-label for="password" class="text-2xl font-bold" :value="__('Password')" />
+                    @if (Route::has('password.request'))
+                        <a class="text-lg font-semibold text-blue-500 hover:text-blue-600" href="{{ route('password.request') }}">
+                            {{ __('Forgot?') }}
+                        </a>
+                    @endif
+                </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+                <x-text-input id="password" class="block mt-3 w-full rounded-2xl border-0 bg-slate-100 px-5 py-4 text-xl"
+                    type="password" name="password" required autocomplete="current-password" />
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            </div>
+
+            <div class="block mt-8">
+                <label for="remember_me" class="inline-flex items-center">
+                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500" name="remember">
+                    <span class="ms-2 text-lg italic text-slate-500">{{ __('Keep me logged in on this device') }}</span>
+                </label>
+            </div>
+
+            <button type="submit" class="mt-8 w-full rounded-2xl bg-blue-400 py-4 text-3xl font-black tracking-widest text-blue-900 hover:bg-blue-500 transition">
+                SIGN IN ->
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var loginAsInput = document.getElementById('login_as');
+            var tabs = document.querySelectorAll('.role-tab');
+
+            function setRole(role) {
+                loginAsInput.value = role;
+                tabs.forEach(function (tab) {
+                    var active = tab.getAttribute('data-role') === role;
+                    tab.classList.toggle('bg-white', active);
+                    tab.classList.toggle('text-slate-900', active);
+                    tab.classList.toggle('shadow-sm', active);
+                    tab.classList.toggle('text-slate-500', !active);
+                });
+            }
+
+            tabs.forEach(function (tab) {
+                tab.addEventListener('click', function () {
+                    setRole(tab.getAttribute('data-role'));
+                });
+            });
+
+            setRole(loginAsInput.value || 'formateur');
+        });
+    </script>
 </x-guest-layout>

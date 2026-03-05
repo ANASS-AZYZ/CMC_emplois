@@ -8,33 +8,26 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class FormateurController extends Controller
 {
-    /**
-     * Afficher la liste des formateurs avec leurs comptes User liés.
-     */
+    
     public function index()
     {
-        // On récupère les formateurs avec la relation 'user'
         $formateurs = Formateur::with('user')->get();
         return view('admin.formateurs.index', compact('formateurs'));
     }
 
-    /**
-     * Afficher le formulaire de création.
-     */
+    
     public function create()
     {
         return view('admin.formateurs.create');
     }
 
-    /**
-     * Enregistrer un nouveau formateur et créer son compte de connexion automatique.
-     */
+    
     public function store(Request $request)
     {
-        // Validation dqiqa m3a l-contraintes dial cahier des charges
         $validated = $request->validate([
             'matricule'           => 'required|unique:formateurs,matricule',
             'nom'                 => 'required|string|max:255',
@@ -42,21 +35,30 @@ class FormateurController extends Controller
             'email_professionnel' => 'required|email|unique:users,email|unique:formateurs,email_professionnel',
             'telephone'           => 'required|string|max:20',
             'specialite'          => 'required|string|max:255',
-            'password'            => 'required|min:8|confirmed', // Admin définit le mot de passe initial
+            'password'            => 'required|min:8|confirmed',
+        ], [
+            'matricule.required' => 'Le matricule est obligatoire.',
+            'matricule.unique' => 'Ce matricule existe deja.',
+            'nom.required' => 'Le nom est obligatoire.',
+            'prenom.required' => 'Le prenom est obligatoire.',
+            'email_professionnel.required' => "L'email professionnel est obligatoire.",
+            'email_professionnel.email' => "L'email professionnel est invalide.",
+            'email_professionnel.unique' => "Cet email professionnel est deja utilise.",
+            'telephone.required' => 'Le telephone est obligatoire.',
+            'specialite.required' => 'La specialite est obligatoire.',
+            'password.required' => 'Le mot de passe est obligatoire.',
+            'password.min' => 'Le mot de passe doit contenir au moins 8 caracteres.',
+            'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
         ]);
 
-        // Transaction bach may-t-creey walou ila tra moshkil f l-base
         DB::transaction(function () use ($validated) {
-            
-            // 1. Création du compte User (Table users) pour le Login
             $user = User::create([
                 'name'     => $validated['prenom'] . ' ' . $validated['nom'],
                 'email'    => $validated['email_professionnel'],
                 'password' => Hash::make($validated['password']),
-                'role'     => 'formateur', // Role fixe pour redirection vers espace formateur
+                'role'     => 'formateur',
             ]);
 
-            // 2. Création du profil Formateur lié à l'User
             Formateur::create([
                 'matricule'           => $validated['matricule'],
                 'nom'                 => $validated['nom'],
@@ -64,58 +66,74 @@ class FormateurController extends Controller
                 'email_professionnel' => $validated['email_professionnel'],
                 'telephone'           => $validated['telephone'],
                 'specialite'          => $validated['specialite'],
-                'user_id'             => $user->id, // Liaison cruciale pour le Dashboard
+                'user_id'             => $user->id,
             ]);
         });
 
         return redirect()->route('formateurs.index')->with('success', 'Formateur et compte de connexion créés avec succès !');
     }
 
-    /**
-     * Afficher le formulaire d'édition.
-     */
+    
     public function edit(Formateur $formateur)
     {
         return view('admin.formateurs.edit', compact('formateur'));
     }
 
-    /**
-     * Mettre à jour les informations du formateur et de son compte.
-     */
+    
     public function update(Request $request, Formateur $formateur)
     {
+        $userId = $formateur->user?->id;
+
         $validated = $request->validate([
             'matricule'           => 'required|unique:formateurs,matricule,' . $formateur->id,
             'nom'                 => 'required|string|max:255', 
             'prenom'              => 'required|string|max:255',
-            'email_professionnel' => 'required|email|unique:formateurs,email_professionnel,' . $formateur->id,
+            'email_professionnel' => [
+                'required',
+                'email',
+                Rule::unique('formateurs', 'email_professionnel')->ignore($formateur->id),
+                Rule::unique('users', 'email')->ignore($userId),
+            ],
             'telephone'           => 'required|string|max:20',
             'specialite'          => 'required|string|max:255',
+            'password'            => 'nullable|string|min:8',
+        ], [
+            'matricule.required' => 'Le matricule est obligatoire.',
+            'matricule.unique' => 'Ce matricule existe deja.',
+            'nom.required' => 'Le nom est obligatoire.',
+            'prenom.required' => 'Le prenom est obligatoire.',
+            'email_professionnel.required' => "L'email professionnel est obligatoire.",
+            'email_professionnel.email' => "L'email professionnel est invalide.",
+            'email_professionnel.unique' => "Cet email professionnel est deja utilise.",
+            'telephone.required' => 'Le telephone est obligatoire.',
+            'specialite.required' => 'La specialite est obligatoire.',
+            'password.min' => 'Le mot de passe doit contenir au moins 8 caracteres.',
         ]);
 
         DB::transaction(function () use ($validated, $formateur) {
-            // Update l-profil formateur
             $formateur->update($validated);
-            
-            // Sync l-email et name f l-table users pour le login
+
             if($formateur->user) {
-                $formateur->user->update([
+                $userData = [
                     'name'  => $validated['prenom'] . ' ' . $validated['nom'],
                     'email' => $validated['email_professionnel'],
-                ]);
+                ];
+
+                if (! empty($validated['password'])) {
+                    $userData['password'] = Hash::make($validated['password']);
+                }
+
+                $formateur->user->update($userData);
             }
         });
 
         return redirect()->route('formateurs.index')->with('success', 'Informations du formateur mises à jour avec succès !');
     }
 
-    /**
-     * Supprimer un formateur et son compte User associé.
-     */
+    
     public function destroy(Formateur $formateur)
     {
         DB::transaction(function () use ($formateur) {
-            // On supprime d'abord le compte utilisateur pour respecter l'intégrité
             if ($formateur->user) {
                 $formateur->user->delete();
             }

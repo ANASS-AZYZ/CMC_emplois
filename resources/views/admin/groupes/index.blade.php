@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Gestion des Groupes</h2>
-            <a href="{{ route('groupes.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">+ Ajouter un Groupe</a>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight" data-i18n-app="manageGroupsTitle">Gestion des Groupes</h2>
+            <a href="{{ route('groupes.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-md" data-i18n-app="addGroupBtn">+ Ajouter un Groupe</a>
         </div>
     </x-slot>
 
@@ -12,25 +12,35 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-100">
-                            <th class="border p-3">Code Unique</th>
-                            <th class="border p-3">Filière</th>
-                            <th class="border p-3">Année</th>
-                            <th class="border p-3 text-center">Actions</th>
+                            <th class="border p-3" data-i18n-app="codeUniqueLabel">Code Unique</th>
+                            <th class="border p-3" data-i18n-app="filiereLabel">Filière</th>
+                            <th class="border p-3" data-i18n-app="yearLabel">Année</th>
+                            <th class="border p-3 text-center" data-i18n-app="actionsLabel">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($groupes as $groupe)
-                        <tr class="hover:bg-gray-50">
+                        <tr>
                             <td class="border p-3 font-bold text-gray-700">{{ $groupe->code }}</td>
                             <td class="border p-3">{{ $groupe->filiere->nom ?? 'N/A' }}</td>
                             <td class="border p-3">{{ $groupe->annee }}</td>
-                            <td class="border p-3 text-center space-x-2">
-                                <a href="{{ route('groupes.edit', $groupe) }}" class="text-blue-600 hover:text-blue-900 font-bold">Modifier</a>
+                            <td class="border p-3 text-center">
+                                <div class="flex flex-row items-center justify-center gap-2">
+                                <a href="{{ route('groupes.edit', $groupe) }}" class="text-blue-600 px-3 py-1 rounded-md border border-blue-600 inline-flex items-center justify-center" aria-label="Modifier" title="Modifier">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.1 2.1 0 1 1 2.97 2.97L8.25 18.04l-4.5 1.125 1.125-4.5 11.987-11.178Z" />
+                                    </svg>
+                                </a>
                                 
-                                <form action="{{ route('groupes.destroy', $groupe) }}" method="POST" class="inline">
+                                <form action="{{ route('groupes.destroy', $groupe) }}" method="POST">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 font-bold">Supprimer</button>
+                                    <button type="submit" class="text-red-600 px-3 py-1 rounded-md border border-red-600 inline-flex items-center justify-center" aria-label="Supprimer" title="Supprimer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0V4.5A2.25 2.25 0 0 0 13.5 2.25h-3A2.25 2.25 0 0 0 8.25 4.5v.893m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        </svg>
+                                    </button>
                                 </form>
+                                </div>
                             </td>
                         </tr>
                         @endforeach

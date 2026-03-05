@@ -13,9 +13,7 @@ class Groupe extends Model
         'annee'
     ];
 
-    /**
-     * Un groupe appartient à une seule filière.
-     */
+    
     public function filiere(): BelongsTo
     {
         return $this->belongsTo(Filiere::class);

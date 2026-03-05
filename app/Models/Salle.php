@@ -8,7 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Salle extends Model
 {
     use HasFactory;
-
-    // Hada hwa l-fix bach d-data d-khul l-base de données
     protected $fillable = ['code', 'type', 'capacite'];
 }

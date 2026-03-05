@@ -1,6 +1,5 @@
 <?php
-
-namespace App\Models;
+namespace App\Models; 
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,11 +12,6 @@ public function user()
     return $this->belongsTo(User::class);
 }
     protected $fillable = [
-        'matricule',
-        'nom',
-        'prenom',
-        'email_professionnel', 
-        'telephone',
-        'specialite',
-    ];
+    'matricule', 'nom', 'prenom', 'email_professionnel', 'telephone', 'specialite', 'user_id'
+];
 }

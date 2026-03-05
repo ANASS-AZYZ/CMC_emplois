@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models; // KHASS TKOUN HAKDA
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

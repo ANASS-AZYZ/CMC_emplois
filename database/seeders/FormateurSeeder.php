@@ -7,9 +7,7 @@ use Illuminate\Database\Seeder;
 
 class FormateurSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    
     public function run(): void
 {
     $formateurs = [
@@ -36,3 +34,4 @@ class FormateurSeeder extends Seeder
     }
 }
 }
+

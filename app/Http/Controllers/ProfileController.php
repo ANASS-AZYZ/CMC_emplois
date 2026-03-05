@@ -12,9 +12,7 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
+    
     public function edit(Request $request): View
     {
         return view('profile.edit', [
@@ -22,10 +20,7 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     * Logic t-zad bach i-sync l-data m3a table formateurs.
-     */
+    
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
@@ -34,14 +29,9 @@ class ProfileController extends Controller
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
-
-        // Transaction bach n-dmnu l-cohérence dial l-data
         DB::transaction(function () use ($user, $request) {
             $user->save();
-
-            // Ila kan l-user formateur, n-update-o l-profil dyalo hta hwa
             if ($user->role === 'formateur' && $user->formateur) {
-                // Kan-ferrqo l-name l-Nom o Prenom (optional logic)
                 $nameParts = explode(' ', $user->name, 2);
                 $prenom = $nameParts[0] ?? '';
                 $nom = $nameParts[1] ?? '';
@@ -57,11 +47,13 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    /**
-     * Delete the user's account.
-     */
+    
     public function destroy(Request $request): RedirectResponse
     {
+        if ($request->user()->role === 'formateur') {
+            abort(403, 'Suppression du compte non autorisee pour les formateurs.');
+        }
+
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);
@@ -69,8 +61,6 @@ class ProfileController extends Controller
         $user = $request->user();
 
         Auth::logout();
-
-        // Transaction bach n-ms7o l-user o l-formateur lié f merra
         DB::transaction(function () use ($user) {
             if ($user->role === 'formateur' && $user->formateur) {
                 $user->formateur->delete();

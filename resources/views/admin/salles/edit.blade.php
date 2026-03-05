@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-bold text-xl text-gray-800 leading-tight">
-            Modifier la Salle : {{ $salle->code }}
+            <span data-i18n-app="editRoomTitle">Modifier la Salle :</span> {{ $salle->code }}
         </h2>
     </x-slot>
 
@@ -12,28 +12,28 @@
                     @csrf
                     @method('PUT') <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label class="block font-bold mb-2 text-gray-700">Code</label>
+                            <label class="block font-bold mb-2 text-gray-700" data-i18n-app="codeLabel">Code</label>
                             <input type="text" name="code" value="{{ old('code', $salle->code) }}" 
                                    class="w-full border-gray-300 rounded-md focus:ring-blue-500">
                         </div>
 
                         <div>
-                            <label class="block font-bold mb-2 text-gray-700">Type</label>
+                            <label class="block font-bold mb-2 text-gray-700" data-i18n-app="typeLabel">Type</label>
                             <select name="type" class="w-full border-gray-300 rounded-md focus:ring-blue-500">
-                                <option value="SC" {{ $salle->type == 'SC' ? 'selected' : '' }}>Salle de cours (SC)</option>
-                                <option value="SM" {{ $salle->type == 'SM' ? 'selected' : '' }}>Salle Multimédia (SM)</option>
+                                <option value="SC" {{ $salle->type == 'SC' ? 'selected' : '' }} data-i18n-app="roomTypeCourseLabel">Salle de cours (SC)</option>
+                                <option value="SM" {{ $salle->type == 'SM' ? 'selected' : '' }} data-i18n-app="roomTypeMultimediaLabel">Salle Multimédia (SM)</option>
                             </select>
                         </div>
 
                         <div>
-                            <label class="block font-bold mb-2 text-gray-700">Capacité</label>
+                            <label class="block font-bold mb-2 text-gray-700" data-i18n-app="capacityLabel">Capacité</label>
                             <input type="number" name="capacite" value="{{ old('capacite', $salle->capacite) }}" 
                                    class="w-full border-gray-300 rounded-md focus:ring-blue-500">
                         </div>
                     </div>
 
                     <div class="mt-6">
-                        <button type="submit" class="bg-blue-600 text-white px-8 py-2 rounded-lg font-bold hover:bg-blue-700 transition shadow-md">
+                        <button type="submit" class="bg-blue-600 text-white px-8 py-2 rounded-lg font-bold transition shadow-md" data-i18n-app="saveChangesBtn">
                             Enregistrer les modifications
                         </button>
                     </div>

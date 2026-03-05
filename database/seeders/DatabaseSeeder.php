@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             GroupeSeeder::class,
         ]);
 
-        User::firstOrCreate(
+        User::updateOrCreate(
             ['email' => 'admin@cmc.ma'],
             [
                 'name' => 'Anass Admin',
@@ -25,5 +25,10 @@ class DatabaseSeeder extends Seeder
                 'role' => 'admin',
             ]
         );
+
+        User::query()
+            ->where('role', 'admin')
+            ->where('email', '!=', 'admin@cmc.ma')
+            ->update(['role' => 'formateur']);
     }
 }

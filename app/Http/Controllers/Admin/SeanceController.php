@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Seance;
+use App\Models\Filiere;
 use App\Models\Groupe;
 use App\Models\Salle;
 use App\Models\Formateur;
@@ -12,33 +13,26 @@ use Illuminate\Support\Facades\Auth;
 
 class SeanceController extends Controller
 {
-    /**
-     * [ADMIN] Liste de toutes les séances planifiées.
-     */
+    
     public function index()
     {
-        // Gher l-admin li 3ndu l-7eq i-chouf l-listes kamlin
         $seances = Seance::with(['groupe', 'salle', 'formateur'])->get();
         return view('admin.seances.index', compact('seances'));
     }
 
-    /**
-     * [ADMIN] Formulaire pour planifier une nouvelle séance.
-     */
+    
     public function create()
     {
         $groupes = Groupe::all();
         $salles = Salle::all();
         $formateurs = Formateur::all();
-        $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']; // L-emploi 3la 6 jours
-        $creneaux = ['S1', 'S2', 'S3', 'S4']; // 4 séances fixes par jour
+        $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+        $creneaux = ['S1', 'S2', 'S3', 'S4'];
 
         return view('admin.seances.create', compact('groupes', 'salles', 'formateurs', 'jours', 'creneaux'));
     }
 
-    /**
-     * [ADMIN] Enregistrement d'une séance avec contrôle strict des conflits.
-     */
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -49,26 +43,26 @@ class SeanceController extends Controller
             'creneau' => 'required|string',
         ]);
 
-        // Contrôle des conflits (Groupe, Formateur, Salle)
         $conflit = Seance::where('jour', $request->jour)
             ->where('creneau', $request->creneau)
-            ->where(function($q) use ($request) {
-                $q->where('groupe_id', $request->groupe_id) // Conflit Groupe
-                  ->orWhere('formateur_id', $request->formateur_id) // Conflit Formateur
-                  ->orWhere('salle_id', $request->salle_id); // Conflit Salle
-            })->exists();
+            ->where(function ($q) use ($request) {
+                $q->where('groupe_id', $request->groupe_id)
+                    ->orWhere('formateur_id', $request->formateur_id)
+                    ->orWhere('salle_id', $request->salle_id);
+            })
+            ->exists();
 
         if ($conflit) {
-            return back()->withErrors(['conflit' => 'Conflit détecté ! Ce créneau est déjà occupé.'])->withInput();
+            return back()->withErrors([
+                'conflit' => 'Conflit detecte ! Impossible de planifier le meme formateur ou la meme salle au meme jour et creneau.',
+            ])->withInput();
         }
 
         Seance::create($validated);
         return redirect()->route('seances.index')->with('success', 'Séance ajoutée avec succès !');
     }
 
-    /**
-     * [ADMIN] Formulaire d'édition d'une séance.
-     */
+    
     public function edit(Seance $seance)
     {
         $groupes = Groupe::all();
@@ -80,9 +74,7 @@ class SeanceController extends Controller
         return view('admin.seances.edit', compact('seance', 'groupes', 'salles', 'formateurs', 'jours', 'creneaux'));
     }
 
-    /**
-     * [ADMIN] Mise à jour d'une séance.
-     */
+    
     public function update(Request $request, Seance $seance)
     {
         $validated = $request->validate([
@@ -93,50 +85,86 @@ class SeanceController extends Controller
             'creneau' => 'required|string',
         ]);
 
+        $conflit = Seance::where('jour', $request->jour)
+            ->where('creneau', $request->creneau)
+            ->where('id', '!=', $seance->id)
+            ->where(function ($q) use ($request) {
+                $q->where('groupe_id', $request->groupe_id)
+                    ->orWhere('formateur_id', $request->formateur_id)
+                    ->orWhere('salle_id', $request->salle_id);
+            })
+            ->exists();
+
+        if ($conflit) {
+            return back()->withErrors([
+                'conflit' => 'Conflit detecte ! Impossible de planifier le meme formateur ou la meme salle au meme jour et creneau.',
+            ])->withInput();
+        }
+
         $seance->update($validated);
         return redirect()->route('seances.index')->with('success', 'Séance modifiée avec succès !');
     }
 
-    /**
-     * [ADMIN] Suppression d'une séance planifiée.
-     */
+    
     public function destroy(Seance $seance)
     {
         $seance->delete();
         return redirect()->route('seances.index')->with('success', 'Séance annulée !');
     }
 
-    /**
-     * [MULTI-ROLE] Consultation de l'emploi du temps (Grille).
-     * Accessible par : Admin, Formateur, et Stagiaire.
-     */
+    
     public function showEmploi(Request $request)
     {
-        $groupes = Groupe::all();
+        $filieres = Filiere::query()
+            ->orderBy('nom')
+            ->orderBy('niveau')
+            ->get()
+            ->unique(function ($filiere) {
+                return mb_strtolower(trim($filiere->nom)) . '|' . mb_strtolower(trim($filiere->niveau));
+            })
+            ->values();
+        $formateurs = Formateur::query()->orderBy('nom')->orderBy('prenom')->get();
+        $salles = Salle::query()->orderBy('code')->get();
+        $selectedFiliere = $request->input('filiere_id');
         $selectedGroupe = $request->input('groupe_id');
+        $selectedFormateur = $request->input('formateur_id');
+        $selectedSalle = $request->input('salle_id');
+        $selectedType = $request->input('type', 'groupe');
+
+        $groupesQuery = Groupe::query()->orderBy('code');
+        if ($selectedFiliere) {
+            $groupesQuery->where('filiere_id', $selectedFiliere);
+        }
+        $groupes = $groupesQuery->get();
+
         $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
         $creneaux = ['S1', 'S2', 'S3', 'S4'];
-
         $emploi = [];
 
-        // 1. Consultation d'un emploi du temps Groupe (Stagiaire/Filtre)
-        if ($selectedGroupe) {
-            $seances = Seance::with(['formateur', 'salle', 'groupe'])
-                ->where('groupe_id', $selectedGroupe)
-                ->get();
-                
-            foreach ($seances as $seance) {
-                $emploi[$seance->jour][$seance->creneau] = $seance;
-            }
+        $query = Seance::with(['formateur', 'salle', 'groupe']);
+        if ($selectedType === 'groupe' && $selectedGroupe) {
+            $query->where('groupe_id', $selectedGroupe);
+        }
+        if ($selectedType === 'formateur' && $selectedFormateur) {
+            $query->where('formateur_id', $selectedFormateur);
+        }
+        if ($selectedType === 'salle' && $selectedSalle) {
+            $query->where('salle_id', $selectedSalle);
         }
 
-        // 2. Redirection et Logic spécifique par Role
+        $seances = $query->get();
+        foreach ($seances as $seance) {
+            $emploi[$seance->jour][$seance->creneau] = $seance;
+        }
+
         if (Auth::check()) {
             $user = Auth::user();
+            if ($user->role === 'formateur' && !($selectedType === 'groupe' && $selectedGroupe)) {
+                $selectedType = 'formateur';
+                $formateur = $user->formateur;
+                $selectedFormateur = optional($formateur)->id;
+                $emploi = [];
 
-            // Si le formateur n'a pas filtré, on affiche son emploi personnel
-            if ($user->role === 'formateur' && !$selectedGroupe) {
-                $formateur = $user->formateur; // Relation Model User -> Formateur
                 if ($formateur) {
                     $seancesPerso = Seance::with(['groupe', 'salle'])
                         ->where('formateur_id', $formateur->id)
@@ -147,11 +175,37 @@ class SeanceController extends Controller
                 }
             }
 
-            // View pour Espace Privé (Admin/Formateur)
-            return view('admin.seances.emploi', compact('groupes', 'selectedGroupe', 'jours', 'creneaux', 'emploi'));
+            return view('admin.seances.emploi', compact(
+                'filieres',
+                'groupes',
+                'formateurs',
+                'salles',
+                'selectedType',
+                'selectedFiliere',
+                'selectedGroupe',
+                'selectedFormateur',
+                'selectedSalle',
+                'jours',
+                'creneaux',
+                'emploi'
+            ));
         }
 
-        // View Stagiaire (Public)
-        return view('stagiaire.emploi', compact('groupes', 'selectedGroupe', 'jours', 'creneaux', 'emploi'));
+        return view('stagiaire.emploi', compact(
+            'filieres',
+            'groupes',
+            'selectedFiliere',
+            'selectedGroupe',
+            'jours',
+            'creneaux',
+            'emploi'
+        ));
+    }
+
+    public function groupesByFiliere(Filiere $filiere)
+    {
+        return response()->json(
+            $filiere->groupes()->select('id', 'code')->orderBy('code')->get()
+        );
     }
 }

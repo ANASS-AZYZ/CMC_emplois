@@ -1,84 +1,396 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Consultation de l'Emploi du Temps
-        </h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight" data-i18n-app="emploisGroupsTitle">Emplois des Groupes</h2>
     </x-slot>
+
+    @php
+        $hasFilter = !empty($selectedGroupe);
+        $currentGroupe = $selectedGroupe ? $groupes->firstWhere('id', (int) $selectedGroupe) : null;
+        $totalSeances = 0;
+        foreach($jours as $j) {
+            foreach($creneaux as $c) {
+                if(isset($emploi[$j][$c])) {
+                    $totalSeances++;
+                }
+            }
+        }
+        $totalHeures = $totalSeances * 2.5;
+    @endphp
+
+    <style>
+        body {
+            font-family: Trebuchet MS, Arial, sans-serif;
+        }
+
+        .paper {
+            width: 1120px;
+            margin: 10px auto;
+            background: white;
+            padding: 8px;
+            border: 1px solid #cfd4da;
+        }
+
+        .doc-header {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            border: 1px solid #cfd4da;
+        }
+
+        .doc-header td {
+            border: 1px solid #cfd4da;
+            text-align: center;
+            vertical-align: middle;
+            padding: 4px;
+        }
+
+        .doc-title-ar {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            line-height: 1.2;
+        }
+
+        .doc-title-fr {
+            margin: 4px 0 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #222;
+            line-height: 1.2;
+        }
+
+        .doc-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 4px 0 8px;
+            padding: 0 6px;
+        }
+
+        .doc-meta b {
+            font-size: 16px;
+            margin-left: 6px;
+        }
+
+        .group-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            page-break-inside: auto;
+        }
+
+        .group-table tr {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .group-table th {
+            background-color: #2f9cb7 !important;
+            color: #fff !important;
+            border: 1px solid #d0d5db;
+            padding: 4px;
+            font-size: 13px;
+            height: 36px;
+            font-weight: 700;
+        }
+
+        .group-table td {
+            border: 1px solid #d0d5db;
+            height: 60px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 11px;
+            padding: 0 !important;
+            background: #f5f5f5;
+        }
+
+        .day-cell {
+            background-color: #d7e2e9 !important;
+            font-weight: 700;
+            width: 110px;
+            font-size: 13px;
+        }
+
+        .slot-card {
+            background-color: #5c80b9 !important;
+            color: #fff !important;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3px;
+            line-height: 1.25;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .slot-title {
+            font-weight: 800;
+        }
+
+        .times {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .emploi-shell {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+        }
+
+        .empty-state {
+            border: 2px dashed #d1d5db;
+            color: #94a3b8;
+        }
+
+        body.theme-dark .emploi-shell {
+            background: var(--app-surface) !important;
+            border-color: var(--app-border) !important;
+        }
+
+        body.theme-dark .emploi-shell label {
+            color: #dbe7ff !important;
+        }
+
+        body.theme-dark .emploi-shell select {
+            background: #0f1a2e !important;
+            border-color: #334155 !important;
+            color: #e5edff !important;
+        }
+
+        body.theme-dark .emploi-shell select option {
+            background: #0f1a2e;
+            color: #e5edff;
+        }
+
+        body.theme-dark .emploi-shell button[type="submit"] {
+            background: #2f7df6 !important;
+            color: #ffffff !important;
+        }
+
+        body.theme-dark .empty-state {
+            border-color: #334155;
+            color: #94a3b8;
+        }
+
+        body.theme-dark .group-table td {
+            background: #111827;
+            color: #e5e7eb;
+        }
+
+        body.theme-dark .day-cell {
+            background-color: #1e293b !important;
+            color: #f8fafc;
+        }
+
+        body.theme-dark .slot-card {
+            background-color: #1d4ed8 !important;
+        }
+
+        @media print {
+            .no-print, nav, aside { display: none !important; }
+            header { display: none !important; }
+            main { padding: 0 !important; }
+            .py-12 { padding-top: 0 !important; padding-bottom: 0 !important; }
+            .max-w-7xl { max-width: 100% !important; }
+            @page { size: A4 landscape; margin: 5mm; }
+            .print-wrap,
+            .paper { box-shadow: none !important; border: 0 !important; padding: 0 !important; width: 100% !important; margin: 0 !important; }
+            .group-table th, .slot-card {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .group-table th { font-size: 10px; padding: 3px; }
+            .group-table td { height: 52px; font-size: 10px; }
+            .day-cell { width: 86px; font-size: 10px; }
+            .slot-card { font-size: 10px; padding: 3px; }
+            .doc-title-ar, .doc-title-fr { font-size: 13px; }
+            .doc-meta { font-size: 11px; margin: 2px 0 6px; }
+            .doc-meta b { font-size: 12px; }
+            .times { font-size: 10px; padding: 0 6px; }
+        }
+    </style>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
-                <form method="GET" action="{{ route('seances.emploi') }}" class="mb-8 flex items-end gap-4">
-                    <div class="w-1/3">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Choisir un Groupe :</label>
-                        <select name="groupe_id" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                            <option value="">-- Sélectionner --</option>
-                            @foreach($groupes as $g)
-                                <option value="{{ $g->id }}" {{ $selectedGroupe == $g->id ? 'selected' : '' }}>
-                                    {{ $g->code }}
-                                </option>
-                            @endforeach
-                        </select>
+            <div class="emploi-shell overflow-hidden shadow-sm sm:rounded-lg p-6 print-wrap">
+                <form method="GET" action="{{ auth()->user()?->role === 'admin' ? route('seances.emploi') : route('formateur.emploi.view') }}" class="mb-8 no-print">
+                    <input type="hidden" name="type" value="groupe">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n-app="filiereLabel">Filiere</label>
+                            <select name="filiere_id" id="filiere_id" class="w-full border-gray-300 rounded-md shadow-sm">
+                                <option value="" data-i18n-app="selectPrompt">-- Selectionner --</option>
+                                @foreach($filieres as $filiere)
+                                    <option value="{{ $filiere->id }}" {{ (string)$selectedFiliere === (string)$filiere->id ? 'selected' : '' }}>{{ $filiere->nom }} ({{ $filiere->niveau }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n-app="groupeLabel">Groupe</label>
+                            <select name="groupe_id" id="groupe_id" class="w-full border-gray-300 rounded-md shadow-sm">
+                                <option value="" data-i18n-app="selectPrompt">-- Selectionner --</option>
+                                @foreach($groupes as $g)
+                                    <option value="{{ $g->id }}" {{ (string)$selectedGroupe === (string)$g->id ? 'selected' : '' }}>{{ $g->code }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition duration-200 shadow">
+                                <span data-i18n-app="showBtn">Afficher</span>
+                            </button>
+                        </div>
+
+                        <div class="text-right no-print">
+                            @if($hasFilter)
+                                <button type="button" onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2 rounded-md transition duration-200 shadow">
+                                    <span data-i18n-app="printEmploisBtn">Imprimer emplois</span>
+                                </button>
+                            @endif
+                        </div>
                     </div>
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition duration-200 shadow">
-                        Afficher l'emploi
-                    </button>
                 </form>
 
-                @if($selectedGroupe)
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-gray-300 rounded-lg">
-                        <thead>
-                            <tr class="bg-blue-600 text-white">
-                                <th class="border border-blue-700 p-4 w-32">Jour / Séance</th>
-                                <th class="border border-blue-700 p-4">S1 <br><span class="text-xs font-normal">08:30 - 11:00</span></th>
-                                <th class="border border-blue-700 p-4">S2 <br><span class="text-xs font-normal">11:00 - 13:30</span></th>
-                                <th class="border border-blue-700 p-4">S3 <br><span class="text-xs font-normal">13:30 - 16:00</span></th>
-                                <th class="border border-blue-700 p-4">S4 <br><span class="text-xs font-normal">16:00 - 18:30</span></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($jours as $jour)
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="border border-gray-300 p-4 font-bold bg-gray-100 text-gray-700 text-center">
-                                    {{ $jour }}
+                @if($hasFilter)
+                    <div class="paper">
+                        <table class="doc-header">
+                            <tr>
+                                <td style="width:200px;">
+                                    <img src="{{ asset('images/logo-cmc.png') }}" style="height:70px; object-fit:contain;">
                                 </td>
+                                <td>
+                                    <p class="doc-title-ar">مكتب التكوين المهني و إنعاش الشغل</p>
+                                    <p class="doc-title-fr">Office de la formation professionnelle et de la promotion du travail</p>
+                                </td>
+                                <td style="width:200px;">
+                                    <img src="{{ asset('images/logo-ofppt.png') }}" style="height:60px; object-fit:contain;">
+                                </td>
+                            </tr>
+                        </table>
 
-                                @foreach($creneaux as $creneau)
-                                <td class="border border-gray-300 p-2 text-center align-top min-h-[100px] w-1/4">
-                                    @if(isset($emploi[$jour][$creneau]))
-                                        <div class="bg-blue-50 border-l-4 border-blue-500 p-3 rounded shadow-sm text-left">
-                                            <p class="font-bold text-blue-900 text-sm mb-1 uppercase">
-                                                {{ $emploi[$jour][$creneau]->formateur->nom }} {{ $emploi[$jour][$creneau]->formateur->prenom }}
-                                            </p>
-                                            <div class="flex justify-between items-center mt-2">
-                                                <span class="bg-blue-200 text-blue-800 text-[10px] px-2 py-1 rounded font-bold uppercase">
-                                                    {{ $emploi[$jour][$creneau]->salle->code }}
-                                                </span>
-                                                <span class="text-[10px] text-gray-500 italic">
-                                                    {{ $emploi[$jour][$creneau]->salle->type }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    @else
-                                        <div class="py-8">
-                                            <span class="text-gray-200 font-light text-xl">---</span>
-                                        </div>
-                                    @endif
-                                </td>
+                        <div class="doc-meta">
+                            <div><span data-i18n-app="groupLabelMeta">Groupe</span> : <b>{{ strtoupper($currentGroupe?->code ?? '') }}</b></div>
+                            <div><span data-i18n-app="weeklyHoursLabel">Masse Horaire Hebdomadaire</span> : <b>{{ rtrim(rtrim(number_format($totalHeures, 1), '0'), '.') }}h</b></div>
+                            <div><span data-i18n-app="trainingYearLabel">Année de Formation</span> : <b>2025 / 2026</b></div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse group-table">
+                            <thead>
+                                <tr>
+                                    <th class="day-cell" data-i18n-app="dayHourHeader">Jour / Horaire</th>
+                                    <th><div class="times"><span>08:30</span><span>11:00</span></div></th>
+                                    <th><div class="times"><span>11:00</span><span>13:30</span></div></th>
+                                    <th><div class="times"><span>13:30</span><span>16:00</span></div></th>
+                                    <th><div class="times"><span>16:00</span><span>18:30</span></div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($jours as $jour)
+                                    <tr>
+                                        @php
+                                            $dayMap = [
+                                                'Lundi' => 'dayMonday',
+                                                'Mardi' => 'dayTuesday',
+                                                'Mercredi' => 'dayWednesday',
+                                                'Jeudi' => 'dayThursday',
+                                                'Vendredi' => 'dayFriday',
+                                                'Samedi' => 'daySaturday',
+                                            ];
+                                            $dayKey = $dayMap[$jour] ?? null;
+                                        @endphp
+                                        <td class="day-cell" @if($dayKey) data-i18n-app="{{ $dayKey }}" @endif>{{ $jour }}</td>
+                                        @foreach($creneaux as $creneau)
+                                            <td>
+                                                @if(isset($emploi[$jour][$creneau]))
+                                                    <div class="slot-card">
+                                                        <div class="slot-title">{{ $emploi[$jour][$creneau]->groupe->code }}</div>
+                                                        <div><span data-i18n-app="formateurLabel">FORMATEUR</span> : {{ $emploi[$jour][$creneau]->formateur->nom }} {{ $emploi[$jour][$creneau]->formateur->prenom }}</div>
+                                                        <div><span data-i18n-app="salleLabel">SALLE</span> : {{ $emploi[$jour][$creneau]->salle->code }}</div>
+                                                    </div>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                        @endforeach
+                                    </tr>
                                 @endforeach
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
                 @else
-                    <div class="text-center py-10 border-2 border-dashed border-gray-200 rounded-lg">
-                        <p class="text-gray-400">Veuillez sélectionner un groupe pour afficher son emploi du temps.</p>
+                    <div class="empty-state text-center py-10 rounded-lg">
+                        <p data-i18n-app="emptyPlanningMsg">Veuillez selectionner un filtre pour afficher le planning.</p>
                     </div>
                 @endif
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const filiereEl = document.getElementById('filiere_id');
+            const groupeEl = document.getElementById('groupe_id');
+            const currentGroupe = '{{ $selectedGroupe }}';
+
+            async function loadGroupesByFiliere() {
+                if (!filiereEl || !groupeEl || !filiereEl.value) {
+                    return;
+                }
+
+                const response = await fetch('/filieres/' + filiereEl.value + '/groupes');
+                if (!response.ok) {
+                    return;
+                }
+
+                const groupes = await response.json();
+                const promptText = document.documentElement.lang === 'ar'
+                    ? '-- اختر --'
+                    : (document.documentElement.lang === 'en' ? '-- Select --' : '-- Selectionner --');
+                const options = ['<option value="">' + promptText + '</option>'];
+                groupes.forEach(function (g) {
+                    const selected = String(g.id) === String(currentGroupe) ? ' selected' : '';
+                    options.push('<option value="' + g.id + '"' + selected + '>' + g.code + '</option>');
+                });
+                groupeEl.innerHTML = options.join('');
+            }
+
+            if (filiereEl) {
+                filiereEl.addEventListener('change', async function () {
+                    if (!groupeEl) {
+                        return;
+                    }
+                    const promptText = document.documentElement.lang === 'ar'
+                        ? '-- اختر --'
+                        : (document.documentElement.lang === 'en' ? '-- Select --' : '-- Selectionner --');
+                    groupeEl.innerHTML = '<option value="">' + promptText + '</option>';
+                    if (!filiereEl.value) {
+                        return;
+                    }
+                    const response = await fetch('/filieres/' + filiereEl.value + '/groupes');
+                    if (!response.ok) {
+                        return;
+                    }
+                    const groupes = await response.json();
+                    groupes.forEach(function (g) {
+                        const option = document.createElement('option');
+                        option.value = g.id;
+                        option.textContent = g.code;
+                        groupeEl.appendChild(option);
+                    });
+                });
+
+                loadGroupesByFiliere();
+            }
+        });
+    </script>
 </x-app-layout>

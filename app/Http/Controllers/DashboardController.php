@@ -12,7 +12,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Had d-data hiya li ghadi t-khlli l-Dashboard i-koun 3amer
         $stats = [
             'groupes' => Groupe::count(),
             'salles' => Salle::count(),

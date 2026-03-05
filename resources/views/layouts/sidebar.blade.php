@@ -1,61 +1,59 @@
-<div class="flex flex-col h-screen bg-[#0f172a] text-white w-72 shadow-2xl no-print">
-    
-    <div class="p-8 border-b border-slate-800">
-        <h1 class="text-2xl font-black text-blue-400 italic tracking-tighter uppercase">
-            CMC Planning
-        </h1>
+<div class="sidebar-shell flex flex-col h-screen w-72 shadow-2xl no-print">
+    <div class="p-8 border-b border-gray-200">
+        <h1 class="sidebar-brand text-2xl font-black tracking-tight">DIA-EMPLOIS</h1>
     </div>
 
-    <nav class="flex-1 px-6 py-8 space-y-4">
-        
+    <nav class="flex-1 px-5 py-6 space-y-2 overflow-y-auto">
         @if(Auth::user()->role === 'admin')
-            <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 text-sm font-bold rounded-xl {{ request()->routeIs('dashboard') ? 'bg-blue-600' : 'text-slate-400 hover:bg-slate-800' }}">
-                <i class="fas fa-chart-pie mr-3"></i> Dashboard
+            <a href="{{ route('dashboard') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('dashboard') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-home mr-3"></i> <span data-i18n-app="navDashboard">Dashboard</span>
             </a>
 
-            <div class="pt-4 pb-2 px-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Ressources</div>
-            <a href="{{ route('groupes.index') }}" class="flex items-center px-4 py-3 text-sm font-semibold text-slate-300 hover:bg-slate-800 rounded-xl">
-                <i class="fas fa-users mr-3"></i> Groupes
+            <div data-i18n-app="sideResources" class="sidebar-section pt-6 pb-2 px-4 text-sm font-bold uppercase tracking-wider">Ressources</div>
+            <a href="{{ route('groupes.index') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl transition {{ request()->routeIs('groupes.*') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-users mr-3"></i> <span data-i18n-app="sideGroups">Groupes</span>
             </a>
-            <a href="{{ route('salles.index') }}" class="flex items-center px-4 py-3 text-sm font-semibold text-slate-300 hover:bg-slate-800 rounded-xl">
-                <i class="fas fa-door-open mr-3"></i> Salles
+            <a href="{{ route('salles.index') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl transition {{ request()->routeIs('salles.*') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-door-open mr-3"></i> <span data-i18n-app="sideRooms">Salles</span>
             </a>
-            <a href="{{ route('formateurs.index') }}" class="flex items-center px-4 py-3 text-sm font-semibold text-slate-300 hover:bg-slate-800 rounded-xl">
-                <i class="fas fa-chalkboard-user mr-3"></i> Formateurs
+            <a href="{{ route('formateurs.index') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl transition {{ request()->routeIs('formateurs.*') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-chalkboard-teacher mr-3"></i> <span data-i18n-app="sideTrainers">Formateurs</span>
+            </a>
+            <a href="{{ route('admin.messages.index') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl transition {{ request()->routeIs('admin.messages.*') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-inbox mr-3"></i> <span data-i18n-app="sideMessages">Messages</span>
             </a>
 
-            <div class="pt-4 pb-2 px-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Planning</div>
-            <a href="{{ route('seances.index') }}" class="flex items-center px-4 py-3 text-sm font-semibold text-slate-300 hover:bg-slate-800 rounded-xl">
-                <i class="fas fa-calendar-days mr-3"></i> Gestion Séances
+            <div data-i18n-app="sidePlanning" class="sidebar-section pt-6 pb-2 px-4 text-sm font-bold uppercase tracking-wider">Planning</div>
+            <a href="{{ route('seances.index') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl transition {{ (request()->routeIs('seances.index') || request()->routeIs('seances.create') || request()->routeIs('seances.edit')) ? 'sidebar-link-active font-semibold' : '' }}">
+                <i class="fas fa-calendar-alt mr-3"></i> <span data-i18n-app="sideManageSessions">Gestion Seances</span>
             </a>
-
-            <div class="mt-6 px-2">
-                <a href="{{ route('seances.create') }}" class="flex items-center justify-center py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl shadow-xl transition-all">
-                    + Ajouter Séance
-                </a>
-            </div>
+            <a href="{{ route('seances.emploi', ['type' => 'groupe']) }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl transition {{ request()->routeIs('seances.emploi') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-table mr-3"></i> <span data-i18n-app="sideGroupTimetables">Emplois Groupe</span>
+            </a>
         @endif
 
         @if(Auth::user()->role === 'formateur')
-            <div class="bg-slate-800/50 p-2 rounded-2xl space-y-2 border border-slate-700">
-                <a href="{{ route('formateur.dashboard') }}" class="flex items-center px-4 py-4 bg-blue-600 text-white font-black rounded-xl shadow-lg shadow-blue-600/20">
-                    <i class="fas fa-calendar-check mr-3"></i> Mon Emploi
-                </a>
-
-                <a href="{{ route('stagiaire.emploi') }}" class="flex items-center px-4 py-4 text-slate-300 hover:bg-slate-700 rounded-xl transition font-bold">
-                    <i class="fas fa-users-viewfinder mr-3 text-blue-400"></i> Emplois des Groupes
-                </a>
-
-                <a href="mailto:admin@cmc.ma" class="flex items-center px-4 py-4 text-slate-400 hover:bg-slate-700 rounded-xl transition font-bold">
-                    <i class="fas fa-envelope mr-3"></i> Contacter l'Admin
-                </a>
-            </div>
-        @endif
-
-        <div class="pt-10">
-            <a href="{{ route('stagiaire.emploi') }}" class="flex items-center px-4 py-3 text-sm font-bold text-slate-500 hover:bg-slate-800 rounded-xl transition">
-                <i class="fas fa-search mr-3"></i> Consulter l'Emploi
+            <a href="{{ route('formateur.dashboard') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.dashboard') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-calendar-check mr-3"></i> <span data-i18n-app="navMyTimetable">Mon Emploi</span>
             </a>
-        </div>
+
+            <a href="{{ route('formateur.emploi.view') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.emploi.view') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-users mr-3"></i> <span data-i18n-app="sideGroupTimetables">Emplois du Groupe</span>
+            </a>
+
+            <a href="{{ route('formateur.contact-admin.create') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.contact-admin.*') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-envelope mr-3"></i> <span data-i18n-app="sideContactAdmin">Contacter Admin</span>
+            </a>
+        @endif
     </nav>
 </div>
