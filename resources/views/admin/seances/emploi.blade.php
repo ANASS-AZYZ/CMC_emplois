@@ -359,14 +359,12 @@
             const filiereEl = document.getElementById('filiere_id');
             const groupeEl = document.getElementById('groupe_id');
             const currentGroupe = '{{ $selectedGroupe }}';
+            const allGroupOptionsHtml = groupeEl ? groupeEl.innerHTML : '';
 
             async function loadGroupesByFiliere() {
                 if (!filiereEl || !groupeEl || !filiereEl.value) {
-                    const promptText = document.documentElement.lang === 'ar'
-                        ? '-- اختر --'
-                        : (document.documentElement.lang === 'en' ? '-- Select --' : '-- Selectionner --');
                     if (groupeEl) {
-                        groupeEl.innerHTML = '<option value="">' + promptText + '</option>';
+                        groupeEl.innerHTML = allGroupOptionsHtml;
                     }
                     return;
                 }
@@ -398,13 +396,14 @@
                     if (!groupeEl) {
                         return;
                     }
+                    if (!filiereEl.value) {
+                        groupeEl.innerHTML = allGroupOptionsHtml;
+                        return;
+                    }
                     const promptText = document.documentElement.lang === 'ar'
                         ? '-- اختر --'
                         : (document.documentElement.lang === 'en' ? '-- Select --' : '-- Selectionner --');
                     groupeEl.innerHTML = '<option value="">' + promptText + '</option>';
-                    if (!filiereEl.value) {
-                        return;
-                    }
                     let response;
                     try {
                         response = await fetch('/filieres/' + filiereEl.value + '/groupes');

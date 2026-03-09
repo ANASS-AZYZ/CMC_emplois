@@ -8,8 +8,10 @@
     <script>
         (function () {
             try {
-                var theme = localStorage.getItem('cmc_theme') || 'light';
-                if (theme === 'dark') {
+                var mode = localStorage.getItem('cmc_theme_mode') || 'system';
+                var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var shouldUseDark = mode === 'dark' || (mode === 'system' && prefersDark);
+                if (shouldUseDark) {
                     document.documentElement.classList.add('theme-dark-preload');
                 }
             } catch (e) {}
@@ -136,22 +138,95 @@
         }
 
         .ui-icon-btn {
-            width: 38px;
-            height: 38px;
+            width: 34px;
+            height: 34px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             border-radius: 9999px;
             border: 1px solid #cbd5e1;
             background: #fff;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 1;
+        }
+
+        .ui-icon-btn svg,
+        .ui-icon-btn i {
+            width: 10px !important;
+            height: 10px !important;
+            font-size: 10px !important;
+        }
+
+        .ui-search-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .ui-search-icon {
+            position: absolute;
+            left: 12px;
+            width: 16px;
+            height: 16px;
+            color: #64748b;
+            pointer-events: none;
+        }
+
+        .ui-search-input {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 9999px;
+            background: #ffffff;
+            color: #0f172a;
+            height: 32px;
+            padding: 0 66px 0 32px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .ui-search-shortcut {
+            position: absolute;
+            right: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .ui-avatar-fallback {
+            width: 36px;
+            height: 36px;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
+            color: #1e3a8a;
+            font-weight: 800;
+            text-transform: uppercase;
         }
 
         body.theme-dark .ui-icon-btn {
             border-color: var(--app-border);
             background: var(--app-surface-soft);
             color: var(--app-text);
+        }
+
+        body.theme-dark .ui-search-input {
+            border-color: var(--app-border);
+            background: var(--app-surface-soft);
+            color: var(--app-text);
+        }
+
+        body.theme-dark .ui-search-shortcut,
+        body.theme-dark .ui-search-icon {
+            color: #94a3b8;
+        }
+
+        body.theme-dark .ui-avatar-fallback {
+            background: #334155;
+            border-color: #475569;
+            color: #e2e8f0;
         }
 
         .ui-lang-wrap { position: relative; }
@@ -291,7 +366,23 @@
             var langToggle = document.getElementById('ui-lang-toggle');
             var langMenu = document.getElementById('ui-lang-menu');
             var langItems = document.querySelectorAll('.ui-lang-item');
-            var currentLang = localStorage.getItem('cmc_lang') || 'en';
+            var searchInputs = document.querySelectorAll('#ui-nav-search, #ui-nav-search-mobile, #ui-sidebar-search');
+            var sidebarLinks = document.querySelectorAll('.sidebar-link');
+            var notificationTrigger = document.getElementById('ui-notification-trigger');
+            function detectSystemLanguage() {
+                var navLang = ((navigator.language || navigator.userLanguage || 'en') + '').toLowerCase();
+                if (navLang.indexOf('ar') === 0) {
+                    return 'ar';
+                }
+                if (navLang.indexOf('fr') === 0) {
+                    return 'fr';
+                }
+                return 'en';
+            }
+
+            var currentLang = localStorage.getItem('cmc_lang') || detectSystemLanguage();
+            var themeMode = localStorage.getItem('cmc_theme_mode') || 'system';
+            var notificationInFlight = false;
 
             var dict = {
                 fr: {
@@ -301,6 +392,8 @@
                     navConsultation: 'Consultation Emploi',
                     navProfile: 'Profil',
                     navLogout: 'Deconnexion',
+                    navSettings: 'Parametres',
+                    navSearchPlaceholder: 'Rechercher...',
                     sideResources: 'Ressources',
                     sideGroups: 'Groupes',
                     sideRooms: 'Salles',
@@ -310,6 +403,21 @@
                     sideManageSessions: 'Gestion Seances',
                     sideGroupTimetables: 'Emplois Groupe',
                     sideContactAdmin: 'Contacter Admin',
+                    sidePreferences: 'Preferences',
+                    sideSettings: 'Parametres',
+                    settingsTitle: 'Parametres',
+                    settingsPasswordNav: 'Changer le mot de passe',
+                    settingsThemeNav: 'Mode d\'affichage',
+                    settingsLanguageNav: 'Langue',
+                    settingsThemeTitle: 'Mode d\'affichage',
+                    settingsThemeHelp: 'Par defaut, le mode suit les preferences de votre systeme.',
+                    settingsThemeLabel: 'Theme',
+                    themeOptionSystem: 'Par defaut (systeme)',
+                    themeOptionDark: 'Dark mode',
+                    themeOptionLight: 'White mode',
+                    settingsLanguageTitle: 'Langue',
+                    settingsLanguageHelp: 'Choisissez la langue de l\'interface.',
+                    settingsLanguageLabel: 'Language',
                     dashboardTitle: 'Tableau de Bord - CMC',
                     statTrainers: 'Formateurs',
                     statRooms: 'Salles',
@@ -424,6 +532,8 @@
                     navConsultation: 'Timetable Consultation',
                     navProfile: 'Profile',
                     navLogout: 'Log Out',
+                    navSettings: 'Settings',
+                    navSearchPlaceholder: 'Search...',
                     sideResources: 'Resources',
                     sideGroups: 'Groups',
                     sideRooms: 'Rooms',
@@ -433,6 +543,21 @@
                     sideManageSessions: 'Manage Sessions',
                     sideGroupTimetables: 'Group Timetables',
                     sideContactAdmin: 'Contact Admin',
+                    sidePreferences: 'Preferences',
+                    sideSettings: 'Settings',
+                    settingsTitle: 'Settings',
+                    settingsPasswordNav: 'Change password',
+                    settingsThemeNav: 'Display mode',
+                    settingsLanguageNav: 'Language',
+                    settingsThemeTitle: 'Display mode',
+                    settingsThemeHelp: 'By default, the app follows your system theme.',
+                    settingsThemeLabel: 'Theme',
+                    themeOptionSystem: 'Default (system)',
+                    themeOptionDark: 'Dark mode',
+                    themeOptionLight: 'White mode',
+                    settingsLanguageTitle: 'Language',
+                    settingsLanguageHelp: 'Choose the interface language.',
+                    settingsLanguageLabel: 'Language',
                     dashboardTitle: 'Dashboard - CMC',
                     statTrainers: 'Trainers',
                     statRooms: 'Rooms',
@@ -547,6 +672,8 @@
                     navConsultation: 'استشارة الجداول',
                     navProfile: 'الملف الشخصي',
                     navLogout: 'تسجيل الخروج',
+                    navSettings: 'الاعدادات',
+                    navSearchPlaceholder: 'بحث...',
                     sideResources: 'الموارد',
                     sideGroups: 'المجموعات',
                     sideRooms: 'القاعات',
@@ -556,6 +683,21 @@
                     sideManageSessions: 'تدبير الحصص',
                     sideGroupTimetables: 'جداول المجموعات',
                     sideContactAdmin: 'مراسلة الادارة',
+                    sidePreferences: 'التفضيلات',
+                    sideSettings: 'الاعدادات',
+                    settingsTitle: 'الاعدادات',
+                    settingsPasswordNav: 'تغيير كلمة المرور',
+                    settingsThemeNav: 'وضع العرض',
+                    settingsLanguageNav: 'اللغة',
+                    settingsThemeTitle: 'وضع العرض',
+                    settingsThemeHelp: 'افتراضيا يتم اتباع اعدادات النظام.',
+                    settingsThemeLabel: 'الثيم',
+                    themeOptionSystem: 'افتراضي (النظام)',
+                    themeOptionDark: 'الوضع الداكن',
+                    themeOptionLight: 'الوضع الفاتح',
+                    settingsLanguageTitle: 'اللغة',
+                    settingsLanguageHelp: 'اختر لغة الواجهة.',
+                    settingsLanguageLabel: 'اللغة',
                     dashboardTitle: 'لوحة التحكم - CMC',
                     statTrainers: 'المكونون',
                     statRooms: 'القاعات',
@@ -665,17 +807,33 @@
                 }
             };
 
-            function applyTheme(theme) {
-                var dark = theme === 'dark';
+            function resolveDarkFromMode(mode) {
+                if (mode === 'dark') {
+                    return true;
+                }
+                if (mode === 'light') {
+                    return false;
+                }
+                return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+
+            function applyTheme(mode) {
+                themeMode = ['light', 'dark', 'system'].indexOf(mode) !== -1 ? mode : 'system';
+                var dark = resolveDarkFromMode(themeMode);
                 document.body.classList.toggle('theme-dark', dark);
                 document.documentElement.classList.toggle('theme-dark-preload', dark);
                 if (!dark) {
                     document.documentElement.classList.remove('theme-dark-preload');
                 }
+                localStorage.setItem('cmc_theme_mode', themeMode);
                 localStorage.setItem('cmc_theme', dark ? 'dark' : 'light');
                 if (themeToggle) {
-                    themeToggle.textContent = dark ? '☀️' : '🌙';
+                    themeToggle.textContent = themeMode === 'system' ? '🖥️' : (dark ? '☀️' : '🌙');
                 }
+
+                document.dispatchEvent(new CustomEvent('cmc-theme-mode-changed', {
+                    detail: { mode: themeMode, isDark: dark }
+                }));
             }
 
             function applyLanguage(lang) {
@@ -706,6 +864,13 @@
                     }
                 });
 
+                document.querySelectorAll('[data-i18n-nav-placeholder]').forEach(function (el) {
+                    var key = el.getAttribute('data-i18n-nav-placeholder');
+                    if (labels[key]) {
+                        el.setAttribute('placeholder', labels[key]);
+                    }
+                });
+
                 document.querySelectorAll('[data-i18n-confirm]').forEach(function (el) {
                     var key = el.getAttribute('data-i18n-confirm');
                     if (labels[key]) {
@@ -725,7 +890,10 @@
 
             if (themeToggle) {
                 themeToggle.addEventListener('click', function () {
-                    applyTheme(document.body.classList.contains('theme-dark') ? 'light' : 'dark');
+                    var next = themeMode === 'system'
+                        ? (document.body.classList.contains('theme-dark') ? 'light' : 'dark')
+                        : (themeMode === 'dark' ? 'light' : 'dark');
+                    applyTheme(next);
                 });
             }
 
@@ -753,8 +921,116 @@
                 }
             });
 
-            applyTheme(localStorage.getItem('cmc_theme') || 'light');
+            function filterSidebarSearch(rawQuery) {
+                if (!sidebarLinks.length) {
+                    return;
+                }
+
+                var query = (rawQuery || '').toLowerCase().trim();
+                sidebarLinks.forEach(function (link) {
+                    var text = (link.textContent || '').toLowerCase();
+                    var show = !query || text.indexOf(query) !== -1;
+                    link.style.display = show ? '' : 'none';
+                });
+            }
+
+            searchInputs.forEach(function (input) {
+                if (!input) {
+                    return;
+                }
+
+                input.addEventListener('input', function () {
+                    var value = input.value;
+                    searchInputs.forEach(function (other) {
+                        if (other !== input) {
+                            other.value = value;
+                        }
+                    });
+                    filterSidebarSearch(value);
+                });
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+                    event.preventDefault();
+                    var target = document.getElementById('ui-nav-search')
+                        || document.getElementById('ui-sidebar-search')
+                        || document.getElementById('ui-nav-search-mobile');
+                    if (target) {
+                        target.focus();
+                        target.select();
+                    }
+                }
+            });
+
+            document.addEventListener('cmc:set-theme-mode', function (event) {
+                var mode = event.detail && event.detail.mode ? event.detail.mode : 'system';
+                applyTheme(mode);
+            });
+
+            document.addEventListener('cmc:set-language', function (event) {
+                var lang = event.detail && event.detail.lang ? event.detail.lang : 'en';
+                applyLanguage(lang);
+            });
+
+            if (notificationTrigger) {
+                notificationTrigger.addEventListener('click', function () {
+                    var badge = document.getElementById('ui-notification-badge');
+                    if (!badge || notificationInFlight) {
+                        return;
+                    }
+
+                    var url = notificationTrigger.getAttribute('data-mark-read-url');
+                    var csrf = notificationTrigger.getAttribute('data-csrf');
+                    if (!url || !csrf) {
+                        return;
+                    }
+
+                    notificationInFlight = true;
+
+                    fetch(url, {
+                        method: 'PATCH',
+                        headers: {
+                            'X-CSRF-TOKEN': csrf,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    })
+                        .then(function (response) {
+                            if (!response.ok) {
+                                throw new Error('mark-all-failed');
+                            }
+
+                            badge.remove();
+                            document.querySelectorAll('.ui-notif-item').forEach(function (item) {
+                                item.remove();
+                            });
+
+                            var emptyState = document.getElementById('ui-notif-empty');
+                            if (emptyState) {
+                                emptyState.classList.remove('hidden');
+                            }
+                        })
+                        .catch(function () {
+                            // Keep UI unchanged if mark-read request fails.
+                        })
+                        .finally(function () {
+                            notificationInFlight = false;
+                        });
+                });
+            }
+
+            if (window.matchMedia) {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+                    if (themeMode === 'system') {
+                        applyTheme('system');
+                    }
+                });
+            }
+
+            applyTheme(themeMode);
             applyLanguage(currentLang);
+            filterSidebarSearch('');
             document.documentElement.classList.remove('theme-dark-preload');
         });
     </script>

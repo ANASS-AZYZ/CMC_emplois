@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\FormateurMessage;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -40,6 +41,19 @@ class MessageController extends Controller
     {
         if (! $message->read_at) {
             $message->update(['read_at' => now()]);
+        }
+
+        return back();
+    }
+
+    public function markAllAsRead(Request $request): JsonResponse|RedirectResponse
+    {
+        FormateurMessage::query()
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
+        if ($request->expectsJson()) {
+            return response()->json(['ok' => true]);
         }
 
         return back();

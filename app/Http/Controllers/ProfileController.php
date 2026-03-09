@@ -24,6 +24,13 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
+
+        if ($user->role === 'admin') {
+            return Redirect::route('profile.edit')->withErrors([
+                'profile' => 'Modification des informations du profil non autorisee pour les administrateurs.',
+            ]);
+        }
+
         $user->fill($request->validated());
 
         if ($user->isDirty('email')) {
