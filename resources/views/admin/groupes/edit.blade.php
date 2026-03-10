@@ -6,7 +6,16 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white p-8 shadow-sm sm:rounded-lg border border-slate-700/40">
-                <form action="{{ route('groupes.update', $groupe) }}" method="POST">
+                @if ($errors->any())
+                    <div class="alert alert-danger mb-4">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <form id="edit-groupe-form" action="{{ route('groupes.update', $groupe) }}" method="POST" data-edit-filiere-id="{{ $groupe->filiere_id }}">
                     @csrf
                     @method('PUT')
 
@@ -45,10 +54,13 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('edit-groupe-form');
             var yearSelect = document.getElementById('group-year');
             var filiereSelect = document.getElementById('group-filiere');
             var codeInput = document.getElementById('group-code');
             var lastAutoValue = '';
+            var originalValue = codeInput ? codeInput.value.trim() : '';
+            var editFiliereId = form ? (form.getAttribute('data-edit-filiere-id') || '') : '';
 
             if (!yearSelect || !filiereSelect || !codeInput) return;
 
@@ -88,13 +100,14 @@
                 var firstVisibleValue = null;
 
                 Array.from(filiereSelect.options).forEach(function (option) {
-                    var visible = option.getAttribute('data-niveau') === wanted;
+                    var isEditFiliere = editFiliereId && (String(option.value) === String(editFiliereId));
+                    var visible = (option.getAttribute('data-niveau') === wanted) || isEditFiliere;
                     option.hidden = !visible;
                     if (visible && firstVisibleValue === null) firstVisibleValue = option.value;
                     if (visible && option.selected) selectedVisible = true;
                 });
 
-                if (!selectedVisible && firstVisibleValue !== null) {
+                if (!selectedVisible && firstVisibleValue !== null && !editFiliereId) {
                     filiereSelect.value = firstVisibleValue;
                 }
             }
@@ -103,7 +116,10 @@
                 var generated = expectedCodeBySelection();
                 var value = (codeInput.value || '').trim();
                 codeInput.placeholder = 'Ex: ' + generated;
-                if (value === '' || value === lastAutoValue) {
+                if (originalValue) {
+                    return;
+                }
+                if (value === '') {
                     codeInput.value = generated;
                     lastAutoValue = generated;
                 }

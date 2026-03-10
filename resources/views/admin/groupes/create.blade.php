@@ -13,7 +13,8 @@
                     <div class="mb-4">
                         <label class="block font-semibold text-base text-gray-100 mb-2" data-i18n-app="yearLabel">Année</label>
                         <select id="group-year" name="annee" class="w-full rounded-md border border-slate-400 bg-white px-4 py-3 text-slate-900 font-semibold shadow-sm" required>
-                            <option value="1ère" {{ in_array((string) old('annee', '1ère'), ['1', '1ère'], true) ? 'selected' : '' }} data-i18n-app="firstYearLabel">1ère année</option>
+                            <option value="" {{ !old('annee') ? 'selected' : '' }} data-i18n-app="chooseYearPlaceholder">Sélectionner...</option>
+                            <option value="1ère" {{ in_array((string) old('annee'), ['1', '1ère'], true) ? 'selected' : '' }} data-i18n-app="firstYearLabel">1ère année</option>
                             <option value="2ème" {{ in_array((string) old('annee'), ['2', '2ème'], true) ? 'selected' : '' }} data-i18n-app="secondYearLabel">2ème année</option>
                         </select>
                         @error('annee') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -22,6 +23,7 @@
                     <div class="mb-4">
                         <label class="block font-semibold text-base text-gray-100 mb-2" data-i18n-app="filiereLabel">Filière</label>
                         <select id="group-filiere" name="filiere_id" class="w-full rounded-md border border-slate-400 bg-white px-4 py-3 text-slate-900 font-semibold shadow-sm" required>
+                            <option value="" data-niveau="" data-nom="" {{ !old('filiere_id') ? 'selected' : '' }} data-i18n-app="chooseFilierePlaceholder">Sélectionner...</option>
                             @foreach($filieres as $filiere)
                                 <option
                                     value="{{ $filiere->id }}"
@@ -99,12 +101,14 @@
             }
 
             function refreshFilieres() {
-                var wanted = mapYearToNiveau(yearSelect.value);
+                var yearVal = yearSelect.value;
+                var wanted = yearVal ? mapYearToNiveau(yearVal) : '';
                 var selectedVisible = false;
                 var firstVisibleValue = null;
 
                 Array.from(filiereSelect.options).forEach(function (option) {
-                    var visible = option.getAttribute('data-niveau') === wanted;
+                    var isEmpty = option.value === '';
+                    var visible = isEmpty ? true : (option.getAttribute('data-niveau') === wanted);
                     option.hidden = !visible;
 
                     if (visible && firstVisibleValue === null) {
@@ -122,6 +126,12 @@
             }
 
             function ensureCodePrefix() {
+                if (yearSelect.value === '' || filiereSelect.value === '') {
+                    codeInput.placeholder = 'Ex: ...';
+                    codeInput.value = '';
+                    lastAutoValue = '';
+                    return;
+                }
                 var generated = expectedCodeBySelection();
                 var value = (codeInput.value || '').trim();
                 codeInput.placeholder = 'Ex: ' + generated;

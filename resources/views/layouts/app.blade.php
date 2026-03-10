@@ -152,9 +152,9 @@
 
         .ui-icon-btn svg,
         .ui-icon-btn i {
-            width: 10px !important;
-            height: 10px !important;
-            font-size: 10px !important;
+            width: 18px !important;
+            height: 18px !important;
+            font-size: 18px !important;
         }
 
         .ui-search-wrap {
@@ -195,15 +195,20 @@
         .ui-avatar-fallback {
             width: 36px;
             height: 36px;
+            min-width: 36px;
+            min-height: 36px;
             border-radius: 9999px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: #dbeafe;
+            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
             border: 1px solid #93c5fd;
             color: #1e3a8a;
-            font-weight: 800;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
             text-transform: uppercase;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
 
         body.theme-dark .ui-icon-btn {
@@ -224,9 +229,10 @@
         }
 
         body.theme-dark .ui-avatar-fallback {
-            background: #334155;
-            border-color: #475569;
+            background: linear-gradient(135deg, #334155 0%, #475569 100%);
+            border-color: #64748b;
             color: #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
 
         .ui-lang-wrap { position: relative; }
@@ -403,6 +409,7 @@
                     sideManageSessions: 'Gestion Seances',
                     sideGroupTimetables: 'Emplois Groupe',
                     sideContactAdmin: 'Contacter Admin',
+                    sideFormateurSpace: 'Espace formateur',
                     sidePreferences: 'Preferences',
                     sideSettings: 'Parametres',
                     settingsTitle: 'Parametres',
@@ -523,7 +530,19 @@
                     noArchivedMessages: 'Aucun message archive pour le moment.',
                     confirmDeleteRoom: 'Supprimer cette salle ?',
                     confirmDeleteGeneric: 'Supprimer ?',
-                    confirmCancelSession: 'Annuler ?'
+                    confirmCancelSession: 'Annuler ?',
+                    profilePageTitle: 'Profil',
+                    profilePhotoHelp: 'Cliquez pour ajouter ou modifier la photo',
+                    profileRemovePhoto: 'Supprimer la photo',
+                    profileNameLabel: 'Nom',
+                    profileEmailLabel: 'Email',
+                    profileSaveBtn: 'Enregistrer',
+                    profilePasswordTitle: 'Mot de passe',
+                    profilePasswordHelp: 'Modifiez votre mot de passe.',
+                    profileCurrentPasswordLabel: 'Mot de passe actuel',
+                    profileNewPasswordLabel: 'Nouveau mot de passe',
+                    profileConfirmPasswordLabel: 'Confirmer le mot de passe',
+                    profileSavePasswordBtn: 'Enregistrer le mot de passe'
                 },
                 en: {
                     navDashboard: 'Dashboard',
@@ -543,6 +562,7 @@
                     sideManageSessions: 'Manage Sessions',
                     sideGroupTimetables: 'Group Timetables',
                     sideContactAdmin: 'Contact Admin',
+                    sideFormateurSpace: 'Trainer space',
                     sidePreferences: 'Preferences',
                     sideSettings: 'Settings',
                     settingsTitle: 'Settings',
@@ -663,7 +683,19 @@
                     noArchivedMessages: 'No archived messages yet.',
                     confirmDeleteRoom: 'Delete this room?',
                     confirmDeleteGeneric: 'Delete?',
-                    confirmCancelSession: 'Cancel?'
+                    confirmCancelSession: 'Cancel?',
+                    profilePageTitle: 'Profile',
+                    profilePhotoHelp: 'Click to add or change photo',
+                    profileRemovePhoto: 'Remove photo',
+                    profileNameLabel: 'Name',
+                    profileEmailLabel: 'Email',
+                    profileSaveBtn: 'Save',
+                    profilePasswordTitle: 'Password',
+                    profilePasswordHelp: 'Update your password.',
+                    profileCurrentPasswordLabel: 'Current password',
+                    profileNewPasswordLabel: 'New password',
+                    profileConfirmPasswordLabel: 'Confirm password',
+                    profileSavePasswordBtn: 'Save password'
                 },
                 ar: {
                     navDashboard: 'لوحة التحكم',
@@ -683,6 +715,7 @@
                     sideManageSessions: 'تدبير الحصص',
                     sideGroupTimetables: 'جداول المجموعات',
                     sideContactAdmin: 'مراسلة الادارة',
+                    sideFormateurSpace: 'فضاء المكون',
                     sidePreferences: 'التفضيلات',
                     sideSettings: 'الاعدادات',
                     settingsTitle: 'الاعدادات',
@@ -803,7 +836,19 @@
                     noArchivedMessages: 'لا توجد رسائل في الارشيف حاليا.',
                     confirmDeleteRoom: 'حذف هذه القاعة؟',
                     confirmDeleteGeneric: 'حذف؟',
-                    confirmCancelSession: 'الغاء؟'
+                    confirmCancelSession: 'الغاء؟',
+                    profilePageTitle: 'الملف الشخصي',
+                    profilePhotoHelp: 'انقر لإضافة أو تغيير الصورة',
+                    profileRemovePhoto: 'حذف الصورة',
+                    profileNameLabel: 'الاسم',
+                    profileEmailLabel: 'البريد الإلكتروني',
+                    profileSaveBtn: 'حفظ',
+                    profilePasswordTitle: 'كلمة المرور',
+                    profilePasswordHelp: 'تعديل كلمة المرور.',
+                    profileCurrentPasswordLabel: 'كلمة المرور الحالية',
+                    profileNewPasswordLabel: 'كلمة المرور الجديدة',
+                    profileConfirmPasswordLabel: 'تأكيد كلمة المرور',
+                    profileSavePasswordBtn: 'حفظ كلمة المرور'
                 }
             };
 

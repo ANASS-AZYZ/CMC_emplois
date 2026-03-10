@@ -43,8 +43,9 @@
                                     data-mark-read-url="{{ route('admin.messages.read-all') }}"
                                     data-csrf="{{ csrf_token() }}"
                                 >
-                                    <svg style="width: 10px; height: 10px;" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M15 17H9m9-1V11a6 6 0 10-12 0v5l-2 2h16l-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                                     </svg>
                                     @if ($unreadMessagesCount > 0)
                                         <span id="ui-notification-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] leading-none px-1.5 py-1 rounded-full">
@@ -74,8 +75,9 @@
                         </x-dropdown>
                     @else
                         <button class="ui-icon-btn" type="button" title="Notifications">
-                            <svg style="width: 10px; height: 10px;" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="M15 17H9m9-1V11a6 6 0 10-12 0v5l-2 2h16l-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                             </svg>
                         </button>
                     @endif
@@ -83,9 +85,9 @@
 
                 @auth
                     <a href="{{ route('settings.index') }}" class="ui-icon-btn" title="Parametres">
-                        <svg style="width: 10px; height: 10px;" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M10.325 4.317a1 1 0 011.35-.936l1.756.74a1 1 0 00.79 0l1.756-.74a1 1 0 011.35.936l.166 1.897a1 1 0 00.5.79l1.59.92a1 1 0 01.366 1.366l-.99 1.714a1 1 0 000 .998l.99 1.714a1 1 0 01-.366 1.366l-1.59.92a1 1 0 00-.5.79l-.166 1.897a1 1 0 01-1.35.936l-1.756-.74a1 1 0 00-.79 0l-1.756.74a1 1 0 01-1.35-.936l-.166-1.897a1 1 0 00-.5-.79l-1.59-.92a1 1 0 01-.366-1.366l.99-1.714a1 1 0 000-.998l-.99-1.714a1 1 0 01.366-1.366l1.59-.92a1 1 0 00.5-.79l.166-1.897z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8" />
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="3" />
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
                         </svg>
                     </a>
                 @endauth
@@ -101,9 +103,9 @@
                         $avatarUrl = Auth::user()->avatar_url ?? null;
                     @endphp
 
-                    <a href="{{ route('profile.edit') }}" class="inline-flex items-center" title="Profile">
+                    <a href="{{ route('profile.edit') }}" class="inline-flex items-center shrink-0 rounded-full ring-2 ring-transparent hover:ring-blue-400 dark:hover:ring-blue-500 focus:ring-2 focus:ring-blue-500 transition-all outline-none" title="Mon profil – photo et paramètres">
                         @if ($avatarUrl)
-                            <img src="{{ $avatarUrl }}" alt="{{ Auth::user()->name }}" class="h-10 w-10 rounded-full object-cover border border-gray-300" />
+                            <img src="{{ $avatarUrl }}" alt="{{ Auth::user()->name }}" class="w-9 h-9 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600 shrink-0 shadow-sm" />
                         @else
                             <span class="ui-avatar-fallback">{{ $firstLetter }}</span>
                         @endif
@@ -112,8 +114,10 @@
                     <form method="POST" action="{{ route('logout') }}" class="ms-2">
                         @csrf
                         <button type="submit" class="ui-icon-btn" title="Deconnexion">
-                            <svg style="width: 10px; height: 10px;" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="M16 17l5-5m0 0l-5-5m5 5H9m4 5v1a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2h6a2 2 0 012 2v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                <polyline points="16 17 21 12 16 7" />
+                                <line x1="21" y1="12" x2="9" y2="12" />
                             </svg>
                         </button>
                     </form>

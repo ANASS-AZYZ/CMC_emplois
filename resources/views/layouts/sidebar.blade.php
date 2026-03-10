@@ -40,22 +40,19 @@
         @endif
 
         @if(Auth::user()->role === 'formateur')
-            <div class="hidden md:block">
-                <a href="{{ route('formateur.dashboard') }}"
-                        class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.dashboard') ? 'sidebar-link-active' : '' }}">
-                    <i class="fas fa-calendar-check mr-3"></i> <span data-i18n-app="navMyTimetable">Mon Emploi</span>
-                </a>
-
-                <a href="{{ route('formateur.emploi.view') }}"
-                        class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.emploi.view') ? 'sidebar-link-active' : '' }}">
-                    <i class="fas fa-users mr-3"></i> <span data-i18n-app="sideGroupTimetables">Emplois du Groupe</span>
-                </a>
-
-                <a href="{{ route('formateur.contact-admin.create') }}"
-                        class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.contact-admin.*') ? 'sidebar-link-active' : '' }}">
-                    <i class="fas fa-envelope mr-3"></i> <span data-i18n-app="sideContactAdmin">Contacter Admin</span>
-                </a>
-            </div>
+            <div data-i18n-app="sideFormateurSpace" class="sidebar-section pt-6 pb-2 px-4 text-sm font-bold uppercase tracking-wider">Espace formateur</div>
+            <a href="{{ route('formateur.dashboard') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.dashboard') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-calendar-check mr-3"></i> <span data-i18n-app="navMyTimetable">Mon Emploi</span>
+            </a>
+            <a href="{{ route('formateur.emploi.view') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.emploi.view') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-table mr-3"></i> <span data-i18n-app="sideGroupTimetables">Emplois du Groupe</span>
+            </a>
+            <a href="{{ route('formateur.contact-admin.create') }}"
+                    class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.contact-admin.*') ? 'sidebar-link-active' : '' }}">
+                <i class="fas fa-envelope mr-3"></i> <span data-i18n-app="sideContactAdmin">Contacter Admin</span>
+            </a>
         @endif
 
         <div class="sidebar-section pt-6 pb-2 px-4 text-sm font-bold uppercase tracking-wider" data-i18n-app="sidePreferences">Preferences</div>

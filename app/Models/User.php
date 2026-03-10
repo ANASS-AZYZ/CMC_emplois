@@ -16,7 +16,17 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'avatar',
     ];
+
+    public function getAvatarUrlAttribute(): ?string
+    {
+        $path = $this->avatar;
+        if (!$path) {
+            return null;
+        }
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+    }
 
     
     protected $hidden = [
