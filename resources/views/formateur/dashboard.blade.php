@@ -99,8 +99,6 @@
         }
 
         .slot {
-            background-color: #5c80b9 !important;
-            color: white !important;
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -134,6 +132,7 @@
             cursor: pointer;
         }
 
+        /* Dark Theme Fixes for Table */
         body.theme-dark .paper {
             background: #ffffff;
             color: #0f172a;
@@ -168,10 +167,12 @@
 
     @php
         $totalSeances = 0;
-        foreach($jours as $j) {
-            foreach($creneaux as $c) {
-                if(isset($emploi[$j][$c])) {
-                    $totalSeances++;
+        if(isset($emploi)) {
+            foreach($jours as $j) {
+                foreach($creneaux as $c) {
+                    if(isset($emploi[$j][$c])) {
+                        $totalSeances++;
+                    }
                 }
             }
         }
@@ -196,7 +197,7 @@
             </table>
 
             <div class="meta">
-                <div><span data-i18n-app="trainerNameLabel">Nom du Formateur</span> : <b>{{ strtoupper($formateur->nom) }} {{ strtoupper($formateur->prenom) }}</b></div>
+                <div><span data-i18n-app="trainerNameLabel">Nom du Formateur</span> : <b>{{ strtoupper($formateur->nom ?? '') }} {{ strtoupper($formateur->prenom ?? '') }}</b></div>
                 <div><span data-i18n-app="weeklyHoursLabel">Masse Horaire Hebdomadaire</span> : <b>{{ rtrim(rtrim(number_format($totalHeures, 1), '0'), '.') }}h</b></div>
                 <div><span data-i18n-app="trainingYearLabel">Année de Formation</span> : <b>2025 / 2026</b></div>
             </div>
@@ -230,18 +231,22 @@
                                 <td>
                                     @if(isset($emploi[$j][$c]))
                                         @php
-                                            $isAbsent = !($emploi[$j][$c]->formateur_present ?? true);
-                                            $isDistance = (($emploi[$j][$c]->mode ?? 'presentiel') === 'distance');
-                                            $formateurName = trim(($emploi[$j][$c]->formateur->nom ?? '') . ' ' . ($emploi[$j][$c]->formateur->prenom ?? ''));
+                                            $seance = $emploi[$j][$c];
+                                            $isAbsent = !($seance->formateur_present ?? true);
+                                            $isDistance = (($seance->mode ?? 'presentiel') === 'distance');
+                                            // جلب كود المجموعة بدلاً من اسم المكون
+                                            $groupeCode = $seance->groupe->code ?? 'N/A';
                                         @endphp
                                         <div class="slot" style="@if($isAbsent) background:#facc15 !important; color:#1f2937 !important; @elseif($isDistance) background:#1f3648 !important; color:#ffffff !important; @else background:#4d8cc3 !important; color:#ffffff !important; @endif">
-                                            <div style="font-weight:700;">{{ $formateurName }}</div>
+                                            
+                                            <div style="font-weight:800; font-size: 12px; margin-bottom: 2px;">{{ $groupeCode }}</div>
+                                            
                                             @if($isAbsent)
                                                 <div style="color:#7c2d12; font-weight:800;">ABSENT</div>
                                             @elseif($isDistance)
                                                 <div style="font-weight:700;">A distance</div>
                                             @else
-                                                <div style="font-weight:700;">{{ $emploi[$j][$c]->salle->code ?? '' }}</div>
+                                                <div style="font-weight:700;">SALLE : {{ $seance->salle->code ?? '' }}</div>
                                             @endif
                                         </div>
                                     @else
@@ -255,7 +260,7 @@
             </table>
 
             <div class="btn-print no-print">
-                <button onclick="window.print()">🖨️ <span data-i18n-app="printTimetableBtn">Imprimer l'emploi du temps</span></button>
+                <button onclick="window.print()"> <span data-i18n-app="printTimetableBtn">Imprimer emplois</span></button>
             </div>
         </div>
     </div>

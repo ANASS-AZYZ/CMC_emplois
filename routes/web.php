@@ -75,7 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::view('/settings', 'settings.index')->name('settings.index');
+    Route::redirect('/settings', '/settings/theme')->name('settings.index');
     Route::view('/settings/theme', 'settings.theme')->name('settings.theme');
     Route::view('/settings/password', 'settings.password')->name('settings.password');
     Route::view('/settings/lang', 'settings.lang')->name('settings.lang');

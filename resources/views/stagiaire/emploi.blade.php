@@ -1,68 +1,123 @@
 <x-guest-layout>
     <style>
         body {
-            background: #e5e7eb;
-            font-family: Trebuchet MS, Arial, sans-serif;
+            background: #eef1f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
         }
 
-        .paper {
-            width: 1120px;
-            margin: 10px auto;
+        .filter-container {
             background: white;
-            padding: 8px;
-            border: 1px solid #cfd4da;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .filter-form {
+            display: flex;
+            gap: 20px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #4b5563;
+            font-size: 14px;
+        }
+
+        .filter-input {
+            padding: 10px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            min-width: 250px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .filter-input:focus {
+            border-color: #2563eb;
+        }
+
+        .btn-submit {
+            background: #2563eb;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: #1d4ed8;
+        }
+
+        .paper {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
         .header {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
-            border: 1px solid #cfd4da;
+            margin-bottom: 15px;
+            border: 1px solid #e5e7eb;
         }
 
         .header td {
-            border: 1px solid #cfd4da;
-            padding: 4px;
+            border: 1px solid #e5e7eb;
+            padding: 10px;
             text-align: center;
             vertical-align: middle;
         }
 
         .header-ar {
-            font-size: 16px;
+            font-size: 18px;
             margin: 0;
             font-weight: 700;
-            color: #333;
+            color: #111827;
         }
 
         .header-fr {
-            font-size: 16px;
-            margin: 4px 0 0;
-            color: #222;
-            font-weight: 600;
+            font-size: 14px;
+            margin: 5px 0 0;
+            color: #374151;
+            font-weight: 500;
         }
 
         .meta {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            font-size: 12px;
-            font-weight: 600;
-            color: #8a94a0;
-            background: #eef1f4;
-            border: 1px solid #d4dbe3;
-            margin: 4px 0 8px;
-            padding: 6px 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            color: #64748b;
+            font-size: 13px;
         }
 
         .meta b {
+            color: #1e3a8a;
             font-size: 15px;
-            margin-left: 6px;
-            color: #355f88;
-            font-weight: 800;
+            margin-left: 5px;
         }
 
         .table {
@@ -72,107 +127,175 @@
         }
 
         .table th {
-            background-color: #2f9cb7 !important;
+            background-color: #31a9c7 !important;
             color: white !important;
-            border: 1px solid #d0d5db;
-            padding: 4px;
-            font-size: 13px;
-            height: 36px;
-            font-weight: 700;
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            font-size: 14px;
         }
 
         .table td {
-            border: 1px solid #d0d5db;
-            height: 60px;
+            border: 1px solid #cbd5e1;
+            height: 75px;
             text-align: center;
-            vertical-align: middle;
-            font-size: 11px;
-            padding: 0 !important;
-            background: #f5f5f5;
+            background: #ffffff;
         }
 
-        .day {
-            background-color: #d7e2e9 !important;
-            font-weight: bold;
-            width: 110px;
-            font-size: 13px;
+        .day-cell {
+            background-color: #f1f5f9 !important;
+            font-weight: 700;
+            width: 120px;
+            color: #334155;
         }
 
         .slot {
-            background-color: #5c80b9 !important;
-            color: white !important;
             height: 100%;
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 3px;
-            line-height: 1.25;
-            font-size: 11px;
-            text-transform: uppercase;
+            align-items: center;
+            padding: 5px;
+            gap: 4px;
         }
 
-        .slot b {
-            font-size: 11px;
-            font-weight: 700;
+        .slot-active {
+            background-color: #4d8cc3 !important;
+            color: white !important;
+        }
+
+        .slot-distance {
+            background-color: #1f3648 !important;
+            color: white !important;
+        }
+
+        .slot-absent {
+            background-color: #facc15 !important;
+            color: #1f2937 !important;
         }
 
         .times {
             display: flex;
             justify-content: space-between;
-            padding: 0 10px;
             font-size: 13px;
-            font-weight: 700;
+            padding: 0 5px;
         }
 
-        .btn-print {
-            margin-top: 14px;
+        .btn-print-container {
             text-align: center;
+            margin-top: 20px;
         }
 
-        .btn-print button {
-            background: #1f2937;
+        .btn-print-container button {
+            background: #1e293b;
             color: white;
-            border: 0;
-            border-radius: 999px;
-            padding: 10px 34px;
+            padding: 12px 40px;
+            border-radius: 50px;
+            border: none;
             font-weight: 700;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.2s;
+        }
+        .btn-print-container button:hover {
+            background: #0f172a;
+        }
+
+        /* Mobile & Tablet Optimization */
+        @media (max-width: 768px) {
+            .filter-container {
+                padding: 15px;
+            }
+            .filter-form {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                align-items: end;
+            }
+            .filter-group label {
+                font-size: 13px;
+            }
+            .filter-input {
+                min-width: 0;
+                width: 100%;
+                font-size: 14px;
+                padding: 10px 8px;
+            }
+            .btn-submit {
+                grid-column: span 2;
+                width: 100%;
+                padding: 12px;
+                font-size: 15px;
+            }
+            .paper {
+                padding: 10px;
+                overflow-x: auto; /* Allow horizontal scroll for table */
+            }
+            .table {
+                min-width: 700px; /* Force table width to keep shape */
+            }
+            .header td {
+                width: auto !important;
+            }
+            .header img {
+                height: 40px !important; /* Smaller logos */
+            }
+            .header-ar { font-size: 13px; }
+            .header-fr { font-size: 10px; }
+            .meta {
+                flex-direction: column;
+                gap: 8px;
+            }
         }
 
         @media print {
             .no-print { display: none !important; }
             body { background: white; }
-            .paper { width: 100% !important; margin: 0 !important; border: 0 !important; padding: 0 !important; }
-            @page { size: A4 landscape; margin: 5mm; }
-            .table th, .slot {
-                -webkit-print-color-adjust: exact !important; 
-                print-color-adjust: exact !important; 
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
-            .table td {
-                height: 52px;
+            .paper { 
+                width: 100% !important; 
+                max-width: 100% !important;
+                border: none !important; 
+                box-shadow: none !important;
+                padding: 0 !important;
             }
+            @page { size: A4 landscape; margin: 1cm; }
         }
     </style>
 
-    <div class="no-print" style="width:1080px; margin:20px auto;">
-        <div style="background:white; padding:15px; border:1px solid #ddd; border-radius:8px;">
-            <form action="{{ route('stagiaire.emploi') }}" method="GET" style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
-                <label style="font-weight:bold;">FILIERE :</label>
-                <select id="filiere_id" name="filiere_id" style="padding:8px; border:1px solid #31a9c7; border-radius:5px; min-width:260px;">
-                    <option value="">-- Sélectionner --</option>
-                    @foreach($filieres as $f)
-                        <option value="{{ $f->id }}" {{ (string)$selectedFiliere === (string)$f->id ? 'selected' : '' }}>{{ $f->nom }} ({{ $f->niveau }})</option>
-                    @endforeach
-                </select>
+    <div class="no-print" style="max-width:1300px; margin:30px auto; padding: 0 20px;">
+        <div class="filter-container">
+            <form action="{{ route('stagiaire.emploi') }}" method="GET" class="filter-form">
+                <div class="filter-group">
+                    <label>FILIERE</label>
+                    <select id="filiere_id" name="filiere_id" class="filter-input">
+                        <option value="">-- Sélectionner --</option>
+                        @foreach($filieres as $f)
+                            <option value="{{ $f->id }}" {{ (string)$selectedFiliere === (string)$f->id ? 'selected' : '' }}>
+                                {{ $f->nom }} ({{ $f->niveau }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-                <label style="font-weight:bold;">GROUPE :</label>
-                <select id="groupe_id" name="groupe_id" style="padding:8px; border:1px solid #31a9c7; border-radius:5px; min-width:200px;">
-                    <option value="">-- Sélectionner --</option>
-                    @foreach($groupes as $g)
-                        <option value="{{ $g->id }}" {{ (string)$selectedGroupe === (string)$g->id ? 'selected' : '' }}>{{ $g->code }}</option>
-                    @endforeach
-                </select>
-                <button type="submit" style="background:#1e3a8a; color:white; padding:8px 30px; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">Afficher</button>
+                <div class="filter-group">
+                    <label>GROUPE</label>
+                    <select id="groupe_id" name="groupe_id" class="filter-input">
+                        <option value="">-- Sélectionner --</option>
+                        @foreach($groupes as $g)
+                            <option value="{{ $g->id }}" {{ (string)$selectedGroupe === (string)$g->id ? 'selected' : '' }}>
+                                {{ $g->code }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-submit">Afficher</button>
             </form>
         </div>
     </div>
@@ -191,28 +314,28 @@
             <table class="header">
                 <tr>
                     <td style="width:200px;">
-                        <img src="{{ asset('images/logo-cmc.png') }}" style="height:70px; object-fit:contain;">
+                        <img src="{{ asset('images/logo-cmc.png') }}" style="height:65px;">
                     </td>
                     <td>
                         <p class="header-ar">مكتب التكوين المهني و إنعاش الشغل</p>
                         <p class="header-fr">Office de la formation professionnelle et de la promotion du travail</p>
                     </td>
                     <td style="width:200px;">
-                        <img src="{{ asset('images/logo-ofppt.png') }}" style="height:60px; object-fit:contain;">
+                        <img src="{{ asset('images/logo-ofppt.png') }}" style="height:55px;">
                     </td>
                 </tr>
             </table>
 
             <div class="meta">
                 <div>Groupe : <b>{{ $currentGroupe->code }}</b></div>
-                <div>Masse Horaire Hebdomadaire : <b>{{ rtrim(rtrim(number_format($totalHeures, 1), '0'), '.') }}h</b></div>
+                <div>Masse Horaire Hebdomadaire : <b>{{ number_format($totalHeures, 1) }}h</b></div>
                 <div>Année de Formation : <b>2025 / 2026</b></div>
             </div>
 
             <table class="table">
                 <thead>
                     <tr>
-                        <th class="day">Jour / Horaire</th>
+                        <th class="day-cell">Jour / Horaire</th>
                         <th><div class="times"><span>08:30</span><span>11:00</span></div></th>
                         <th><div class="times"><span>11:00</span><span>13:30</span></div></th>
                         <th><div class="times"><span>13:30</span><span>16:00</span></div></th>
@@ -222,27 +345,32 @@
                 <tbody>
                     @foreach($jours as $jour)
                         <tr>
-                            <td class="day">{{ $jour }}</td>
+                            <td class="day-cell">{{ $jour }}</td>
                             @foreach($creneaux as $creneau)
                                 <td>
                                     @if(isset($emploi[$jour][$creneau]))
                                         @php
-                                            $isAbsent = !($emploi[$jour][$creneau]->formateur_present ?? true);
-                                            $isDistance = (($emploi[$jour][$creneau]->mode ?? 'presentiel') === 'distance');
-                                            $formateurName = trim((($emploi[$jour][$creneau]->formateur->nom ?? '')) . ' ' . (($emploi[$jour][$creneau]->formateur->prenom ?? '')));
+                                            $item = $emploi[$jour][$creneau];
+                                            $isAbsent = !($item->formateur_present ?? true);
+                                            $isDistance = (($item->mode ?? 'presentiel') === 'distance');
+                                            $formateur = trim(($item->formateur->nom ?? '') . ' ' . ($item->formateur->prenom ?? ''));
+                                            
+                                            $statusClass = 'slot-active';
+                                            if($isAbsent) $statusClass = 'slot-absent';
+                                            elseif($isDistance) $statusClass = 'slot-distance';
                                         @endphp
-                                        <div class="slot" style="background-color: {{ $isAbsent ? '#facc15' : ((($emploi[$jour][$creneau]->mode ?? 'presentiel') === 'distance') ? '#1f3648' : '#4d8cc3') }} !important; color: {{ $isAbsent ? '#1f2937' : '#ffffff' }} !important;">
-                                            <div style="font-weight:700;">{{ $formateurName }}</div>
+                                        <div class="slot {{ $statusClass }}">
+                                            <div style="font-weight:800; font-size:12px;">{{ $formateur }}</div>
                                             @if($isAbsent)
-                                                <div style="color:#7c2d12; font-weight:800;">ABSENT</div>
+                                                <div style="text-decoration: underline;">ABSENT</div>
                                             @elseif($isDistance)
-                                                <div style="font-weight:700;">A distance</div>
+                                                <div>(A distance)</div>
                                             @else
-                                                <div style="font-weight:700;">{{ $emploi[$jour][$creneau]->salle->code ?? '' }}</div>
+                                                <div style="font-size:11px; opacity:0.9;">{{ $item->salle->code ?? '' }}</div>
                                             @endif
                                         </div>
                                     @else
-                                        -
+                                        <span style="color:#cbd5e1;">-</span>
                                     @endif
                                 </td>
                             @endforeach
@@ -251,9 +379,12 @@
                 </tbody>
             </table>
 
-            <div class="btn-print no-print">
+            <div class="btn-print-container no-print">
                 <button onclick="window.print()">
-                    🖨️ Imprimer l'emploi du temps
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 20px; height: 20px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z" />
+                    </svg>
+                    Imprimer l'emploi du temps
                 </button>
             </div>
         </div>
@@ -263,29 +394,24 @@
         document.addEventListener('DOMContentLoaded', function () {
             const filiereEl = document.getElementById('filiere_id');
             const groupeEl = document.getElementById('groupe_id');
-            if (!filiereEl || !groupeEl) {
-                return;
-            }
 
-            filiereEl.addEventListener('change', async function () {
-                groupeEl.innerHTML = '<option value="">-- Sélectionner --</option>';
-                if (!filiereEl.value) {
-                    return;
-                }
+            if (filiereEl && groupeEl) {
+                filiereEl.addEventListener('change', async function () {
+                    groupeEl.innerHTML = '<option value="">-- Sélectionner --</option>';
+                    if (!this.value) return;
 
-                const response = await fetch('/filieres/' + filiereEl.value + '/groupes');
-                if (!response.ok) {
-                    return;
-                }
-
-                const groupes = await response.json();
-                groupes.forEach(function (g) {
-                    const option = document.createElement('option');
-                    option.value = g.id;
-                    option.textContent = g.code;
-                    groupeEl.appendChild(option);
+                    try {
+                        const response = await fetch('/filieres/' + this.value + '/groupes');
+                        const groupes = await response.json();
+                        groupes.forEach(g => {
+                            const opt = document.createElement('option');
+                            opt.value = g.id;
+                            opt.textContent = g.code;
+                            groupeEl.appendChild(opt);
+                        });
+                    } catch (e) { console.error("Erreur AJAX"); }
                 });
-            });
+            }
         });
     </script>
 </x-guest-layout>
