@@ -206,7 +206,7 @@
             header { display: none !important; }
             main { padding: 0 !important; }
             .py-12 { padding-top: 0 !important; padding-bottom: 0 !important; }
-            .max-w-7xl { max-width: 100% !important; }
+            .max-w-7xl { max-width: 400px !important; }
             @page { size: A4 landscape; margin: 5mm; }
             .print-wrap,
             .paper { box-shadow: none !important; border: 0 !important; padding: 0 !important; width: 100% !important; margin: 0 !important; }
@@ -272,14 +272,14 @@
                         <table class="doc-header">
                             <tr>
                                 <td style="width:200px;">
-                                    <img src="{{ asset('images/logo-cmc.png') }}" style="height:70px; object-fit:contain;">
+                                    <img src="{{ asset('images/logo-cmc.png') }}" alt="Logo CMC" style="height:70px; object-fit:contain;">
                                 </td>
                                 <td>
                                     <p class="doc-title-ar">مكتب التكوين المهني و إنعاش الشغل</p>
                                     <p class="doc-title-fr">Office de la formation professionnelle et de la promotion du travail</p>
                                 </td>
                                 <td style="width:200px;">
-                                    <img src="{{ asset('images/logo-ofppt.png') }}" style="height:60px; object-fit:contain;">
+                                    <img src="{{ asset('images/logo-ofppt.png') }}" alt="Logo OFPPT" style="height:60px; object-fit:contain;">
                                 </td>
                             </tr>
                         </table>

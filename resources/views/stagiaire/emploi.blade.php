@@ -7,57 +7,56 @@
             padding: 0;
         }
 
-        .filter-container {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 25px;
-        }
+.filter-container {
+    background: white;
+    padding: 24px 20px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+    max-width: 520px;        /* ← زيد هاد */
+    margin-left: auto;       /* ← زيد هاد */
+    margin-right: auto;      /* ← زيد هاد */
+}
 
-        .filter-form {
-            display: flex;
-            gap: 20px;
-            align-items: flex-end;
-            flex-wrap: wrap;
-        }
+.filter-form {
+    display: flex;
+    flex-direction: column;  /* ← بدل من flex لـ column */
+    gap: 16px;
+}
 
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+.filter-group label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 14px;
+}
 
-        .filter-group label {
-            font-weight: 600;
-            color: #4b5563;
-            font-size: 14px;
-        }
+.filter-input {
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    width: 100%;
+    min-width: 0;            /* ← بدل من 250px */
+    outline: none;
+    font-size: 15px;
+    background: #f8fafc;
+    color: #374151;
+    transition: border-color 0.2s;
+    appearance: auto;
+}
 
-        .filter-input {
-            padding: 10px 15px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            min-width: 250px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .filter-input:focus {
-            border-color: #2563eb;
-        }
-
-        .btn-submit {
-            background: #2563eb;
-            color: white;
-            padding: 10px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: background 0.2s;
-        }
+.btn-submit {
+    background: #2563eb;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 15px;
+    width: 100%;             /* ← زيد هاد */
+    transition: background 0.2s;
+}
 
         .btn-submit:hover {
             background: #1d4ed8;
@@ -65,10 +64,10 @@
 
         .paper {
             width: 100%;
-            max-width: 1300px;
-            margin: 0 auto 30px;
+            max-width: 1000px;
+            margin: 0 auto 15px;
             background: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
             border: 1px solid #d1d5db;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -202,11 +201,21 @@
         .btn-print-container button:hover {
             background: #0f172a;
         }
+        .empty-state {
+            max-width: 520px;
+            margin: 0 auto;
+            border: 2px dashed #e2e8f0;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 15px;
+            background: white;
+        }
 
-        /* Mobile & Tablet Optimization */
         @media (max-width: 768px) {
             .filter-container {
-                padding: 15px;
+                padding: 10px;
             }
             .filter-form {
                 display: grid;
@@ -240,7 +249,7 @@
                 width: auto !important;
             }
             .header img {
-                height: 40px !important; /* Smaller logos */
+                height: 40px !important;
             }
             .header-ar { font-size: 13px; }
             .header-fr { font-size: 10px; }
@@ -250,25 +259,88 @@
             }
         }
 
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white; }
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            .paper { 
-                width: 100% !important; 
-                max-width: 100% !important;
-                border: none !important; 
-                box-shadow: none !important;
-                padding: 0 !important;
-            }
-            @page { size: A4 landscape; margin: 1cm; }
-        }
-    </style>
+   
+@media print {
+    .no-print, nav { display: none !important; }
+    body { background: white !important; margin: 0 !important; padding: 0 !important; }
+    
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .meta {
+        flex-direction: row !important;      /* ← زيد هاد */
+        justify-content: space-between !important;
+        flex-wrap: nowrap !important;
+    }
 
-    <div class="no-print" style="max-width:1300px; margin:30px auto; padding: 0 20px;">
+    .meta b {
+        font-size: 13px !important;          /* ← زيد هاد */
+    }
+ html, body {
+        width: 297mm;
+        height: 210mm;
+    }
+     .paper {
+        transform-origin: top left;
+        transform: scale(0.95);          /* ← صغر كلشي */
+        width: 133% !important;          /* ← عوض الـ scale */
+    }
+
+    .header-ar { font-size: 16px !important; }
+    .header-fr { font-size: 13px !important; }
+
+    .table th  { font-size: 12px !important; padding: 6px !important; }
+    .table td  { height: 47px !important; font-size: 12px !important; }
+    .times     { font-size: 12px !important; }
+    .day-cell  { width: 70px !important; font-size: 11px !important; }
+    .slot      { font-size: 10px !important; }
+
+    .meta      { font-size: 12px !important; padding: 6px 12px !important; }
+    .meta b    { font-size: 13px !important; }
+
+    .paper {
+        display: block !important;
+        visibility: visible !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 8px !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+    }
+
+    .table {
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    .header img {
+        height: 50px !important;
+    }
+
+    @page { size: A4 landscape; margin: 1cm; }
+}
+    </style>
+{{-- ── NAV ── --}}
+<nav style="background:white; border-bottom:1px solid #e2e8f0; padding:10px 15px;
+            display:flex; align-items:center; justify-content:space-between;
+            box-shadow:0 1px 4px rgba(0,0,0,0.06);width:100%; max-width:1000px; margin:8px auto 5px; border-radius:12px;">
+
+    {{-- Logo --}}
+    <img src="{{ asset('images/logo-cmc.png') }}" style="height:80px; object-fit:contain;">
+
+    {{-- Title --}}
+    <span style="font-weight:800; font-size:30px; color:#1e3a5f; letter-spacing:0.5px;">
+        DIA-EMPLOIS
+    </span>
+
+</nav>
+
+
+    <div class="no-print" style="max-width:1000px; margin:5px auto 10px; padding: 0 20px;">
         <div class="filter-container">
             <form action="{{ route('stagiaire.emploi') }}" method="GET" class="filter-form">
                 <div class="filter-group">
@@ -389,6 +461,17 @@
             </div>
         </div>
     @endif
+    @if(!$selectedGroupe)
+    <div class="empty-state no-print" style="max-width:390px; margin:0 auto;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+             stroke-width="1.5" stroke="currentColor" 
+             style="width:40px;height:40px;margin:0 auto 12px;display:block;color:#cbd5e1;">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
+        </svg>
+        Veuillez sélectionner un filtre pour afficher le planning.
+    </div>
+@endif
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

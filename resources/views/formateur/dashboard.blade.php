@@ -153,6 +153,29 @@
             background: #f3f4f6;
         }
 
+        /* Header flex */
+.edt-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border: 1px solid #cfd4da;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    flex-wrap: nowrap;
+}
+
+.header-logo {
+    height: 55px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.header-center {
+    text-align: center;
+    flex: 1;
+    min-width: 0;
+}
         @media print {
             .no-print, nav, aside { display: none !important; }
             @page { size: A4 landscape; margin: 5mm; }
@@ -162,10 +185,30 @@
                 print-color-adjust: exact !important;
             }
             .table td {
-                height: 52px;
+                
             }
         }
 
+        /* Responsive compact */
+        @media (max-width: 480px) {
+            .edt-header    { padding: 3px 2px; gap: 3px; }
+            .header-logo   { height: 25px; }
+            .header-ar     { font-size: 6px; }
+            .header-fr     { font-size: 6px; }
+            .paper        { padding: 6px; } 
+            .header img   { height: 40px  }
+            .meta         { font-size: 6px; padding: 3px 4px; gap: 3px; }
+            .meta b       { font-size: 8px; }
+            .table th     { height: 10px; font-size: 7px; padding: 3px 2px; }
+            .table td     { height: 10px; }
+            .slot         { font-size: 7px; padding: 2px; }
+            .times        { font-size: 9px; padding: 0 3px; }
+            .day          { width: 70px; font-size: 9px; }
+        }
+        .btn-print button {
+            padding: 8px 24px;      /* قبل: 10px 34px */
+            font-size: 13px;        /* زيد هاد السطر */
+        }
         /* Custom Scrollbar for better UX */
         .custom-scrollbar::-webkit-scrollbar {
             height: 6px;
@@ -193,22 +236,16 @@
         $totalHeures = $totalSeances * 2.5;
     @endphp
 
-    <div class="py-6 px-2 sm:px-4 bg-gray-200">
-        <div class="paper shadow-lg rounded-sm">
-            <table class="header">
-                <tr>
-                    <td style="width:200px;">
-                        <img src="{{ asset('images/logo-cmc.png') }}" style="height:70px; object-fit:contain;">
-                    </td>
-                    <td>
-                        <p class="header-ar">مكتب التكوين المهني و إنعاش الشغل</p>
-                        <p class="header-fr">Office de la formation professionnelle et de la promotion du travail</p>
-                    </td>
-                    <td style="width:200px;">
-                        <img src="{{ asset('images/logo-ofppt.png') }}" style="height:60px; object-fit:contain;">
-                    </td>
-                </tr>
-            </table>
+<div style="background:#eef2f7; padding:16px 10px; font-family:'Trebuchet MS',Arial,sans-serif;">
+    <div class="paper shadow-lg rounded-sm">
+            <div class="edt-header">
+    <img src="{{ asset('images/logo-cmc.png') }}" class="header-logo">
+    <div class="header-center">
+        <p class="header-ar">مكتب التكوين المهني و إنعاش الشغل</p>
+        <p class="header-fr">Office de la formation professionnelle et de la promotion du travail</p>
+    </div>
+    <img src="{{ asset('images/logo-ofppt.png') }}" class="header-logo">
+</div>
 
             <div class="meta">
                 <div><span data-i18n-app="trainerNameLabel">Nom du Formateur</span> : <b>{{ strtoupper($formateur->nom ?? '') }} {{ strtoupper($formateur->prenom ?? '') }}</b></div>
@@ -217,7 +254,7 @@
             </div>
 
             <div class="w-full overflow-x-auto custom-scrollbar">
-                <table class="table min-w-[850px]">
+                <table class="table min-w-[450px]">
                     <thead>
                         <tr>
                             <th class="day" data-i18n-app="dayHourHeader">Jour / Horaire</th>
@@ -254,7 +291,7 @@
                                             @endphp
                                             <div class="slot" style="@if($isAbsent) background:#facc15 !important; color:#1f2937 !important; @elseif($isDistance) background:#1f3648 !important; color:#ffffff !important; @else background:#4d8cc3 !important; color:#ffffff !important; @endif">
                                                 
-                                                <div style="font-weight:800; font-size: 12px; margin-bottom: 2px;">{{ $groupeCode }}</div>
+                                                <div style="font-weight:800; font-size: 6px; margin-bottom: 2px;"><span>Groupe : </span>{{ $groupeCode }}</div>
                                                 
                                                 @if($isAbsent)
                                                     <div style="color:#7c2d12; font-weight:800;">ABSENT</div>

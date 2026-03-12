@@ -22,7 +22,6 @@
                             @csrf
                             @method('patch')
 
-                            {{-- Photo de profil --}}
                             <div class="flex flex-col items-center text-center">
                                 <label for="avatar" class="cursor-pointer block relative group focus-within:outline-none">
                                     <div class="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden ring-4 ring-blue-100 dark:ring-blue-900/40 ring-offset-4 ring-offset-white shadow-inner transition-shadow group-hover:ring-blue-200">

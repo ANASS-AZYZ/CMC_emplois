@@ -1,7 +1,7 @@
 @extends('settings.layout')
 
 @section('settings-content')
-<div class="mx-auto bg-white rounded-xl shadow-md p-4 md:p-8 border border-[var(--app-border)]" style="width: 550px; max-width: 95%;">
+<div class="mx-auto bg-white rounded-xl shadow-md p-4 md:p-8 border border-[var(--app-border)]" style="width: 400px; max-width: 95%;">
     <h1 class="text-2xl font-bold mb-8 text-gray-900 text-center">Changer le mot de passe</h1>
 
     <form method="POST" action="{{ route('password.update') }}" class="space-y-6">
