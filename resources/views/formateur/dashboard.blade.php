@@ -6,7 +6,7 @@
         }
 
         .paper {
-            width: 100%; /* Responsive width */
+            width: 100%;
             max-width: 1000px;
             margin: 10px auto;
             background: white;
@@ -136,7 +136,6 @@
             cursor: pointer;
         }
 
-        /* Dark Theme Fixes for Table */
         body.theme-dark .paper {
             background: #ffffff;
             color: #0f172a;
@@ -155,7 +154,6 @@
             background: #f3f4f6;
         }
 
-        /* Header flex */
 .edt-header {
     display: flex;
     align-items: center;
@@ -191,7 +189,6 @@
             }
         }
 
-        /* Responsive compact */
         @media (max-width: 480px) {
             .paper { 
                 padding: 4px !important; 
@@ -213,10 +210,9 @@
             .day          { width: 70px; font-size: 9px; }
         }
         .btn-print button {
-            padding: 8px 24px;      /* قبل: 10px 34px */
-            font-size: 13px;        /* زيد هاد السطر */
+            padding: 8px 24px;
+            font-size: 13px;
         }
-        /* Custom Scrollbar for better UX */
         .custom-scrollbar::-webkit-scrollbar {
             height: 6px;
         }
@@ -293,7 +289,6 @@
                                                 $seance = $emploi[$j][$c];
                                                 $isAbsent = !($seance->formateur_present ?? true);
                                                 $isDistance = (($seance->mode ?? 'presentiel') === 'distance');
-                                                // جلب كود المجموعة بدلاً من اسم المكون
                                                 $groupeCode = $seance->groupe->code ?? 'N/A';
                                             @endphp
                                             <div class="slot" style="@if($isAbsent) background:#facc15 !important; color:#1f2937 !important; @elseif($isDistance) background:#1f3648 !important; color:#ffffff !important; @else background:#4d8cc3 !important; color:#ffffff !important; @endif">
