@@ -1,5 +1,6 @@
 <x-app-layout>
     <style>
+        
         body {
             font-family: Trebuchet MS, Arial, sans-serif;
         }
@@ -13,6 +14,7 @@
             padding: 8px;
             border: 1px solid #cfd4da;
             overflow: hidden;
+            box-sizing: border-box;
         }
 
         .header {
@@ -191,6 +193,11 @@
 
         /* Responsive compact */
         @media (max-width: 480px) {
+            .paper { 
+                padding: 4px !important; 
+                margin: 4px !important;
+                width: calc(100% - 8px) !important;
+            }
             .edt-header    { padding: 3px 2px; gap: 3px; }
             .header-logo   { height: 25px; }
             .header-ar     { font-size: 6px; }
@@ -236,7 +243,7 @@
         $totalHeures = $totalSeances * 2.5;
     @endphp
 
-<div style="background:#eef2f7; padding:16px 10px; font-family:'Trebuchet MS',Arial,sans-serif;">
+<div style="background:#eef2f7; padding:16px 6px; box-sizing:border-box; width:100%; overflow-x:hidden;">
     <div class="paper shadow-lg rounded-sm">
             <div class="edt-header">
     <img src="{{ asset('images/logo-cmc.png') }}" class="header-logo">
@@ -254,7 +261,7 @@
             </div>
 
             <div class="w-full overflow-x-auto custom-scrollbar">
-                <table class="table min-w-[450px]">
+                <table class="table" style="min-width:450px;">
                     <thead>
                         <tr>
                             <th class="day" data-i18n-app="dayHourHeader">Jour / Horaire</th>

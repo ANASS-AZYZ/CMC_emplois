@@ -23,7 +23,7 @@ Route::get('/', function () {
             return redirect()->route('formateur.dashboard');
         }
     }
-    return redirect()->route('login.admin');
+    return redirect()->route('login.formateur');
 })->name('login.page');
 Route::get('/consulter-emploi', [SeanceController::class, 'showEmploi'])->name('stagiaire.emploi');
 Route::middleware('auth')->get('/mon-emploi', function () {
@@ -40,7 +40,7 @@ Route::middleware('auth')->get('/mon-emploi', function () {
     return redirect()->route('stagiaire.emploi');
 })->name('mon.emploi');
 Route::get('/filieres/{filiere}/groupes', [SeanceController::class, 'groupesByFiliere'])->name('filieres.groupes');
-Route::middleware(['auth', 'verified', 'role:formateur'])->group(function () {
+Route::middleware(['auth', 'role:formateur'])->group(function () {
     Route::get('/formateur/dashboard', [FormateurDashboard::class, 'index'])->name('formateur.dashboard');
     Route::get('/formateur/groupes', [GroupeController::class, 'index'])->name('formateur.groupes');
     Route::get('/formateur/salles', [SalleController::class, 'index'])->name('formateur.salles');
@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified', 'role:formateur'])->group(function () {
     Route::get('/formateur/contact-admin', [ContactAdminController::class, 'create'])->name('formateur.contact-admin.create');
     Route::post('/formateur/contact-admin', [ContactAdminController::class, 'store'])->name('formateur.contact-admin.store');
 });
-Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', function () {
         $stats = [
             'formateurs' => Formateur::count(),
