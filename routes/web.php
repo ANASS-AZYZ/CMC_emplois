@@ -23,7 +23,7 @@ Route::get('/', function () {
             return redirect()->route('formateur.dashboard');
         }
     }
-    return view('welcome');
+    return redirect()->route('login.admin');
 })->name('login.page');
 Route::get('/consulter-emploi', [SeanceController::class, 'showEmploi'])->name('stagiaire.emploi');
 Route::middleware('auth')->get('/mon-emploi', function () {
@@ -67,6 +67,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
         Route::get('messages', [MessageController::class, 'index'])->name('admin.messages.index');
         Route::patch('messages/{message}/read', [MessageController::class, 'markAsRead'])->name('admin.messages.read');
+        Route::patch('messages/read-all', [MessageController::class, 'markAllAsRead'])->name('admin.messages.read-all');
         Route::get('emploi', [SeanceController::class, 'showEmploi'])->name('seances.emploi');
     });
 });
@@ -74,6 +75,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::redirect('/settings', '/settings/theme')->name('settings.index');
+    Route::view('/settings/theme', 'settings.theme')->name('settings.theme');
+    Route::view('/settings/password', 'settings.password')->name('settings.password');
+    Route::view('/settings/lang', 'settings.lang')->name('settings.lang');
+    Route::match(['POST', 'PUT'], '/password', [ProfileController::class, 'updatePassword'])->name('password.update');
 });
 
 require __DIR__.'/auth.php';

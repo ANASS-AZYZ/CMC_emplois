@@ -14,7 +14,26 @@ class AuthenticatedSessionController extends Controller
     
     public function create(): View
     {
-        return view('auth.login');
+        return view('auth.login-split', [
+            'forcedRole' => null,
+            'title' => 'Connexion',
+        ]);
+    }
+
+    public function createFormateur(): View
+    {
+        return view('auth.login-split', [
+            'forcedRole' => 'formateur',
+            'title' => 'Connexion Formateur',
+        ]);
+    }
+
+    public function createAdmin(): View
+    {
+        return view('auth.login-split', [
+            'forcedRole' => 'admin',
+            'title' => 'Connexion Admin',
+        ]);
     }
 
     

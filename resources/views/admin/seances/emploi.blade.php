@@ -23,8 +23,8 @@
         }
 
         .paper {
-            width: 1120px;
-            margin: 10px auto;
+            width: 1000px;
+            margin: 0px auto;
             background: white;
             padding: 8px;
             border: 1px solid #cfd4da;
@@ -325,13 +325,13 @@
                                                         $formateurName = trim(($emploi[$jour][$creneau]->formateur->nom ?? '') . ' ' . ($emploi[$jour][$creneau]->formateur->prenom ?? ''));
                                                     @endphp
                                                     <div class="slot-card" style="@if($isAbsent) background:#facc15 !important; color:#1f2937 !important; @elseif($isDistance) background:#1f3648 !important; color:#ffffff !important; @else background:#4d8cc3 !important; color:#ffffff !important; @endif">
-                                                        <div style="font-weight:700;">{{ $formateurName }}</div>
+                                                        <div style="font-weight:700;"><span style="color:EEF1F5">Formateur : </span>{{ $formateurName }}</div>
                                                         @if($isAbsent)
                                                             <div style="font-weight:800; color:#7c2d12;">ABSENT</div>
                                                         @elseif($isDistance)
                                                             <div style="font-weight:700;">A distance</div>
                                                         @else
-                                                            <div style="font-weight:700;">{{ $emploi[$jour][$creneau]->salle->code ?? '' }}</div>
+                                                            <div style="font-weight:700;"><span style="color:EEF1F5">Salle : {{ $emploi[$jour][$creneau]->salle->code ?? '' }}</div>
                                                         @endif
                                                     </div>
                                                 @else
@@ -359,14 +359,12 @@
             const filiereEl = document.getElementById('filiere_id');
             const groupeEl = document.getElementById('groupe_id');
             const currentGroupe = '{{ $selectedGroupe }}';
+            const allGroupOptionsHtml = groupeEl ? groupeEl.innerHTML : '';
 
             async function loadGroupesByFiliere() {
                 if (!filiereEl || !groupeEl || !filiereEl.value) {
-                    const promptText = document.documentElement.lang === 'ar'
-                        ? '-- اختر --'
-                        : (document.documentElement.lang === 'en' ? '-- Select --' : '-- Selectionner --');
                     if (groupeEl) {
-                        groupeEl.innerHTML = '<option value="">' + promptText + '</option>';
+                        groupeEl.innerHTML = allGroupOptionsHtml;
                     }
                     return;
                 }
@@ -398,13 +396,14 @@
                     if (!groupeEl) {
                         return;
                     }
+                    if (!filiereEl.value) {
+                        groupeEl.innerHTML = allGroupOptionsHtml;
+                        return;
+                    }
                     const promptText = document.documentElement.lang === 'ar'
                         ? '-- اختر --'
                         : (document.documentElement.lang === 'en' ? '-- Select --' : '-- Selectionner --');
                     groupeEl.innerHTML = '<option value="">' + promptText + '</option>';
-                    if (!filiereEl.value) {
-                        return;
-                    }
                     let response;
                     try {
                         response = await fetch('/filieres/' + filiereEl.value + '/groupes');

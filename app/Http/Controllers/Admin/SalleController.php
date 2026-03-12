@@ -25,9 +25,24 @@ class SalleController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'code'     => 'required|unique:salles,code|max:20', // ex: SC-01
+            'code'     => [
+                'required',
+                'unique:salles,code',
+                'max:20',
+                'regex:/^(SC|SM)-[A-Za-z0-9]+$/',
+                function ($attribute, $value, $fail) use ($request) {
+                    $type = $request->input('type');
+                    if ($type && !str_starts_with($value, $type . '-')) {
+                        $fail('Le code doit commencer par ' . $type . '- selon le type de salle choisi.');
+                    }
+                },
+            ], // ex: SC-01
             'type'     => 'required|in:SC,SM',                // SC: Cours, SM: Multimédia
             'capacite' => 'nullable|integer|min:1',           // Optionnel selon le cahier des charges
+        ], [
+            'code.unique' => 'Rah had salle deja existe.',
+            'code.required' => 'Le code de la salle est obligatoire.',
+            'type.required' => 'Le type de salle est obligatoire.',
         ]);
 
         Salle::create($validated);
@@ -45,9 +60,24 @@ class SalleController extends Controller
     public function update(Request $request, Salle $salle)
     {
         $validated = $request->validate([
-            'code'     => 'required|max:20|unique:salles,code,' . $salle->id,
+            'code'     => [
+                'required',
+                'max:20',
+                'unique:salles,code,' . $salle->id,
+                'regex:/^(SC|SM)-[A-Za-z0-9]+$/',
+                function ($attribute, $value, $fail) use ($request) {
+                    $type = $request->input('type');
+                    if ($type && !str_starts_with($value, $type . '-')) {
+                        $fail('Le code doit commencer par ' . $type . '- selon le type de salle choisi.');
+                    }
+                },
+            ],
             'type'     => 'required|in:SC,SM',
             'capacite' => 'nullable|integer|min:1',
+        ], [
+            'code.unique' => 'Rah had salle deja existe.',
+            'code.required' => 'Le code de la salle est obligatoire.',
+            'type.required' => 'Le type de salle est obligatoire.',
         ]);
 
         $salle->update($validated);

@@ -1,6 +1,6 @@
 <div class="sidebar-shell flex flex-col h-screen w-72 shadow-2xl no-print">
-    <div class="p-8 border-b border-gray-200">
-        <h1 class="sidebar-brand text-2xl font-black tracking-tight">DIA-EMPLOIS</h1>
+    <div class="h-16 px-6 border-b border-gray-200 flex items-center">
+        <h1 class="sidebar-brand text-2xl font-black tracking-tight leading-none">DIA-EMPLOIS</h1>
     </div>
 
     <nav class="flex-1 px-5 py-6 space-y-2 overflow-y-auto">
@@ -40,20 +40,25 @@
         @endif
 
         @if(Auth::user()->role === 'formateur')
+            <div data-i18n-app="sideFormateurSpace" class="sidebar-section pt-6 pb-2 px-4 text-sm font-bold uppercase tracking-wider">Espace formateur</div>
             <a href="{{ route('formateur.dashboard') }}"
                     class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.dashboard') ? 'sidebar-link-active' : '' }}">
                 <i class="fas fa-calendar-check mr-3"></i> <span data-i18n-app="navMyTimetable">Mon Emploi</span>
             </a>
-
             <a href="{{ route('formateur.emploi.view') }}"
                     class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.emploi.view') ? 'sidebar-link-active' : '' }}">
-                <i class="fas fa-users mr-3"></i> <span data-i18n-app="sideGroupTimetables">Emplois du Groupe</span>
+                <i class="fas fa-table mr-3"></i> <span data-i18n-app="sideGroupTimetables">Emplois du Groupe</span>
             </a>
-
             <a href="{{ route('formateur.contact-admin.create') }}"
                     class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl font-semibold transition {{ request()->routeIs('formateur.contact-admin.*') ? 'sidebar-link-active' : '' }}">
                 <i class="fas fa-envelope mr-3"></i> <span data-i18n-app="sideContactAdmin">Contacter Admin</span>
             </a>
         @endif
+
+        <div class="sidebar-section pt-6 pb-2 px-4 text-sm font-bold uppercase tracking-wider" data-i18n-app="sidePreferences">Preferences</div>
+        <a href="{{ route('settings.index') }}"
+                class="sidebar-link flex items-center px-4 py-3 text-base rounded-xl transition {{ request()->routeIs('settings.index') ? 'sidebar-link-active' : '' }}">
+            <i class="fas fa-cog mr-3"></i> <span data-i18n-app="sideSettings">Parametres</span>
+        </a>
     </nav>
 </div>

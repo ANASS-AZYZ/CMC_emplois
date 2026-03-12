@@ -13,9 +13,36 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+        <div>
+            <x-input-label :value="__('Photo de profil')" />
+            <div class="mt-2 flex items-center gap-4">
+                @php
+                    $avatarUrl = $user->avatar_url;
+                    $firstLetter = $user->name ? mb_strtoupper(mb_substr(trim($user->name), 0, 1)) : 'U';
+                @endphp
+                @if ($avatarUrl)
+                    <img src="{{ $avatarUrl }}" alt="{{ $user->name }}" class="h-16 w-16 rounded-full object-cover border-2 border-gray-200 shadow-sm" id="avatar-preview-img" />
+                    <span class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 border-2 border-blue-200 text-blue-800 text-xl font-bold shadow-sm hidden" id="avatar-preview-letter">{{ $firstLetter }}</span>
+                @else
+                    <span class="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 border-2 border-blue-200 text-blue-800 text-xl font-bold shadow-sm" id="avatar-preview-letter">{{ $firstLetter }}</span>
+                    <img src="" alt="" class="h-16 w-16 rounded-full object-cover border-2 border-gray-200 shadow-sm hidden" id="avatar-preview-img" />
+                @endif
+                <div class="flex flex-col gap-2">
+                    <input type="file" name="avatar" id="avatar" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" class="block w-full text-sm text-gray-600 file:mr-4 file:rounded-md file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-indigo-700 hover:file:bg-indigo-100" />
+                    @if ($avatarUrl)
+                        <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                            <input type="checkbox" name="remove_avatar" value="1" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                            {{ __('Supprimer la photo') }}
+                        </label>
+                    @endif
+                </div>
+            </div>
+            <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -61,4 +88,16 @@
             @endif
         </div>
     </form>
+    <script>
+        document.getElementById('avatar')?.addEventListener('change', function (e) {
+            var file = e.target.files?.[0];
+            var img = document.getElementById('avatar-preview-img');
+            var letter = document.getElementById('avatar-preview-letter');
+            if (!file || !img || !letter) return;
+            var url = URL.createObjectURL(file);
+            img.src = url;
+            img.classList.remove('hidden');
+            letter.classList.add('hidden');
+        });
+    </script>
 </section>
