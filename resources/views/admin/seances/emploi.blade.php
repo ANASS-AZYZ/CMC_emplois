@@ -18,6 +18,9 @@
     <style>
         body { font-family: Trebuchet MS, Arial, sans-serif; }
 
+        /* ══════════════════════════════════════
+           PAPER
+        ══════════════════════════════════════ */
         .paper {
             width: 100%;
             max-width: 1000px;
@@ -28,6 +31,9 @@
             box-sizing: border-box;
         }
 
+        /* ══════════════════════════════════════
+           DOC HEADER
+        ══════════════════════════════════════ */
         .doc-header {
             width: 100%;
             border-collapse: collapse;
@@ -55,6 +61,9 @@
             line-height: 1.2;
         }
 
+        /* ══════════════════════════════════════
+           DOC META
+        ══════════════════════════════════════ */
         .doc-meta {
             display: flex;
             justify-content: space-between;
@@ -76,6 +85,12 @@
             font-weight: 800;
         }
 
+<<<<<<< HEAD
+=======
+        /* ══════════════════════════════════════
+           TABLE
+        ══════════════════════════════════════ */
+>>>>>>> d53410b24962b78f7c3e85ade00873d6a9fba792
         .table-scroll-wrapper {
             width: 100%;
             overflow-x: auto;
@@ -131,6 +146,9 @@
             font-weight: 700;
         }
 
+        /* ══════════════════════════════════════
+           SHELL / EMPTY
+        ══════════════════════════════════════ */
         .emploi-shell {
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -140,6 +158,12 @@
             color: #94a3b8;
         }
 
+<<<<<<< HEAD
+=======
+        /* ══════════════════════════════════════
+           DARK MODE
+        ══════════════════════════════════════ */
+>>>>>>> d53410b24962b78f7c3e85ade00873d6a9fba792
         body.theme-dark .emploi-shell { background: var(--app-surface) !important; border-color: var(--app-border) !important; }
         body.theme-dark .emploi-shell label { color: #f8fafc !important; }
         body.theme-dark .emploi-shell select { background: #ffffff !important; border-color: #64748b !important; color: #0f172a !important; }
@@ -153,16 +177,35 @@
         body.theme-dark .doc-title-fr { color: #0f172a !important; }
         body.theme-dark .doc-meta { color: #0f172a !important; }
 
+<<<<<<< HEAD
         @media (max-width: 768px) {
             .paper { padding: 6px; }
 
+=======
+        /* ══════════════════════════════════════
+           RESPONSIVE — كل الـ @media بلاصة وحدة
+        ══════════════════════════════════════ */
+        @media (max-width: 768px) {
+            /* paper */
+            .paper { padding: 6px; }
+
+            /* doc header */
+>>>>>>> d53410b24962b78f7c3e85ade00873d6a9fba792
             .doc-header .logo-cell { display: none; }
             .doc-title-ar { font-size: 11px; }
             .doc-title-fr { font-size: 10px; }
 
+<<<<<<< HEAD
             .doc-meta { flex-direction: row; flex-wrap: wrap; font-size: 10px; padding: 4px 8px; gap: 3px; }
             .doc-meta b { font-size: 11px; }
 
+=======
+            /* doc meta */
+            .doc-meta { flex-direction: row; flex-wrap: wrap; font-size: 10px; padding: 4px 8px; gap: 3px; }
+            .doc-meta b { font-size: 11px; }
+
+            /* table */
+>>>>>>> d53410b24962b78f7c3e85ade00873d6a9fba792
             .group-table { min-width: 420px; }
             .group-table th { font-size: 9px; padding: 2px; height: 28px; }
             .group-table td { height: 45px; font-size: 8px; }
@@ -172,12 +215,24 @@
         }
 
         @media (max-width: 480px) {
+<<<<<<< HEAD
             .doc-title-ar { font-size: 8px; }
             .doc-title-fr { font-size: 7px; }
 
             .doc-meta { font-size: 6px; padding: 2px 2px; }
             .doc-meta b { font-size: 8px; }
 
+=======
+            /* doc header */
+            .doc-title-ar { font-size: 8px; }
+            .doc-title-fr { font-size: 7px; }
+
+            /* doc meta */
+            .doc-meta { font-size: 6px; padding: 2px 2px; }
+            .doc-meta b { font-size: 8px; }
+
+            /* table */
+>>>>>>> d53410b24962b78f7c3e85ade00873d6a9fba792
             .group-table { min-width: 320px; }
             .group-table th { font-size: 8px; padding: 1px; height: 20px; }
             .group-table td { height: 25px; font-size: 6px; }
@@ -186,6 +241,9 @@
             .times { font-size: 7px; padding: 0 2px; }
         }
 
+        /* ══════════════════════════════════════
+           PRINT
+        ══════════════════════════════════════ */
         @media print {
             .no-print, nav, aside { display: none !important; }
             header { display: none !important; }
@@ -215,6 +273,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="emploi-shell overflow-hidden shadow-sm sm:rounded-lg p-6 print-wrap">
 
+<<<<<<< HEAD
+=======
+                {{-- ── FILTER FORM ── --}}
+>>>>>>> d53410b24962b78f7c3e85ade00873d6a9fba792
                 <form method="GET" action="{{ auth()->user()?->role === 'admin' ? route('seances.emploi') : route('formateur.emploi.view') }}" class="mb-8 no-print">
                     <input type="hidden" name="type" value="groupe">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end" style="max-width:320px;">
@@ -244,9 +306,14 @@
                     </div>
                 </form>
 
+                {{-- ── PLANNING ── --}}
                 @if($hasFilter)
                     <div class="paper">
 
+<<<<<<< HEAD
+=======
+                        {{-- DOC HEADER --}}
+>>>>>>> d53410b24962b78f7c3e85ade00873d6a9fba792
                         <table class="doc-header">
                             <tr>
                                 <td style="width:80px;" class="logo-cell">
@@ -262,12 +329,17 @@
                             </tr>
                         </table>
 
+                        {{-- META --}}
                         <div class="doc-meta">
                             <div><span data-i18n-app="groupLabelMeta">Groupe</span> : <b>{{ strtoupper($currentGroupe?->code ?? '') }}</b></div>
                             <div><span data-i18n-app="weeklyHoursLabel">Masse Horaire Hebdomadaire</span> : <b>{{ rtrim(rtrim(number_format($totalHeures, 1), '0'), '.') }}h</b></div>
                             <div><span data-i18n-app="trainingYearLabel">Année de Formation</span> : <b>2025 / 2026</b></div>
                         </div>
 
+<<<<<<< HEAD
+=======
+                        {{-- TABLE --}}
+>>>>>>> d53410b24962b78f7c3e85ade00873d6a9fba792
                         <div class="table-scroll-wrapper">
                             <table class="group-table">
                                 <thead>
@@ -323,6 +395,10 @@
                             </table>
                         </div>
 
+<<<<<<< HEAD
+=======
+                        {{-- PRINT BUTTON --}}
+>>>>>>> d53410b24962b78f7c3e85ade00873d6a9fba792
                         <div class="text-right no-print" style="margin-top:10px;">
                             <button type="button" onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2 rounded-md transition duration-200 shadow">
                                 <span data-i18n-app="printEmploisBtn">Imprimer emplois</span>
