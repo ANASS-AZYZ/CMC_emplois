@@ -22,12 +22,22 @@
             font-family: Trebuchet MS, Arial, sans-serif;
         }
 
+        /* ── PAPER ── desktop: fixed 1000px / mobile: full width */
         .paper {
-            width: 1000px;
+            width: 100%;
+            max-width: 1000px;
+
             margin: 0px auto;
             background: white;
             padding: 8px;
             border: 1px solid #cfd4da;
+        }
+
+        @media (max-width: 1040px) {
+            .paper {
+                width: 100%;
+                overflow-x: auto;
+            }
         }
 
         .doc-header {
@@ -44,6 +54,13 @@
             padding: 4px;
         }
 
+        /* ── hide logos on very small screens to save space ── */
+        @media (max-width: 600px) {
+            .doc-header .logo-cell {
+                display: none;
+            }
+        }
+
         .doc-title-ar {
             margin: 0;
             font-size: 16px;
@@ -58,6 +75,11 @@
             font-weight: 600;
             color: #222;
             line-height: 1.2;
+        }
+
+        @media (max-width: 600px) {
+            .doc-title-ar { font-size: 13px; }
+            .doc-title-fr { font-size: 12px; }
         }
 
         .doc-meta {
@@ -82,8 +104,16 @@
             font-weight: 800;
         }
 
+        /* ── TABLE wrapper: scrollable on mobile ── */
+        .table-scroll-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .group-table {
             width: 100%;
+            min-width: 480px; /* prevents squishing below readable size */
             border-collapse: collapse;
             table-layout: fixed;
             page-break-inside: auto;
@@ -99,7 +129,7 @@
             color: #fff !important;
             border: 1px solid #d0d5db;
             padding: 4px;
-            font-size: 13px;
+            font-size: 7px;
             height: 36px;
             font-weight: 700;
         }
@@ -122,6 +152,14 @@
             font-size: 13px;
         }
 
+        @media (max-width: 768px) {
+            .day-cell { width: 20px; font-size: 8px; }
+            .group-table th { font-size: 7px; padding: 2px; }
+            .group-table td { height: 15px; font-size: 7px; }
+            .times { font-size: 8px; padding: 0 3px; }
+            .slot-card { font-size: 9px; padding: 2px; }
+        }
+
         .slot-card {
             background-color: #5c80b9 !important;
             color: #fff !important;
@@ -136,7 +174,7 @@
         }
 
         .slot-title {
-            font-weight: 800;
+            font-weight: 100;
         }
 
         .times {
@@ -144,7 +182,20 @@
             justify-content: space-between;
             padding: 0 10px;
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 1  00;
+        }
+
+        @media (max-width: 768px) {
+            .doc-title-ar {
+    font-size: 5px;
+    margin: 0;
+}
+
+.doc-title-fr {
+    font-size: 5px;
+    margin: 4px 0 0;
+}
+            .times { font-size: 10px; padding: 0 4px; }
         }
 
         .emploi-shell {
@@ -157,6 +208,7 @@
             color: #94a3b8;
         }
 
+        /* ── DARK MODE ── */
         body.theme-dark .emploi-shell {
             background: var(--app-surface) !important;
             border-color: var(--app-border) !important;
@@ -201,6 +253,42 @@
             background-color: #1d4ed8 !important;
         }
 
+        /* Mobile card view */
+/* Mobile card view */
+.mobile-card-view { display: none; }
+
+.
+.day-card { border: 1px solid #d0d5db; border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+.day-card-header { background-color: #2f9cb7; color: #fff; font-weight: 100; font-size: 10px; padding: 8px 12px; border-bottom: 1px solid #c5cfd6; }
+.creneau-row { display: flex; align-items: stretch; border-bottom: 1px solid #e5e7eb;  }
+.creneau-row:last-child { border-bottom: none; }
+.creneau-time { width: 40px;  background: #f0f4f7; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 7px; font-weight: 100; color: #4a6b7a; padding: 6px 4px; border-right: 1px solid #d0d5db; line-height: 1.3; text-align: center; }
+.creneau-content { flex: 1; display: flex; align-items: center; justify-content: center; background: #f5f5f5; padding: 6px 8px; font-size: 11px; text-align: center; color: #94a3b8; }
+.mobile-slot-card { width: 100%; border-radius: 5px; padding: 6px 8px; font-size: 11px; line-height: 1.4; text-transform: uppercase; font-weight: 100; color: #fff; text-align: left; }
+
+body.theme-dark .day-card { border-color: #334155; }
+body.theme-dark .day-card-header { background-color: #1e293b; color: #f8fafc; border-bottom-color: #334155; }
+body.theme-dark .creneau-row { border-bottom-color: #1e293b; }
+body.theme-dark .creneau-time { background: #111827; color: #94a3b8; border-right-color: #334155; }
+body.theme-dark .creneau-content { background: #111827; }
+
+@media print {
+    .desktop-table-view { display: block !important; }
+    .mobile-card-view { display: none !important; }
+}
+/* Dark mode mobile */
+body.theme-dark .day-card { border-color: #334155; }
+body.theme-dark .day-card-header { background-color: #1e293b; color: #f8fafc; border-bottom-color: #334155; }
+body.theme-dark .creneau-row { border-bottom-color: #1e293b; }
+body.theme-dark .creneau-time { background: #111827; color: #94a3b8; border-right-color: #334155; }
+body.theme-dark .creneau-content { background: #111827; }
+
+/* Print: force desktop table */
+@media print {
+    .desktop-table-view { display: block !important; }
+    .mobile-card-view { display: none !important; }
+}
+        /* ── PRINT ── desktop layout is preserved exactly ── */
         @media print {
             .no-print, nav, aside { display: none !important; }
             header { display: none !important; }
@@ -209,7 +297,7 @@
             .max-w-7xl { max-width: 400px !important; }
             @page { size: A4 landscape; margin: 5mm; }
             .print-wrap,
-            .paper { box-shadow: none !important; border: 0 !important; padding: 0 !important; width: 100% !important; margin: 0 !important; }
+            .paper { box-shadow: none !important; border: 0 !important; padding: 0 !important; width: 100%;  !important; margin: 0 !important; }
             .group-table th, .slot-card {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
@@ -222,12 +310,16 @@
             .doc-meta { font-size: 11px; margin: 2px 0 6px; }
             .doc-meta b { font-size: 12px; }
             .times { font-size: 10px; padding: 0 6px; }
+            /* restore logos for print */
+            .doc-header .logo-cell { display: table-cell !important; }
+            /* no horizontal scroll on print */
+            .table-scroll-wrapper { overflow: visible; }
         }
     </style>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="emploi-shell overflow-hidden shadow-sm sm:rounded-lg p-6 print-wrap">
+            <div class="emploi-shell overflow-hidden shadow-sm sm:rounded-lg p-6 print-wrap" style="width:400px;">
                 <form method="GET" action="{{ auth()->user()?->role === 'admin' ? route('seances.emploi') : route('formateur.emploi.view') }}" class="mb-8 no-print">
                     <input type="hidden" name="type" value="groupe">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
@@ -257,13 +349,7 @@
                             </button>
                         </div>
 
-                        <div class="text-right no-print">
-                            @if($hasFilter)
-                                <button type="button" onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2 rounded-md transition duration-200 shadow">
-                                    <span data-i18n-app="printEmploisBtn">Imprimer emplois</span>
-                                </button>
-                            @endif
-                        </div>
+
                     </div>
                 </form>
 
@@ -271,14 +357,14 @@
                     <div class="paper">
                         <table class="doc-header">
                             <tr>
-                                <td style="width:200px;">
-                                    <img src="{{ asset('images/logo-cmc.png') }}" alt="Logo CMC" style="height:70px; object-fit:contain;">
+                                <td style="width:80px;" class="logo-cell">
+                                    <img src="{{ asset('images/logo-cmc.png') }}" alt="Logo CMC" style="height:40px; object-fit:contain;">
                                 </td>
                                 <td>
                                     <p class="doc-title-ar">مكتب التكوين المهني و إنعاش الشغل</p>
                                     <p class="doc-title-fr">Office de la formation professionnelle et de la promotion du travail</p>
                                 </td>
-                                <td style="width:200px;">
+                                <td style="width:80px;" class="logo-cell">
                                     <img src="{{ asset('images/logo-ofppt.png') }}" alt="Logo OFPPT" style="height:60px; object-fit:contain;">
                                 </td>
                             </tr>
@@ -290,7 +376,9 @@
                             <div><span data-i18n-app="trainingYearLabel">Année de Formation</span> : <b>2025 / 2026</b></div>
                         </div>
 
-                        <div class="overflow-x-auto">
+                        {{-- Wrapper div makes the table scroll horizontally on mobile --}}
+                        <div class="desktop-table-view">
+                        <div class="table-scroll-wrapper">
                             <table class="w-full border-collapse group-table">
                             <thead>
                                 <tr>
@@ -344,7 +432,67 @@
                             </tbody>
                             </table>
                         </div>
-                    </div>
+                        </div>{{-- end desktop-table-view --}}
+                        <div class="text-right no-print">
+                            @if($hasFilter)
+                                <button type="button" onclick="window.print()" class="bg-gray-500 hover:bg-gray-200 text-white px-6 py-2 rounded-md transition duration-200 shadow">
+                                    <span data-i18n-app="printEmploisBtn">Imprimer emplois</span>
+                                </button>
+                            @endif
+                        </div>
+                        <div class="mobile-card-view">
+                            @foreach($jours as $jour)
+                                <div class="day-card">
+                                    <div class="day-card-header">{{ $jour }}</div>
+                                    @foreach($creneaux as $creneau)
+                                        @php
+                                            $creneauLabels = [
+                                                '08:30-11:00' => ['08:30', '11:00'],
+                                                '11:00-13:30' => ['11:00', '13:30'],
+                                                '13:30-16:00' => ['13:30', '16:00'],
+                                                '16:00-18:30' => ['16:00', '18:30'],
+                                            ];
+                                            $times     = $creneauLabels[$creneau] ?? explode('-', $creneau);
+                                            $timeStart = $times[0] ?? $creneau;
+                                            $timeEnd   = $times[1] ?? '';
+                                        @endphp
+                                        <div class="creneau-row">
+                                            <div class="creneau-time">
+                                                <span>{{ $timeStart }}</span>
+                                                <span style="color:#b0bec5;">↓</span>
+                                                <span>{{ $timeEnd }}</span>
+                                            </div>
+                                            <div class="creneau-content">
+                                                @if(isset($emploi[$jour][$creneau]))
+                                                    @php
+                                                        $isAbsent      = !($emploi[$jour][$creneau]->formateur_present ?? true);
+                                                        $isDistance    = (($emploi[$jour][$creneau]->mode ?? 'presentiel') === 'distance');
+                                                        $formateurName = trim(($emploi[$jour][$creneau]->formateur->nom ?? '') . ' ' . ($emploi[$jour][$creneau]->formateur->prenom ?? ''));
+                                                        $bgColor       = $isAbsent ? '#facc15' : ($isDistance ? '#1f3648' : '#4d8cc3');
+                                                        $textColor     = $isAbsent ? '#1f2937' : '#ffffff';
+                                                    @endphp
+                                                    <div class="mobile-slot-card" style="background:{{ $bgColor }}; color:{{ $textColor }};">
+                                                        <div style="font-weight:100; margin-bottom:2px;">{{ $formateurName }}</div>
+                                                        @if($isAbsent)
+                                                            <div style="font-weight:100; color:#7c2d12;">⚠ ABSENT</div>
+                                                        @elseif($isDistance)
+                                                            <div>📡 A distance</div>
+                                                        @else
+                                                            <div>🏫 Salle : {{ $emploi[$jour][$creneau]->salle->code ?? '' }}</div>
+                                                        @endif
+                                                    </div>
+                                                @else
+                                                    <span style="color:#cbd5e1;">—</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endforeach
+                        </div>{{-- end mobile-card-view --}}
+
+                    </div>{{-- end paper --}}
+                    
                 @else
                     <div class="empty-state text-center py-10 rounded-lg">
                         <p data-i18n-app="emptyPlanningMsg">Veuillez selectionner un filtre pour afficher le planning.</p>

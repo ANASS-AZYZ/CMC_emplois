@@ -213,17 +213,38 @@ class SeanceController extends Controller
                 $selectedFormateur = optional($formateur)->id;
                 $emploi = [];
 
-                if ($formateur) {
-                    $seancesPerso = Seance::with(['groupe', 'salle'])
-                        ->where('formateur_id', $formateur->id)
-                        ->when(Auth::check() && in_array($selectedModeFilter, ['presentiel', 'distance'], true), function ($q) use ($selectedModeFilter) {
-                            $q->where('mode', $selectedModeFilter);
-                        })
-                        ->get();
-                    foreach ($seancesPerso as $s) {
-                        $emploi[$s->jour][$s->creneau] = $s;
-                    }
-                }
+                // دابا
+if ($user->role === 'formateur') {
+    // إلا بغا يشوف emploi groupe — خليه
+    if ($selectedType === 'groupe' && $selectedGroupe) {
+        // ما تبدلش شي — خليه يشوف emploi groupe
+    } else {
+        // رجع لـ emploi ديالو
+        $selectedType = 'formateur';
+        $formateur = $user->formateur;
+        $selectedFormateur = optional($formateur)->id;
+        $emploi = [];
+
+        if ($formateur) {
+            $seancesPerso = Seance::with(['groupe', 'salle'])
+                ->where('formateur_id', $formateur->id)
+                ->when(in_array($selectedModeFilter, ['presentiel', 'distance'], true), function ($q) use ($selectedModeFilter) {
+                    $q->where('mode', $selectedModeFilter);
+                })
+                ->get();
+            foreach ($seancesPerso as $s) {
+                $emploi[$s->jour][$s->creneau] = $s;
+            }
+        }
+    }
+
+    return view('admin.seances.emploi', compact(
+        'filieres', 'groupes', 'formateurs', 'salles',
+        'selectedType', 'selectedFiliere', 'selectedGroupe',
+        'selectedFormateur', 'selectedSalle', 'selectedModeFilter',
+        'jours', 'creneaux', 'emploi'
+    ));
+}
             }
 
             return view('admin.seances.emploi', compact(
