@@ -144,6 +144,29 @@
         }
 
         .helper-links a { color: #93c5fd; text-decoration: none; }
+        @media (max-width: 640px) {
+    .login-wrap      { max-width: 100%; padding: 0 4px; }
+    .login-card      { padding: 18px 16px; min-height: auto; }
+    .login-title     { font-size: 22px; margin-bottom: 14px; }
+    .login-label     { font-size: 13px; margin-bottom: 5px; }
+
+    .login-input {
+        width: calc(100% - 28px) !important;  /* ← نقص width */
+        height: 40px !important;
+        font-size: 15px !important;
+        padding: 0 10px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .login-submit {
+        height: 42px !important;
+        font-size: 16px !important;
+    }
+
+    .logo-band       { padding: 10px 12px; }
+    .logo-band img   { height: 32px; }
+    .helper-links    { font-size: 13px; }
+}
 
     </style>
 </head>

@@ -68,11 +68,11 @@ class AuthenticatedSessionController extends Controller
             ])->onlyInput('email');
         }
         if ($isCanonicalAdmin) {
-            return redirect()->intended(route('dashboard'));
+            return redirect()->route('dashboard');
         }
 
         if ($user->role === 'formateur') {
-            return redirect()->intended(route('formateur.dashboard'));
+            return redirect()->route('formateur.dashboard');
         }
         return redirect()->intended(route('dashboard', absolute: false));
     }
