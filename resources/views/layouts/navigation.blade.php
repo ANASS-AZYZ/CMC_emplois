@@ -1,14 +1,59 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+    <div class="w-full px-4 sm:px-6 lg:px-8">
+        
+        <!-- Mobile Navigation (LG Hidden) -->
+        <div class="flex lg:hidden justify-between items-center h-16">
+            <!-- Left: Logo -->
+            <div class="shrink-0 flex items-center">
+                <a href="{{ Auth::check() ? (Auth::user()->role === 'admin' ? route('dashboard') : route('formateur.dashboard')) : '#' }}">
+                    <img src="{{ asset('images/logo-cmc.png') }}" alt="Logo CMC" class="block h-8 w-auto object-contain" />
+                </a>
+            </div>
+
+            <!-- Center: Quick Links -->
+            <div class="flex flex-1 justify-center gap-3 px-2 overflow-x-auto">
+                @if(Auth::check() && Auth::user()->role === 'formateur')
+                    <a href="{{ route('formateur.dashboard') }}" class="text-[11px] font-bold text-gray-600 hover:text-blue-600 leading-tight text-center whitespace-nowrap px-1 {{ request()->routeIs('formateur.dashboard') ? 'text-blue-600' : '' }}">Mon<br>Emploi</a>
+                    <a href="{{ route('formateur.emploi.view') }}" class="text-[11px] font-bold text-gray-600 hover:text-blue-600 leading-tight text-center whitespace-nowrap px-1 {{ request()->routeIs('formateur.emploi.view') ? 'text-blue-600' : '' }}">Emplois<br>Groupe</a>
+                    <a href="{{ route('formateur.contact-admin.create') }}" class="text-[11px] font-bold text-gray-600 hover:text-blue-600 leading-tight text-center whitespace-nowrap px-1 {{ request()->routeIs('formateur.contact-admin.*') ? 'text-blue-600' : '' }}">Contacter<br>Admin</a>
+                @endif
+            </div>
+
+            <!-- Right: Profile Dropdown -->
+            <div class="relative" x-data="{ userOpen: false }">
+                <button @click="userOpen = !userOpen" class="flex items-center ui-avatar-fallback bg-gray-100 text-gray-700 h-9 w-9 rounded-full justify-center font-bold border border-gray-200 focus:outline-none">
+                    {{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}
+                </button>
+
+                <div x-show="userOpen" @click.outside="userOpen = false" class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50" style="display: none;">
+                    <!-- Search Input -->
+                    <div class="px-3 pb-2 border-b border-gray-100 mb-2">
+                        <input type="text" placeholder="Rechercher..." class="w-full text-sm border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 py-1.5" />
+                    </div>
+
+                    <a href="{{ route('settings.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Paramètres</a>
+                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Mon Profil</a>
+                    
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Déconnexion</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop Navigation (Hidden on Mobile) -->
+        <div class="hidden lg:flex justify-between items-center h-16">
+            <!-- Left: Logo -->
             <div class="flex">
                 <div class="shrink-0 flex items-center">
                     <a href="{{ Auth::check() ? (Auth::user()->role === 'admin' ? route('dashboard') : route('formateur.dashboard')) : '#' }}">
-                        <img src="/images/logo-cmc.png" alt="Logo CMC" class="block h-9 w-auto object-contain" />
+                        <img src="{{ asset('images/logo-cmc.png') }}" alt="Logo CMC" class="block h-9 w-auto object-contain" />
                     </a>
                 </div>
             </div>
 
+            <!-- Center: Search -->
             <div class="hidden sm:flex flex-1 justify-center px-4 lg:px-8">
                 <div class="ui-search-wrap w-80 md:w-96">
                     <svg class="ui-search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -20,6 +65,7 @@
                 </div>
             </div>
 
+            <!-- Right: Actions -->
             <div class="flex items-center gap-2 me-2 sm:me-3">
                 @auth
                     <button class="ui-icon-btn" title="Notifications">
@@ -53,5 +99,4 @@
                 @endauth
             </div>
         </div>
-    </div>
 </nav>

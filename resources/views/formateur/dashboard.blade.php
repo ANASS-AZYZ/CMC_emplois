@@ -5,12 +5,14 @@
         }
 
         .paper {
-            width: 1120px;
+            width: 100%; /* Responsive width */
+            max-width: 1000px;
             margin: 10px auto;
             background: white;
             color: #0f172a;
             padding: 8px;
             border: 1px solid #cfd4da;
+            overflow: hidden;
         }
 
         .header {
@@ -163,6 +165,18 @@
                 height: 52px;
             }
         }
+
+        /* Custom Scrollbar for better UX */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
     </style>
 
     @php
@@ -179,8 +193,8 @@
         $totalHeures = $totalSeances * 2.5;
     @endphp
 
-    <div class="py-6 bg-gray-200">
-        <div class="paper">
+    <div class="py-6 px-2 sm:px-4 bg-gray-200">
+        <div class="paper shadow-lg rounded-sm">
             <table class="header">
                 <tr>
                     <td style="width:200px;">
@@ -202,62 +216,64 @@
                 <div><span data-i18n-app="trainingYearLabel">Année de Formation</span> : <b>2025 / 2026</b></div>
             </div>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="day" data-i18n-app="dayHourHeader">Jour / Horaire</th>
-                        <th><div class="times"><span>08:30</span><span>11:00</span></div></th>
-                        <th><div class="times"><span>11:00</span><span>13:30</span></div></th>
-                        <th><div class="times"><span>13:30</span><span>16:00</span></div></th>
-                        <th><div class="times"><span>16:00</span><span>18:30</span></div></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($jours as $j)
+            <div class="w-full overflow-x-auto custom-scrollbar">
+                <table class="table min-w-[850px]">
+                    <thead>
                         <tr>
-                            @php
-                                $dayMap = [
-                                    'Lundi' => 'dayMonday',
-                                    'Mardi' => 'dayTuesday',
-                                    'Mercredi' => 'dayWednesday',
-                                    'Jeudi' => 'dayThursday',
-                                    'Vendredi' => 'dayFriday',
-                                    'Samedi' => 'daySaturday',
-                                ];
-                                $dayKey = $dayMap[$j] ?? null;
-                            @endphp
-                            <td class="day" @if($dayKey) data-i18n-app="{{ $dayKey }}" @endif>{{ $j }}</td>
-                            @foreach($creneaux as $c)
-                                <td>
-                                    @if(isset($emploi[$j][$c]))
-                                        @php
-                                            $seance = $emploi[$j][$c];
-                                            $isAbsent = !($seance->formateur_present ?? true);
-                                            $isDistance = (($seance->mode ?? 'presentiel') === 'distance');
-                                            // جلب كود المجموعة بدلاً من اسم المكون
-                                            $groupeCode = $seance->groupe->code ?? 'N/A';
-                                        @endphp
-                                        <div class="slot" style="@if($isAbsent) background:#facc15 !important; color:#1f2937 !important; @elseif($isDistance) background:#1f3648 !important; color:#ffffff !important; @else background:#4d8cc3 !important; color:#ffffff !important; @endif">
-                                            
-                                            <div style="font-weight:800; font-size: 12px; margin-bottom: 2px;">{{ $groupeCode }}</div>
-                                            
-                                            @if($isAbsent)
-                                                <div style="color:#7c2d12; font-weight:800;">ABSENT</div>
-                                            @elseif($isDistance)
-                                                <div style="font-weight:700;">A distance</div>
-                                            @else
-                                                <div style="font-weight:700;">SALLE : {{ $seance->salle->code ?? '' }}</div>
-                                            @endif
-                                        </div>
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                            @endforeach
+                            <th class="day" data-i18n-app="dayHourHeader">Jour / Horaire</th>
+                            <th><div class="times"><span>08:30</span><span>11:00</span></div></th>
+                            <th><div class="times"><span>11:00</span><span>13:30</span></div></th>
+                            <th><div class="times"><span>13:30</span><span>16:00</span></div></th>
+                            <th><div class="times"><span>16:00</span><span>18:30</span></div></th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($jours as $j)
+                            <tr>
+                                @php
+                                    $dayMap = [
+                                        'Lundi' => 'dayMonday',
+                                        'Mardi' => 'dayTuesday',
+                                        'Mercredi' => 'dayWednesday',
+                                        'Jeudi' => 'dayThursday',
+                                        'Vendredi' => 'dayFriday',
+                                        'Samedi' => 'daySaturday',
+                                    ];
+                                    $dayKey = $dayMap[$j] ?? null;
+                                @endphp
+                                <td class="day" @if($dayKey) data-i18n-app="{{ $dayKey }}" @endif>{{ $j }}</td>
+                                @foreach($creneaux as $c)
+                                    <td>
+                                        @if(isset($emploi[$j][$c]))
+                                            @php
+                                                $seance = $emploi[$j][$c];
+                                                $isAbsent = !($seance->formateur_present ?? true);
+                                                $isDistance = (($seance->mode ?? 'presentiel') === 'distance');
+                                                // جلب كود المجموعة بدلاً من اسم المكون
+                                                $groupeCode = $seance->groupe->code ?? 'N/A';
+                                            @endphp
+                                            <div class="slot" style="@if($isAbsent) background:#facc15 !important; color:#1f2937 !important; @elseif($isDistance) background:#1f3648 !important; color:#ffffff !important; @else background:#4d8cc3 !important; color:#ffffff !important; @endif">
+                                                
+                                                <div style="font-weight:800; font-size: 12px; margin-bottom: 2px;">{{ $groupeCode }}</div>
+                                                
+                                                @if($isAbsent)
+                                                    <div style="color:#7c2d12; font-weight:800;">ABSENT</div>
+                                                @elseif($isDistance)
+                                                    <div style="font-weight:700;">A distance</div>
+                                                @else
+                                                    <div style="font-weight:700;">SALLE : {{ $seance->salle->code ?? '' }}</div>
+                                                @endif
+                                            </div>
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
             <div class="btn-print no-print">
                 <button onclick="window.print()"> <span data-i18n-app="printTimetableBtn">Imprimer emplois</span></button>

@@ -1,4 +1,4 @@
-<div class="sidebar-shell flex flex-col h-screen w-72 shadow-2xl no-print">
+<div class="sidebar-shell hidden lg:flex flex-col h-screen w-full shadow-2xl no-print">
     <div class="h-16 px-6 border-b border-gray-200 flex items-center">
         <h1 class="sidebar-brand text-2xl font-black tracking-tight leading-none">DIA-EMPLOIS</h1>
     </div>
