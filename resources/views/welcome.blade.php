@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Back - CMC Planning</title>
-    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('favicon-cmcm.png') }}">
+    <link rel="icon" type="image/png" href="/images/logo-cmc.png">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
@@ -204,9 +204,9 @@
 
             <div class="mx-auto w-full max-w-xl text-center mb-7">
                 <div class="logo-chip inline-flex items-center gap-3 sm:gap-4 rounded-2xl bg-white/80 border border-slate-200 px-4 sm:px-5 py-2.5 shadow-sm">
-                    <img src="{{ asset('images/logo-cmc.png') }}" alt="CMC" class="h-8 sm:h-9 w-auto object-contain">
+                    <img src="/images/logo-cmc.png" alt="CMC" class="h-8 sm:h-9 w-auto object-contain">
                     <div class="h-8 sm:h-9 w-px bg-slate-200"></div>
-                    <img src="{{ asset('images/logo-ofppt-clean.png') }}" alt="OFPPT" class="h-8 sm:h-9 w-auto object-contain max-w-[165px] sm:max-w-[205px]">
+                    <img src="/images/logo-ofppt.png" alt="OFPPT" class="h-8 sm:h-9 w-auto object-contain max-w-[165px] sm:max-w-[205px]">
                 </div>
                 <h1 data-i18n="welcomeTitle" class="page-title mt-6 text-[2.75rem] sm:text-[3.35rem] font-extrabold text-slate-950">CMC Academic Portal</h1>
                 <p data-i18n="subtitle" class="page-subtitle mt-3 text-slate-600 font-medium text-base sm:text-[1.08rem]">Secure access to scheduling and planning services</p>

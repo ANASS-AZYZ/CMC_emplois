@@ -159,7 +159,7 @@
                 </div>
                 <div class="logo-sep"></div>
                 <div class="logo-slot right">
-                    <img src="{{ asset('images/logo-ofppt-clean.png') }}" alt="OFPPT" class="logo-right">
+                    <img src="{{ asset('images/logo-ofppt.png') }}" alt="OFPPT" class="logo-right">
                 </div>
             </div>
 
