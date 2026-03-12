@@ -11,12 +11,11 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    
     public function create(): View
     {
         return view('auth.login-split', [
             'forcedRole' => null,
-            'title' => 'Connexion',
+            'title'      => 'Connexion',
         ]);
     }
 
@@ -24,7 +23,7 @@ class AuthenticatedSessionController extends Controller
     {
         return view('auth.login-split', [
             'forcedRole' => 'formateur',
-            'title' => 'Connexion Formateur',
+            'title'      => 'Connexion Formateur',
         ]);
     }
 
@@ -32,23 +31,27 @@ class AuthenticatedSessionController extends Controller
     {
         return view('auth.login-split', [
             'forcedRole' => 'admin',
-            'title' => 'Connexion Admin',
+            'title'      => 'Connexion Admin',
         ]);
     }
 
-    
     public function store(LoginRequest $request): RedirectResponse
     {
         $requestedRole = $request->input('login_as');
+
         $request->authenticate();
         $request->session()->regenerate();
+
         $user = Auth::user();
+
         $isCanonicalAdmin = $user->role === 'admin' && $user->email === 'admin@cmc.ma';
-        if ($user->role === 'admin' && ! $isCanonicalAdmin) {
+
+        if ($user->role === 'admin' && !$isCanonicalAdmin) {
             $user->update(['role' => 'formateur']);
             $user->refresh();
         }
-        if ($requestedRole === 'admin' && ! $isCanonicalAdmin) {
+
+        if ($requestedRole === 'admin' && !$isCanonicalAdmin) {
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -58,7 +61,7 @@ class AuthenticatedSessionController extends Controller
             ])->onlyInput('email');
         }
 
-        if (in_array($requestedRole, ['admin', 'formateur'], true) && $user->role !== $requestedRole) {
+        if (!empty($requestedRole) && $requestedRole !== 'admin' && $user->role !== $requestedRole) {
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -67,6 +70,7 @@ class AuthenticatedSessionController extends Controller
                 'email' => 'Informations de connexion incorrectes.',
             ])->onlyInput('email');
         }
+
         if ($isCanonicalAdmin) {
             return redirect()->route('dashboard');
         }
@@ -74,16 +78,14 @@ class AuthenticatedSessionController extends Controller
         if ($user->role === 'formateur') {
             return redirect()->route('formateur.dashboard');
         }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
-    
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');

@@ -74,7 +74,7 @@
                     </a>
 
                     <a href="{{ route('profile.edit') }}" class="ui-avatar-fallback hover:opacity-80 transition-opacity" title="Mon profil">
-                        {{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}
+                        {{ Auth::check() ? mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) : '?' }}
                     </a>
 
                     <form method="POST" action="{{ route('logout') }}" class="ms-1">

@@ -36,9 +36,9 @@ class SalleController extends Controller
                         $fail('Le code doit commencer par ' . $type . '- selon le type de salle choisi.');
                     }
                 },
-            ], // ex: SC-01
-            'type'     => 'required|in:SC,SM',                // SC: Cours, SM: Multimédia
-            'capacite' => 'nullable|integer|min:1',           // Optionnel selon le cahier des charges
+            ],
+            'type'     => 'required|in:SC,SM',
+            'capacite' => 'nullable|integer|min:1',
         ], [
             'code.unique' => 'Rah had salle deja existe.',
             'code.required' => 'Le code de la salle est obligatoire.',

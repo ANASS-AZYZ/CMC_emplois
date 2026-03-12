@@ -88,7 +88,7 @@ class GroupeController extends Controller
                         $fail('Le code doit commencer par ' . $expectedPrefix . '.');
                     }
                 },
-            ], // Code unique ex: DEVOWFS201 [cite: 55]
+            ],
             'filiere_id' => [
                 'required',
                 'exists:filieres,id',
@@ -101,8 +101,8 @@ class GroupeController extends Controller
                         $fail('La filière choisie ne correspond pas à l\'année sélectionnée.');
                     }
                 },
-            ],        // Doit appartenir à une filière 
-            'annee'      => 'required|in:1,2,1ère,2ème'           // 1ère ou 2ème année 
+            ],
+            'annee'      => 'required|in:1,2,1ère,2ème'
         ]);
 
         $validated['annee'] = in_array((string) $validated['annee'], ['1', '1ère'], true) ? '1ère' : '2ème';

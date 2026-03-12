@@ -50,7 +50,7 @@ Route::middleware(['auth', 'role:formateur'])->group(function () {
 });
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', function () {
-        $stats = [
+        $stats = [  
             'formateurs' => Formateur::count(),
             'salles'     => Salle::count(),
             'groupes'    => Groupe::count(),
