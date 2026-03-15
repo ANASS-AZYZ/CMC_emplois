@@ -59,12 +59,25 @@
 
             <div class="flex items-center gap-2 me-2 sm:me-3">
                 @auth
-                    <button class="ui-icon-btn" title="Notifications">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                        </svg>
-                    </button>
+            <div class="relative" x-data="{ notifOpen: false }">
+                <button @click="notifOpen = !notifOpen" class="ui-icon-btn" title="Notifications">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
+                </button>
+
+                <div x-show="notifOpen" @click.outside="notifOpen = false"
+                    class="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50"
+                    style="display:none;">
+                    <div class="px-4 py-2 border-b border-gray-100 mb-1">
+                        <span class="font-bold text-sm text-gray-700">Notifications</span>
+                    </div>
+                    <div class="px-4 py-6 text-center text-sm text-gray-400">
+                        Aucune notification pour le moment
+                    </div>
+                </div>
+            </div>
 
                     <a href="{{ route('settings.theme') }}" class="ui-icon-btn hover:text-blue-600 transition-colors" title="Paramètres">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

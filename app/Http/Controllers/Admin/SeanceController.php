@@ -14,14 +14,12 @@ use Illuminate\Validation\Rule;
 
 class SeanceController extends Controller
 {
-    
     public function index()
     {
         $seances = Seance::with(['groupe', 'salle', 'formateur'])->get();
         return view('admin.seances.index', compact('seances'));
     }
 
-    
     public function create()
     {
         $groupes = Groupe::all();
@@ -33,26 +31,24 @@ class SeanceController extends Controller
         return view('admin.seances.create', compact('groupes', 'salles', 'formateurs', 'jours', 'creneaux'));
     }
 
-    
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'groupe_id' => 'required|exists:groupes,id',
+            'groupe_id'    => 'required|exists:groupes,id',
             'formateur_id' => 'required|exists:formateurs,id',
-            'salle_id' => ['nullable', Rule::requiredIf(fn() => $request->input('mode') === 'presentiel'), 'exists:salles,id'],
-            'jour' => 'required|string',
-            'creneau' => 'required|string',
-            'mode' => 'required|in:presentiel,distance',
+            'salle_id'     => ['nullable', Rule::requiredIf(fn() => $request->input('mode') === 'presentiel'), 'exists:salles,id'],
+            'jour'         => 'required|string',
+            'creneau'      => 'required|string',
+            'mode'         => 'required|in:presentiel,distance',
         ]);
 
         if ($validated['mode'] === 'distance') {
             $validated['salle_id'] = null;
         }
 
-        $baseQuery = Seance::where('jour', $request->jour)
-            ->where('creneau', $request->creneau);
-
+        $baseQuery = Seance::where('jour', $request->jour)->where('creneau', $request->creneau);
         $issues = [];
+
         if ((clone $baseQuery)->where('groupe_id', $request->groupe_id)->exists()) {
             $issues[] = 'Le groupe est deja occupe sur ce jour/creneau.';
         }
@@ -65,37 +61,33 @@ class SeanceController extends Controller
         }
 
         if (!empty($issues)) {
-            return back()->withErrors([
-                'conflit' => 'Conflit detecte: ' . implode(' ', $issues),
-            ])->withInput();
+            return back()->withErrors(['conflit' => 'Conflit detecte: ' . implode(' ', $issues)])->withInput();
         }
 
         Seance::create($validated);
         return redirect()->route('seances.index')->with('success', 'Séance ajoutée avec succès !');
     }
 
-    
     public function edit(Seance $seance)
     {
-        $groupes = Groupe::all();
-        $salles = Salle::all();
+        $groupes    = Groupe::all();
+        $salles     = Salle::all();
         $formateurs = Formateur::all();
-        $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-        $creneaux = ['S1', 'S2', 'S3', 'S4'];
-        
+        $jours      = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+        $creneaux   = ['S1', 'S2', 'S3', 'S4'];
+
         return view('admin.seances.edit', compact('seance', 'groupes', 'salles', 'formateurs', 'jours', 'creneaux'));
     }
 
-    
     public function update(Request $request, Seance $seance)
     {
         $validated = $request->validate([
-            'groupe_id' => 'required|exists:groupes,id',
+            'groupe_id'    => 'required|exists:groupes,id',
             'formateur_id' => 'required|exists:formateurs,id',
-            'salle_id' => ['nullable', Rule::requiredIf(fn() => $request->input('mode') === 'presentiel'), 'exists:salles,id'],
-            'jour' => 'required|string',
-            'creneau' => 'required|string',
-            'mode' => 'required|in:presentiel,distance',
+            'salle_id'     => ['nullable', Rule::requiredIf(fn() => $request->input('mode') === 'presentiel'), 'exists:salles,id'],
+            'jour'         => 'required|string',
+            'creneau'      => 'required|string',
+            'mode'         => 'required|in:presentiel,distance',
         ]);
 
         if ($validated['mode'] === 'distance') {
@@ -107,6 +99,7 @@ class SeanceController extends Controller
             ->where('id', '!=', $seance->id);
 
         $issues = [];
+
         if ((clone $baseQuery)->where('groupe_id', $request->groupe_id)->exists()) {
             $issues[] = 'Le groupe est deja occupe sur ce jour/creneau.';
         }
@@ -119,16 +112,13 @@ class SeanceController extends Controller
         }
 
         if (!empty($issues)) {
-            return back()->withErrors([
-                'conflit' => 'Conflit detecte: ' . implode(' ', $issues),
-            ])->withInput();
+            return back()->withErrors(['conflit' => 'Conflit detecte: ' . implode(' ', $issues)])->withInput();
         }
 
         $seance->update($validated);
         return redirect()->route('seances.index')->with('success', 'Séance modifiée avec succès !');
     }
 
-    
     public function destroy(Seance $seance)
     {
         $seance->delete();
@@ -138,7 +128,7 @@ class SeanceController extends Controller
     public function toggleAbsence(Seance $seance)
     {
         $seance->update([
-            'formateur_present' => ! (bool) $seance->formateur_present,
+            'formateur_present' => !(bool) $seance->formateur_present,
         ]);
 
         $message = $seance->formateur_present
@@ -148,31 +138,30 @@ class SeanceController extends Controller
         return redirect()->route('seances.index')->with('success', $message);
     }
 
-    
     public function showEmploi(Request $request)
     {
         $filieres = Filiere::query()
             ->orderBy('nom')
             ->orderBy('niveau')
             ->get()
-            ->unique(function ($filiere) {
-                return mb_strtolower(trim($filiere->nom)) . '|' . mb_strtolower(trim($filiere->niveau));
-            })
+            ->unique(fn($f) => mb_strtolower(trim($f->nom)) . '|' . mb_strtolower(trim($f->niveau)))
             ->values();
-        $formateurs = Formateur::query()->orderBy('nom')->orderBy('prenom')->get();
-        $salles = Salle::query()->orderBy('code')->get();
-        $selectedFiliere = $request->input('filiere_id');
-        $selectedGroupe = $request->input('groupe_id');
+
+        $formateurs        = Formateur::query()->orderBy('nom')->orderBy('prenom')->get();
+        $salles            = Salle::query()->orderBy('code')->get();
+        $selectedFiliere   = $request->input('filiere_id');
+        $selectedGroupe    = $request->input('groupe_id');
         $selectedFormateur = $request->input('formateur_id');
-        $selectedSalle = $request->input('salle_id');
-        $selectedType = $request->input('type', 'groupe');
+        $selectedSalle     = $request->input('salle_id');
+        $selectedType      = $request->input('type', 'groupe');
         $selectedModeFilter = $request->input('mode_filter');
 
+        // ── Groupes ──
         $groupesQuery = Groupe::query()->orderBy('code');
         if ($selectedFiliere) {
             $selectedFiliereModel = Filiere::find($selectedFiliere);
             if ($selectedFiliereModel) {
-                $nom = trim($selectedFiliereModel->nom);
+                $nom    = trim($selectedFiliereModel->nom);
                 $niveau = trim($selectedFiliereModel->niveau);
                 $groupesQuery->whereHas('filiere', function ($q) use ($nom, $niveau) {
                     $q->whereRaw('TRIM(nom) = ?', [$nom])
@@ -180,12 +169,71 @@ class SeanceController extends Controller
                 });
             }
         }
-        $groupes = $groupesQuery->get();
-
-        $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+        $groupes  = $groupesQuery->get();
+        $jours    = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
         $creneaux = ['S1', 'S2', 'S3', 'S4'];
-        $emploi = [];
+        $emploi   = [];
 
+        // ── Cas: utilisateur NON connecté → vue stagiaire ──
+        if (!Auth::check()) {
+            if ($selectedGroupe) {
+                $seances = Seance::with(['formateur', 'salle', 'groupe'])
+                    ->where('groupe_id', $selectedGroupe)
+                    ->get();
+                foreach ($seances as $seance) {
+                    $emploi[$seance->jour][$seance->creneau] = $seance;
+                }
+            }
+
+            return view('stagiaire.emploi', compact(
+                'filieres', 'groupes',
+                'selectedFiliere', 'selectedGroupe', 'selectedModeFilter',
+                'jours', 'creneaux', 'emploi'
+            ));
+        }
+
+        // ── Cas: utilisateur connecté ──
+        $user = Auth::user();
+
+        // Formateur: affiche son emploi perso sauf si il filtre par groupe
+        if ($user->role === 'formateur') {
+            if ($selectedType === 'groupe' && $selectedGroupe) {
+                // Formateur veut voir emploi d'un groupe — on le permet
+                $seances = Seance::with(['formateur', 'salle', 'groupe'])
+                    ->where('groupe_id', $selectedGroupe)
+                    ->get();
+                foreach ($seances as $seance) {
+                    $emploi[$seance->jour][$seance->creneau] = $seance;
+                }
+            } else {
+                // Afficher emploi perso du formateur
+                $selectedType = 'formateur';
+                $formateur = $user->formateur;
+                $selectedFormateur = optional($formateur)->id;
+
+                if ($formateur) {
+                    $seancesPerso = Seance::with(['groupe', 'salle'])
+                        ->where('formateur_id', $formateur->id)
+                        ->when(
+                            in_array($selectedModeFilter, ['presentiel', 'distance'], true),
+                            fn($q) => $q->where('mode', $selectedModeFilter)
+                        )
+                        ->get();
+                    foreach ($seancesPerso as $s) {
+                        $emploi[$s->jour][$s->creneau] = $s;
+                    }
+                }
+            }
+
+            return view('admin.seances.emploi', compact(
+                'filieres', 'groupes', 'formateurs', 'salles',
+                'selectedType', 'selectedFiliere', 'selectedGroupe',
+                'selectedFormateur', 'selectedSalle', 'selectedModeFilter',
+                'jours', 'creneaux', 'emploi'
+            ));
+        }
+
+        // Admin
         $query = Seance::with(['formateur', 'salle', 'groupe']);
         if ($selectedType === 'groupe' && $selectedGroupe) {
             $query->where('groupe_id', $selectedGroupe);
@@ -196,103 +244,25 @@ class SeanceController extends Controller
         if ($selectedType === 'salle' && $selectedSalle) {
             $query->where('salle_id', $selectedSalle);
         }
-        if (Auth::check() && in_array($selectedModeFilter, ['presentiel', 'distance'], true)) {
+        if (in_array($selectedModeFilter, ['presentiel', 'distance'], true)) {
             $query->where('mode', $selectedModeFilter);
         }
 
-        $seances = $query->get();
-        foreach ($seances as $seance) {
+        foreach ($query->get() as $seance) {
             $emploi[$seance->jour][$seance->creneau] = $seance;
         }
 
-        if (Auth::check()) {
-            $user = Auth::user();
-            if ($user->role === 'formateur' && !($selectedType === 'groupe' && $selectedGroupe)) {
-                $selectedType = 'formateur';
-                $formateur = $user->formateur;
-                $selectedFormateur = optional($formateur)->id;
-                $emploi = [];
-
-<<<<<<< HEAD
-                if ($formateur) {
-                    $seancesPerso = Seance::with(['groupe', 'salle'])
-                        ->where('formateur_id', $formateur->id)
-                        ->when(in_array($selectedModeFilter, ['presentiel', 'distance'], true), function ($q) use ($selectedModeFilter) {
-                            $q->where('mode', $selectedModeFilter);
-                        })
-                        ->get();
-                    foreach ($seancesPerso as $s) {
-                        $emploi[$s->jour][$s->creneau] = $s;
-                    }
-                }
-=======
-                // دابا
-if ($user->role === 'formateur') {
-    // إلا بغا يشوف emploi groupe — خليه
-    if ($selectedType === 'groupe' && $selectedGroupe) {
-        // ما تبدلش شي — خليه يشوف emploi groupe
-    } else {
-        // رجع لـ emploi ديالو
-        $selectedType = 'formateur';
-        $formateur = $user->formateur;
-        $selectedFormateur = optional($formateur)->id;
-        $emploi = [];
-
-        if ($formateur) {
-            $seancesPerso = Seance::with(['groupe', 'salle'])
-                ->where('formateur_id', $formateur->id)
-                ->when(in_array($selectedModeFilter, ['presentiel', 'distance'], true), function ($q) use ($selectedModeFilter) {
-                    $q->where('mode', $selectedModeFilter);
-                })
-                ->get();
-            foreach ($seancesPerso as $s) {
-                $emploi[$s->jour][$s->creneau] = $s;
-            }
-        }
-    }
-
-    return view('admin.seances.emploi', compact(
-        'filieres', 'groupes', 'formateurs', 'salles',
-        'selectedType', 'selectedFiliere', 'selectedGroupe',
-        'selectedFormateur', 'selectedSalle', 'selectedModeFilter',
-        'jours', 'creneaux', 'emploi'
-    ));
-}
->>>>>>> d53410b24962b78f7c3e85ade00873d6a9fba792
-            }
-
-            return view('admin.seances.emploi', compact(
-                'filieres',
-                'groupes',
-                'formateurs',
-                'salles',
-                'selectedType',
-                'selectedFiliere',
-                'selectedGroupe',
-                'selectedFormateur',
-                'selectedSalle',
-                'selectedModeFilter',
-                'jours',
-                'creneaux',
-                'emploi'
-            ));
-        }
-
-        return view('stagiaire.emploi', compact(
-            'filieres',
-            'groupes',
-            'selectedFiliere',
-            'selectedGroupe',
-            'selectedModeFilter',
-            'jours',
-            'creneaux',
-            'emploi'
+        return view('admin.seances.emploi', compact(
+            'filieres', 'groupes', 'formateurs', 'salles',
+            'selectedType', 'selectedFiliere', 'selectedGroupe',
+            'selectedFormateur', 'selectedSalle', 'selectedModeFilter',
+            'jours', 'creneaux', 'emploi'
         ));
     }
 
     public function groupesByFiliere(Filiere $filiere)
     {
-        $nom = trim($filiere->nom);
+        $nom    = trim($filiere->nom);
         $niveau = trim($filiere->niveau);
 
         $groupes = Groupe::query()
