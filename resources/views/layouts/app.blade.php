@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CMC Planning</title>
-    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('favicon-cmcm.png') }}">
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-cmcm.png">
     <script>
         (function () {
             try {
@@ -338,6 +338,30 @@
             background: #ffffff;
             color: #0f172a;
         }
+
+        @media (max-width: 768px) {
+            html,
+            body {
+                overflow-x: hidden;
+            }
+
+            main {
+                padding: 10px !important;
+            }
+
+            .ui-search-wrap {
+                width: 100% !important;
+            }
+
+            .ui-search-input {
+                height: 34px;
+                font-size: 13px;
+            }
+
+            .ui-search-shortcut {
+                font-size: 9px;
+            }
+        }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -425,6 +449,8 @@
                     settingsLanguageTitle: 'Langue',
                     settingsLanguageHelp: 'Choisissez la langue de l\'interface.',
                     settingsLanguageLabel: 'Language',
+                    showPasswordBtn: 'Afficher',
+                    hidePasswordBtn: 'Masquer',
                     dashboardTitle: 'Tableau de Bord - CMC',
                     statTrainers: 'Formateurs',
                     statRooms: 'Salles',
@@ -437,7 +463,7 @@
                     groupeLabel: 'Groupe',
                     showBtn: 'Afficher',
                     printEmploisBtn: 'Imprimer emplois',
-                    selectPrompt: '-- Selectionner --',
+                    selectPrompt: 'Selectionner',
                     emptyPlanningMsg: 'Veuillez selectionner un filtre pour afficher le planning.',
                     dayHourHeader: 'Jour / Horaire',
                     trainerNameLabel: 'Nom du Formateur',
@@ -542,7 +568,13 @@
                     profileCurrentPasswordLabel: 'Mot de passe actuel',
                     profileNewPasswordLabel: 'Nouveau mot de passe',
                     profileConfirmPasswordLabel: 'Confirmer le mot de passe',
-                    profileSavePasswordBtn: 'Enregistrer le mot de passe'
+                    profileSavePasswordBtn: 'Enregistrer le mot de passe',
+                    profileLockedInfo: 'Le nom et l\'email sont verrouilles pour le compte formateur.',
+                    notificationsTitle: 'Notifications',
+                    noNotifications: 'Aucune notification pour le moment.',
+                    statusAbsent: 'ABSENT',
+                    statusDistance: 'A distance',
+                    savePdfBtn: 'Installer PDF'
                 },
                 en: {
                     navDashboard: 'Dashboard',
@@ -578,6 +610,8 @@
                     settingsLanguageTitle: 'Language',
                     settingsLanguageHelp: 'Choose the interface language.',
                     settingsLanguageLabel: 'Language',
+                    showPasswordBtn: 'Show',
+                    hidePasswordBtn: 'Hide',
                     dashboardTitle: 'Dashboard - CMC',
                     statTrainers: 'Trainers',
                     statRooms: 'Rooms',
@@ -590,7 +624,7 @@
                     groupeLabel: 'Group',
                     showBtn: 'Show',
                     printEmploisBtn: 'Print timetable',
-                    selectPrompt: '-- Select --',
+                    selectPrompt: 'Select',
                     emptyPlanningMsg: 'Please select a filter to display the timetable.',
                     dayHourHeader: 'Day / Time',
                     trainerNameLabel: 'Trainer Name',
@@ -695,7 +729,13 @@
                     profileCurrentPasswordLabel: 'Current password',
                     profileNewPasswordLabel: 'New password',
                     profileConfirmPasswordLabel: 'Confirm password',
-                    profileSavePasswordBtn: 'Save password'
+                    profileSavePasswordBtn: 'Save password',
+                    profileLockedInfo: 'Name and email are locked for trainer account.',
+                    notificationsTitle: 'Notifications',
+                    noNotifications: 'No notifications at the moment.',
+                    statusAbsent: 'ABSENT',
+                    statusDistance: 'Remote',
+                    savePdfBtn: 'Save PDF'
                 },
                 ar: {
                     navDashboard: 'لوحة التحكم',
@@ -731,6 +771,8 @@
                     settingsLanguageTitle: 'اللغة',
                     settingsLanguageHelp: 'اختر لغة الواجهة.',
                     settingsLanguageLabel: 'اللغة',
+                    showPasswordBtn: 'اظهار',
+                    hidePasswordBtn: 'اخفاء',
                     dashboardTitle: 'لوحة التحكم - CMC',
                     statTrainers: 'المكونون',
                     statRooms: 'القاعات',
@@ -743,7 +785,7 @@
                     groupeLabel: 'المجموعة',
                     showBtn: 'عرض',
                     printEmploisBtn: 'طباعة الجداول',
-                    selectPrompt: '-- اختر --',
+                    selectPrompt: 'اختر',
                     emptyPlanningMsg: 'المرجو اختيار فلتر لعرض استعمال الزمن.',
                     dayHourHeader: 'اليوم / التوقيت',
                     trainerNameLabel: 'اسم المكون',
@@ -848,7 +890,13 @@
                     profileCurrentPasswordLabel: 'كلمة المرور الحالية',
                     profileNewPasswordLabel: 'كلمة المرور الجديدة',
                     profileConfirmPasswordLabel: 'تأكيد كلمة المرور',
-                    profileSavePasswordBtn: 'حفظ كلمة المرور'
+                    profileSavePasswordBtn: 'حفظ كلمة المرور',
+                    profileLockedInfo: 'الاسم والبريد الالكتروني مقفلان لحساب المكون.',
+                    notificationsTitle: 'الاشعارات',
+                    noNotifications: 'لا توجد اشعارات حاليا.',
+                    statusAbsent: 'غائب',
+                    statusDistance: 'عن بعد',
+                    savePdfBtn: 'حفظ PDF'
                 }
             };
 

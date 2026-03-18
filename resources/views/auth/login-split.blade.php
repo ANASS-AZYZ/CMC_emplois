@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }} - CMC</title>
-    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('favicon-cmcm.png') }}">
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-cmcm.png">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
@@ -151,16 +151,20 @@
     .login-label     { font-size: 13px; margin-bottom: 5px; }
 
     .login-input {
-        width: calc(100% - 28px) !important;  /* ← نقص width */
+        width: 100% !important;
         height: 40px !important;
         font-size: 15px !important;
         padding: 0 10px !important;
         margin-bottom: 12px !important;
+        box-sizing: border-box;
     }
 
     .login-submit {
+        width: 86% !important;
         height: 42px !important;
         font-size: 16px !important;
+        display: block;
+        margin: 8px auto 0 !important;
     }
 
     .logo-band       { padding: 10px 12px; }
@@ -178,11 +182,11 @@
         <div class="login-wrap">
             <div class="logo-band">
                 <div class="logo-slot left">
-                    <img src="{{ asset('images/logo-cmc.png') }}" alt="CMC" class="logo-left">
+                    <img src="/images/logo-cmc.png" alt="CMC" class="logo-left">
                 </div>
                 <div class="logo-sep"></div>
                 <div class="logo-slot right">
-                    <img src="{{ asset('images/logo-ofppt.png') }}" alt="OFPPT" class="logo-right">
+                    <img src="/images/logo-ofppt.png" alt="OFPPT" class="logo-right">
                 </div>
             </div>
 
@@ -191,12 +195,12 @@
 
                 @if(!$forcedRole)
                     <div class="switch-links">
-                        <a href="{{ route('login.formateur') }}" class="{{ $role === 'formateur' ? 'active' : '' }}">Formateur</a>
-                        <a href="{{ route('login.admin') }}" class="{{ $role === 'admin' ? 'active' : '' }}">Admin</a>
+                        <a href="{{ route('login.formateur', [], false) }}" class="{{ $role === 'formateur' ? 'active' : '' }}">Formateur</a>
+                        <a href="{{ route('login.admin', [], false) }}" class="{{ $role === 'admin' ? 'active' : '' }}">Admin</a>
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('login') }}">
+                <form method="POST" action="{{ route('login', [], false) }}">
                     @csrf
                     <input type="hidden" name="login_as" value="{{ $role }}">
 
@@ -220,7 +224,7 @@
                             <span id="remember-text">Rester connecté</span>
                         </label>
                         @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" id="forgot-text">Mot de passe oublié ?</a>
+                            <a href="{{ route('password.request', [], false) }}" id="forgot-text">Mot de passe oublié ?</a>
                         @endif
                     </div>
                 </form>

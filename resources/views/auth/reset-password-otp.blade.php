@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mot de passe oublie - CMC</title>
+    <title>Nouveau mot de passe - CMC</title>
     <link rel="icon" type="image/png" sizes="64x64" href="/favicon-cmcm.png">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -86,16 +86,6 @@
             font-size: 14px;
         }
 
-        .status {
-            background: #0f2c1f;
-            border: 1px solid #2f855a;
-            color: #9ae6b4;
-            padding: 10px 12px;
-            border-radius: 10px;
-            margin-bottom: 14px;
-            font-size: 14px;
-        }
-
         .error-box {
             background: #3f1d1d;
             border: 1px solid #b91c1c;
@@ -126,6 +116,11 @@
             box-sizing: border-box;
         }
 
+        .input[readonly] {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
         .btn {
             width: 100%;
             height: 50px;
@@ -139,23 +134,12 @@
             margin-top: 8px;
         }
 
-        .btn-alt {
-            margin-top: 10px;
-            background: #1f2937;
-        }
-
         .back-link {
             display: inline-block;
             margin-top: 14px;
             color: #93c5fd;
             text-decoration: none;
             font-weight: 700;
-        }
-
-        .step-divider {
-            height: 1px;
-            background: #334a75;
-            margin: 12px 0 16px;
         }
 
         @media (max-width: 640px) {
@@ -169,11 +153,6 @@
     </style>
 </head>
 <body>
-    @php
-        $otpSent = session('otp_sent') || $errors->has('otp') || $errors->has('password') || $errors->has('password_confirmation');
-        $emailValue = old('email');
-    @endphp
-
     <div class="shell">
         <div class="wrap">
             <div class="logo-band">
@@ -183,12 +162,8 @@
             </div>
 
             <div class="card">
-                <h1 class="title">Mot de passe oublie</h1>
-                <p class="subtitle">Recevez un code OTP par email puis verifiez-le pour continuer.</p>
-
-                @if(session('status'))
-                    <div class="status">{{ session('status') }}</div>
-                @endif
+                <h1 class="title">Nouveau mot de passe</h1>
+                <p class="subtitle">Code OTP valide. Definissez maintenant votre nouveau mot de passe.</p>
 
                 @if($errors->any())
                     <div class="error-box">
@@ -198,43 +173,24 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('password.email', [], false) }}">
+                <form method="POST" action="{{ route('password.otp.reset', [], false) }}">
                     @csrf
-                    <input type="hidden" name="action" value="send_otp">
 
                     <label class="label" for="email">Email</label>
-                    <input class="input" id="email" type="email" name="email" value="{{ $emailValue }}" placeholder="Entrer votre email" required autofocus>
+                    <input class="input" id="email" type="email" value="{{ $email }}" readonly>
 
-                    <button class="btn" type="submit">Envoyer le code OTP</button>
+                    <label class="label" for="password">Nouveau mot de passe</label>
+                    <input class="input" id="password" type="password" name="password" required autocomplete="new-password">
+
+                    <label class="label" for="password_confirmation">Confirmer mot de passe</label>
+                    <input class="input" id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password">
+
+                    <button class="btn" type="submit">Confirmer</button>
                 </form>
 
-                @if($otpSent)
-                    <div class="step-divider"></div>
-
-                    <form method="POST" action="{{ route('password.otp.verify', [], false) }}">
-                        @csrf
-
-                        <label class="label" for="email_reset">Email</label>
-                        <input class="input" id="email_reset" type="email" name="email" value="{{ $emailValue }}" required>
-
-                        <label class="label" for="otp">Code OTP</label>
-                        <input class="input" id="otp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" name="otp" value="{{ old('otp') }}" placeholder="Ex: 123456" required>
-
-                        <button class="btn" type="submit">Verifier le code</button>
-                    </form>
-
-                    <form method="POST" action="{{ route('password.email', [], false) }}">
-                        @csrf
-                        <input type="hidden" name="action" value="send_otp">
-                        <input type="hidden" name="email" value="{{ $emailValue }}">
-                        <button class="btn btn-alt" type="submit">Renvoyer le code</button>
-                    </form>
-                @endif
-
-                <a class="back-link" href="{{ route('login', [], false) }}">Retour a la connexion</a>
+                <a class="back-link" href="{{ route('password.request', [], false) }}">Retour au code OTP</a>
             </div>
         </div>
     </div>
 </body>
 </html>
-

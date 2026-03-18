@@ -32,7 +32,21 @@ class ProfileController extends Controller
             ]);
         }
 
-        $user->fill($request->safe()->only(['name', 'email']));
+        $incomingName = trim((string) $request->input('name', ''));
+        $incomingEmail = mb_strtolower(trim((string) $request->input('email', '')));
+
+        if ($user->role === 'formateur') {
+            $currentName = trim((string) $user->name);
+            $currentEmail = mb_strtolower(trim((string) $user->email));
+
+            if ($incomingName !== $currentName || $incomingEmail !== $currentEmail) {
+                return Redirect::route('profile.edit')->withErrors([
+                    'profile' => 'Modification du nom et de l\'email non autorisee pour les formateurs.',
+                ]);
+            }
+        } else {
+            $user->fill($request->safe()->only(['name', 'email']));
+        }
 
         if ($request->boolean('remove_avatar') && $user->avatar) {
             Storage::disk('public')->delete($user->avatar);

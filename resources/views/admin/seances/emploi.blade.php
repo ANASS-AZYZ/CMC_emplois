@@ -20,7 +20,7 @@
 
         .paper {
             width: 100%;
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
             padding: 8px;
@@ -162,7 +162,7 @@
             .doc-title-fr { font-size: 10px; }
             .doc-meta { flex-direction: row; flex-wrap: wrap; font-size: 10px; padding: 4px 8px; gap: 3px; }
             .doc-meta b { font-size: 11px; }
-            .group-table { min-width: 420px; }
+            .group-table { min-width: 390px; }
             .group-table th { font-size: 9px; padding: 2px; height: 28px; }
             .group-table td { height: 45px; font-size: 8px; }
             .day-cell { width: 55px; font-size: 9px; }
@@ -176,7 +176,7 @@
             .doc-title-fr { font-size: 7px; }
             .doc-meta { font-size: 6px; padding: 2px 2px; }
             .doc-meta b { font-size: 8px; }
-            .group-table { min-width: 320px; }
+            .group-table { min-width: 300px; }
             .group-table th { font-size: 8px; padding: 1px; height: 20px; }
             .group-table td { height: 25px; font-size: 6px; }
             .day-cell { width: 42px; font-size: 8px; }
@@ -219,7 +219,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n-app="filiereLabel">Filiere</label>
                             <select name="filiere_id" id="filiere_id" class="w-full border-gray-300 rounded-md shadow-sm">
-                                <option value="" data-i18n-app="selectPrompt">-- Selectionner --</option>
+                                <option value="" data-i18n-app="selectPrompt">Selectionner</option>
                                 @foreach($filieres as $filiere)
                                     <option value="{{ $filiere->id }}" {{ (string)$selectedFiliere === (string)$filiere->id ? 'selected' : '' }}>{{ $filiere->nom }} ({{ $filiere->niveau }})</option>
                                 @endforeach
@@ -228,7 +228,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n-app="groupeLabel">Groupe</label>
                             <select name="groupe_id" id="groupe_id" class="w-full border-gray-300 rounded-md shadow-sm">
-                                <option value="" data-i18n-app="selectPrompt">-- Selectionner --</option>
+                                <option value="" data-i18n-app="selectPrompt">Selectionner</option>
                                 @foreach($groupes as $g)
                                     <option value="{{ $g->id }}" {{ (string)$selectedGroupe === (string)$g->id ? 'selected' : '' }}>{{ $g->code }}</option>
                                 @endforeach
@@ -250,14 +250,14 @@
                         <table class="doc-header">
                             <tr>
                                 <td style="width:80px;" class="logo-cell">
-                                    <img src="{{ asset('images/logo-cmc.png') }}" alt="Logo CMC" style="height:40px; object-fit:contain;">
+                                    <img src="/images/logo-cmc.png" alt="Logo CMC" style="height:40px; object-fit:contain;">
                                 </td>
                                 <td>
                                     <p class="doc-title-ar">مكتب التكوين المهني و إنعاش الشغل</p>
                                     <p class="doc-title-fr">Office de la formation professionnelle et de la promotion du travail</p>
                                 </td>
                                 <td style="width:80px;" class="logo-cell">
-                                    <img src="{{ asset('images/logo-ofppt.png') }}" alt="Logo OFPPT" style="height:40px; object-fit:contain;">
+                                    <img src="/images/logo-ofppt.png" alt="Logo OFPPT" style="height:40px; object-fit:contain;">
                                 </td>
                             </tr>
                         </table>
@@ -325,10 +325,10 @@
                             </table>
                         </div>
 
-                        {{-- PRINT BUTTON --}}
+                        {{-- PDF BUTTON --}}
                         <div class="text-right no-print" style="margin-top:10px;">
-                            <button type="button" onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2 rounded-md transition duration-200 shadow">
-                                <span data-i18n-app="printEmploisBtn">Imprimer emplois</span>
+                            <button type="button" onclick="downloadTimetablePdf()" class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2 rounded-md transition duration-200 shadow">
+                                <span data-i18n-app="savePdfBtn">Enregistrer PDF</span>
                             </button>
                         </div>
 
@@ -343,6 +343,8 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -363,8 +365,8 @@
 
                 const groupes = await response.json();
                 const promptText = document.documentElement.lang === 'ar'
-                    ? '-- اختر --'
-                    : (document.documentElement.lang === 'en' ? '-- Select --' : '-- Selectionner --');
+                    ? 'اختر'
+                    : (document.documentElement.lang === 'en' ? 'Select' : 'Selectionner');
                 const options = ['<option value="">' + promptText + '</option>'];
                 groupes.forEach(function (g) {
                     const selected = String(g.id) === String(currentGroupe) ? ' selected' : '';
@@ -379,8 +381,8 @@
                     if (!filiereEl.value) { groupeEl.innerHTML = allGroupOptionsHtml; return; }
 
                     const promptText = document.documentElement.lang === 'ar'
-                        ? '-- اختر --'
-                        : (document.documentElement.lang === 'en' ? '-- Select --' : '-- Selectionner --');
+                        ? 'اختر'
+                        : (document.documentElement.lang === 'en' ? 'Select' : 'Selectionner');
                     groupeEl.innerHTML = '<option value="">' + promptText + '</option>';
 
                     let response;
@@ -400,5 +402,29 @@
                 loadGroupesByFiliere();
             }
         });
+
+        function downloadTimetablePdf() {
+            var paper = document.querySelector('.paper');
+            if (!paper) return;
+
+            if (typeof html2pdf === 'undefined') {
+                window.print();
+                return;
+            }
+
+            var lang = (document.documentElement.lang || 'fr').toLowerCase();
+            var groupCode = '{{ strtoupper($currentGroupe?->code ?? "") }}' || 'groupe';
+            var safeCode = groupCode.replace(/\s+/g, '-').replace(/[^A-Za-z0-9\-_]/g, '');
+            var prefix = lang.startsWith('ar') ? 'emploi-groupe' : (lang.startsWith('en') ? 'group-timetable' : 'emploi-groupe');
+            var fileName = prefix + '-' + (safeCode || 'groupe') + '.pdf';
+
+            html2pdf().set({
+                margin: 6,
+                filename: fileName,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            }).from(paper).save();
+        }
     </script>
 </x-app-layout>

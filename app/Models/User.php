@@ -25,7 +25,9 @@ class User extends Authenticatable
         if (!$path) {
             return null;
         }
-        return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+
+        // Use a root-relative URL so avatar works on localhost and ngrok without APP_URL mismatch.
+        return '/storage/' . ltrim($path, '/');
     }
 
     

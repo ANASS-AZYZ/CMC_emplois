@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="ngrok-skip-browser-warning" content="true">
     <title>DIA-EMPLOIS</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logo-cmc.png') }}">
+    <link rel="icon" type="image/png" href="/images/logo-cmc.png">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @php
@@ -114,7 +114,7 @@
 
         .btn-submit:hover { background: #1d4ed8; }
 
-        .btn-print {
+        .btn-pdf {
             background: #1e293b;
             color: white;
             padding: 12px;
@@ -127,11 +127,11 @@
             transition: background 0.2s;
         }
 
-        .btn-print:hover { background: #0f172a; }
+        .btn-pdf:hover { background: #0f172a; }
 
         .paper {
             width: 100%;
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto 15px;
             background: white;
             padding: 15px;
@@ -268,9 +268,9 @@
         @media (max-width: 768px) {
             .filter-container { max-width: 100%; padding: 16px; }
             .filter-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; }
-            .btn-submit, .btn-print { grid-column: span 2; }
+            .btn-submit, .btn-pdf { grid-column: span 2; }
             .paper { padding: 6px; overflow-x: auto; }
-            .group-table { min-width: 400px; }
+            .group-table { min-width: 390px; }
             .doc-header .logo-cell { display: none; }
             .doc-title-ar { font-size: 12px; }
             .doc-title-fr { font-size: 10px; }
@@ -285,7 +285,7 @@
 
         @media (max-width: 480px) {
             .filter-form { grid-template-columns: 1fr; }
-            .btn-submit, .btn-print { grid-column: span 1; }
+            .btn-submit, .btn-pdf { grid-column: span 1; }
             .doc-title-ar { font-size: 5px; }
             .doc-title-fr { font-size: 6px; }
             .doc-meta { font-size: 6px; padding: 2px 4px; gap: 2px; }
@@ -325,7 +325,7 @@
 <body>
 
     <nav class="public-nav">
-        <img src="{{ asset('images/logo-cmc.png') }}" alt="CMC">
+        <img src="/images/logo-cmc.png" alt="CMC">
         <span>DIA-EMPLOIS</span>
     </nav>
 
@@ -336,9 +336,9 @@
                 <input type="hidden" name="type" value="groupe">
 
                 <div class="filter-group">
-                    <label>FILIERE</label>
+                    <label id="filiereLabel">FILIERE</label>
                     <select name="filiere_id" id="filiere_id" class="filter-input">
-                        <option value="">-- Selectionner --</option>
+                        <option value="">Selectionner</option>
                         @foreach($filieres as $filiere)
                             <option value="{{ $filiere->id }}" {{ (string)$selectedFiliere === (string)$filiere->id ? 'selected' : '' }}>
                                 {{ $filiere->nom }} ({{ $filiere->niveau }})
@@ -348,16 +348,16 @@
                 </div>
 
                 <div class="filter-group">
-                    <label>GROUPE</label>
+                    <label id="groupeLabel">GROUPE</label>
                     <select name="groupe_id" id="groupe_id" class="filter-input">
-                        <option value="">-- Selectionner --</option>
+                        <option value="">Selectionner</option>
                         @foreach($groupes as $g)
                             <option value="{{ $g->id }}" {{ (string)$selectedGroupe === (string)$g->id ? 'selected' : '' }}>{{ $g->code }}</option>
                         @endforeach
                     </select>
                 </div>
 
-                <button type="submit" class="btn-submit">Afficher</button>
+                <button type="submit" class="btn-submit" id="showBtn">Afficher</button>
 
                 
             </form>
@@ -369,14 +369,14 @@
                 <table class="doc-header">
                     <tr>
                         <td style="width:60px;" class="logo-cell">
-                            <img src="{{ asset('images/logo-cmc.png') }}" alt="Logo CMC" class="logo-img">
+                            <img src="/images/logo-cmc.png" alt="Logo CMC" class="logo-img">
                         </td>
                         <td>
                             <p class="doc-title-ar">مكتب التكوين المهني و إنعاش الشغل</p>
                             <p class="doc-title-fr">Office de la formation professionnelle et de la promotion du travail</p>
                         </td>
                         <td style="width:60px;" class="logo-cell">
-                            <img src="{{ asset('images/logo-ofppt.png') }}" alt="Logo OFPPT" class="logo-img">
+                            <img src="/images/logo-ofppt.png" alt="Logo OFPPT" class="logo-img">
                         </td>
                     </tr>
                 </table>
@@ -434,11 +434,11 @@
                 </div>
 
                 <div class="no-print" style="text-align:center; margin-top:20px;">
-                    <button onclick="window.print()" style="background:#1e293b; color:white; padding:12px 40px; border-radius:50px; border:none; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:10px; font-size:14px;">
+                    <button type="button" class="btn-pdf" onclick="downloadTimetablePdf()" style="padding:12px 40px; border-radius:50px; display:inline-flex; align-items:center; gap:10px; font-size:14px; width:auto;">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:20px;height:20px;">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z" />
                         </svg>
-                        Imprimer l'emploi du temps
+                        <span id="savePdfBtn">Installer PDF</span>
                     </button>
                 </div>
 
@@ -452,18 +452,45 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                           d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
                 </svg>
-                <p>Veuillez selectionner un filtre pour afficher le planning.</p>
+                <p id="emptyPlanningMsg">Veuillez selectionner un filtre pour afficher le planning.</p>
             </div>
         @endif
 
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <script>
+        function localeText(lang, fr, en, ar) {
+            if (lang.startsWith('ar')) return ar;
+            if (lang.startsWith('en')) return en;
+            return fr;
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             const filiereEl = document.getElementById('filiere_id');
             const groupeEl  = document.getElementById('groupe_id');
             const currentGroupe = '{{ $selectedGroupe }}';
             const allGroupOptionsHtml = groupeEl ? groupeEl.innerHTML : '';
+            const lang = (document.documentElement.lang || 'fr').toLowerCase();
+
+            const promptText = localeText(lang, 'Selectionner', 'Select', 'اختر');
+
+            const filiereLabel = document.getElementById('filiereLabel');
+            const groupeLabel = document.getElementById('groupeLabel');
+            const showBtn = document.getElementById('showBtn');
+            const savePdfBtn = document.getElementById('savePdfBtn');
+            const emptyPlanningMsg = document.getElementById('emptyPlanningMsg');
+
+            if (filiereLabel) filiereLabel.textContent = localeText(lang, 'FILIERE', 'PROGRAM', 'الشعبة');
+            if (groupeLabel) groupeLabel.textContent = localeText(lang, 'GROUPE', 'GROUP', 'المجموعة');
+            if (showBtn) showBtn.textContent = localeText(lang, 'Afficher', 'Show', 'عرض');
+            if (savePdfBtn) savePdfBtn.textContent = localeText(lang, 'Installer PDF', 'Save PDF', 'حفظ PDF');
+            if (emptyPlanningMsg) emptyPlanningMsg.textContent = localeText(lang, 'Veuillez selectionner un filtre pour afficher le planning.', 'Please select a filter to show the timetable.', 'يرجى اختيار مرشح لعرض الجدول.');
+
+            if (filiereEl && filiereEl.options.length > 0) filiereEl.options[0].textContent = promptText;
+            if (groupeEl && groupeEl.options.length > 0) groupeEl.options[0].textContent = promptText;
 
             async function loadGroupesByFiliere() {
                 if (!filiereEl || !groupeEl || !filiereEl.value) {
@@ -476,7 +503,7 @@
                 if (!response.ok) return;
 
                 const groupes = await response.json();
-                const options = ['<option value="">-- Selectionner --</option>'];
+                const options = ['<option value="">' + promptText + '</option>'];
                 groupes.forEach(function (g) {
                     const selected = String(g.id) === String(currentGroupe) ? ' selected' : '';
                     options.push('<option value="' + g.id + '"' + selected + '>' + g.code + '</option>');
@@ -488,7 +515,7 @@
                 filiereEl.addEventListener('change', async function () {
                     if (!groupeEl) return;
                     if (!filiereEl.value) { groupeEl.innerHTML = allGroupOptionsHtml; return; }
-                    groupeEl.innerHTML = '<option value="">-- Selectionner --</option>';
+                    groupeEl.innerHTML = '<option value="">' + promptText + '</option>';
 
                     let response;
                     try { response = await fetch('/filieres/' + filiereEl.value + '/groupes'); }
@@ -507,6 +534,58 @@
                 loadGroupesByFiliere();
             }
         });
+
+        function downloadTimetablePdf() {
+            var paper = document.querySelector('.paper');
+            if (!paper) return;
+
+            if (typeof html2canvas === 'undefined') {
+                alert('PDF indisponible pour le moment. Rechargez la page puis reessayez.');
+                return;
+            }
+
+            var lang = (document.documentElement.lang || 'fr').toLowerCase();
+            var groupCode = '{{ strtoupper($currentGroupe?->code ?? "") }}' || 'groupe';
+            var safeCode = groupCode.replace(/\s+/g, '-').replace(/[^A-Za-z0-9\-_]/g, '');
+            var prefix = localeText(lang, 'emploi-groupe', 'group-timetable', 'emploi-groupe');
+            var fileName = prefix + '-' + (safeCode || 'groupe') + '.pdf';
+
+            var prevTransform = paper.style.transform || '';
+            paper.style.transform = 'none';
+
+            html2canvas(paper, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            }).then(function (canvas) {
+                var jsPDFCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+                if (!jsPDFCtor) {
+                    alert('Generation PDF indisponible. Rechargez la page puis reessayez.');
+                    return;
+                }
+
+                var orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
+                var pdf = new jsPDFCtor({
+                    orientation: orientation,
+                    unit: 'px',
+                    format: [canvas.width, canvas.height]
+                });
+
+                pdf.addImage(
+                    canvas.toDataURL('image/jpeg', 0.98),
+                    'JPEG',
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+                pdf.save(fileName);
+            }).catch(function () {
+                alert('Erreur de generation PDF. Reessayez dans quelques secondes.');
+            }).finally(function () {
+                paper.style.transform = prevTransform;
+            });
+        }
     </script>
 
 </body>

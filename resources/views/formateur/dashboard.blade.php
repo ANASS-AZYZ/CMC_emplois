@@ -1,70 +1,88 @@
 <x-app-layout>
     <style>
-        
-        body {
-            font-family: Trebuchet MS, Arial, sans-serif;
+        body { font-family: Trebuchet MS, Arial, sans-serif; }
+
+        .emploi-shell-wrap {
+            background: #eef2f7;
+            padding: 12px 8px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .emploi-fit-stage {
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
 
         .paper {
             width: 100%;
-            max-width: 1000px;
-            margin: 10px auto;
+            max-width: 900px;
+            margin: 0 auto 12px;
             background: white;
-            color: #0f172a;
-            padding: 8px;
-            border: 1px solid #cfd4da;
-            overflow: hidden;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
             box-sizing: border-box;
         }
 
-        .header {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10px;
-            border: 1px solid #cfd4da;
+        .edt-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+            margin-bottom: 12px;
         }
 
-        .header td {
-            border: 1px solid #cfd4da;
-            padding: 4px;
+        .header-logo {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .header-center {
             text-align: center;
-            vertical-align: middle;
+            flex: 1;
+            min-width: 0;
         }
 
         .header-ar {
             font-size: 16px;
             margin: 0;
             font-weight: 700;
-            color: #333;
+            color: #111827;
         }
 
         .header-fr {
-            font-size: 16px;
-            margin: 4px 0 0;
-            color: #222;
-            font-weight: 600;
+            font-size: 14px;
+            margin: 5px 0 0;
+            color: #374151;
+            font-weight: 500;
         }
 
         .meta {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            gap: 16px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            color: #64748b;
+            font-size: 13px;
             flex-wrap: wrap;
-            font-size: 12px;
+            gap: 8px;
             font-weight: 600;
-            color: #8a94a0;
-            background: #eef1f4;
-            border: 1px solid #d4dbe3;
-            margin: 4px 0 8px;
-            padding: 6px 10px;
         }
 
         .meta b {
+            color: #1e3a8a;
             font-size: 15px;
-            margin-left: 6px;
-            color: #355f88;
-            font-weight: 800;
+            margin-left: 5px;
         }
 
         .table {
@@ -74,67 +92,93 @@
         }
 
         .table th {
-            background-color: #2f9cb7 !important;
-            color: white !important;
-            border: 1px solid #d0d5db;
-            padding: 4px;
-            font-size: 13px;
-            height: 36px;
+            background-color: #31a9c7 !important;
+            color: #fff !important;
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            font-size: 14px;
             font-weight: 700;
         }
 
         .table td {
-            border: 1px solid #d0d5db;
-            height: 60px;
+            border: 1px solid #cbd5e1;
+            height: 75px;
             text-align: center;
             vertical-align: middle;
-            font-size: 11px;
-            color: #1f2937;
+            background: #ffffff;
             padding: 0 !important;
-            background: #f5f5f5;
+            font-size: 12px;
+            color: #1f2937;
         }
 
         .day {
-            background-color: #d7e2e9 !important;
-            color: #1f2937;
-            font-weight: bold;
-            width: 110px;
+            background-color: #f1f5f9 !important;
+            font-weight: 700;
+            width: 120px;
+            color: #334155;
             font-size: 13px;
         }
 
         .slot {
             height: 100%;
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 3px;
-            line-height: 1.25;
-            font-size: 11px;
+            align-items: center;
+            padding: 4px;
+            gap: 2px;
+            font-size: 10px;
             text-transform: uppercase;
+            line-height: 1.15;
         }
+
+        .slot-title {
+            font-weight: 800;
+            font-size: 9px;
+            margin-bottom: 0;
+        }
+
+        .slot-room,
+        .slot-status {
+            font-size: 8px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .slot-label { font-weight: 700; }
 
         .times {
             display: flex;
             justify-content: space-between;
-            padding: 0 10px;
             font-size: 13px;
+            padding: 0 5px;
             font-weight: 700;
         }
 
         .btn-print {
-            margin-top: 14px;
+            margin-top: 20px;
             text-align: center;
         }
 
         .btn-print button {
-            background: #1f2937;
+            background: #1e293b;
             color: white;
-            border: 0;
-            border-radius: 999px;
-            padding: 10px 34px;
-            font-weight: 700;
+            padding: 12px 40px;
+            border: none;
+            border-radius: 50px;
             cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
+
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
         body.theme-dark .paper {
             background: #ffffff;
@@ -150,78 +194,64 @@
             color: #0f172a !important;
         }
 
-        body.theme-dark .table td {
-            background: #f3f4f6;
+        body.theme-dark .table td { background: #f3f4f6; }
+
+        @media (max-width: 768px) {
+            .emploi-shell-wrap { padding: 8px 4px; }
+            .paper { padding: 6px; }
+            .table { min-width: 360px; }
+            .header-logo { height: 34px; }
+            .header-ar { font-size: 12px; }
+            .header-fr { font-size: 10px; }
+            .meta { font-size: 10px; padding: 5px 8px; gap: 3px; }
+            .meta b { font-size: 12px; }
+            .table th { font-size: 9px; padding: 3px; }
+            .table td { height: 50px; font-size: 9px; }
+            .day { width: 55px; font-size: 9px; }
+            .slot { font-size: 8px; padding: 2px; gap: 1px; }
+            .slot-title { font-size: 8px; }
+            .slot-room, .slot-status { font-size: 7px; }
+            .times { font-size: 8px; padding: 0 2px; }
+            .btn-print button { width: auto; padding: 10px 22px; font-size: 13px; }
         }
 
-.edt-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    border: 1px solid #cfd4da;
-    padding: 8px 12px;
-    margin-bottom: 10px;
-    flex-wrap: nowrap;
-}
+        @media (max-width: 480px) {
+            .paper {
+                width: calc(100% - 12px);
+                margin: 6px auto;
+                padding: 6px;
+            }
+            .table { min-width: 280px; }
+            .header-logo { height: 25px; }
+            .header-ar { font-size: 5px; }
+            .header-fr { font-size: 6px; }
+            .meta { font-size: 6px; padding: 2px 4px; gap: 2px; }
+            .meta b { font-size: 7px; }
+            .table th { font-size: 6px; padding: 1px; height: 22px; }
+            .table td { height: 30px; font-size: 6px; }
+            .day { width: 36px; font-size: 6px; }
+            .slot { font-size: 5px; padding: 1px; gap: 0; }
+            .slot-title { font-size: 5px; }
+            .slot-room, .slot-status { font-size: 5px; }
+            .times { font-size: 5px; padding: 0 1px; }
+            .btn-print button { width: 100%; padding: 10px 14px; font-size: 12px; }
+        }
 
-.header-logo {
-    height: 55px;
-    object-fit: contain;
-    flex-shrink: 0;
-}
-
-.header-center {
-    text-align: center;
-    flex: 1;
-    min-width: 0;
-}
         @media print {
             .no-print, nav, aside { display: none !important; }
             @page { size: A4 landscape; margin: 5mm; }
-            .paper { width: 100% !important; margin: 0 !important; border: 0 !important; padding: 0 !important; }
+            .paper {
+                width: 100% !important;
+                margin: 0 !important;
+                border: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
             .table th, .slot {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
-            .table td {
-                
-            }
-        }
-
-        @media (max-width: 480px) {
-            .paper { 
-                padding: 4px !important; 
-                margin: 4px !important;
-                width: calc(100% - 8px) !important;
-            }
-            .edt-header    { padding: 3px 2px; gap: 3px; }
-            .header-logo   { height: 25px; }
-            .header-ar     { font-size: 6px; }
-            .header-fr     { font-size: 6px; }
-            .paper        { padding: 6px; } 
-            .header img   { height: 40px  }
-            .meta         { font-size: 6px; padding: 3px 4px; gap: 3px; }
-            .meta b       { font-size: 8px; }
-            .table th     { height: 10px; font-size: 7px; padding: 3px 2px; }
-            .table td     { height: 10px; }
-            .slot         { font-size: 7px; padding: 2px; }
-            .times        { font-size: 9px; padding: 0 3px; }
-            .day          { width: 70px; font-size: 9px; }
-        }
-        .btn-print button {
-            padding: 8px 24px;
-            font-size: 13px;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
         }
     </style>
 
@@ -239,15 +269,16 @@
         $totalHeures = $totalSeances * 2.5;
     @endphp
 
-<div style="background:#eef2f7; padding:16px 6px; box-sizing:border-box; width:100%; overflow-x:hidden;">
-    <div class="paper shadow-lg rounded-sm">
+<div class="emploi-shell-wrap">
+    <div class="emploi-fit-stage">
+    <div id="emploi-paper" class="paper shadow-lg rounded-sm">
             <div class="edt-header">
-    <img src="{{ asset('images/logo-cmc.png') }}" class="header-logo">
+    <img src="/images/logo-cmc.png" class="header-logo" alt="Logo CMC">
     <div class="header-center">
         <p class="header-ar">مكتب التكوين المهني و إنعاش الشغل</p>
         <p class="header-fr">Office de la formation professionnelle et de la promotion du travail</p>
     </div>
-    <img src="{{ asset('images/logo-ofppt.png') }}" class="header-logo">
+    <img src="/images/logo-ofppt.png" class="header-logo" alt="Logo OFPPT">
 </div>
 
             <div class="meta">
@@ -256,8 +287,8 @@
                 <div><span data-i18n-app="trainingYearLabel">Année de Formation</span> : <b>2025 / 2026</b></div>
             </div>
 
-            <div class="w-full overflow-x-auto custom-scrollbar">
-                <table class="table" style="min-width:450px;">
+            <div class="w-full overflow-x-auto custom-scrollbar" style="-webkit-overflow-scrolling:touch;">
+                <table class="table">
                     <thead>
                         <tr>
                             <th class="day" data-i18n-app="dayHourHeader">Jour / Horaire</th>
@@ -290,17 +321,16 @@
                                                 $isAbsent = !($seance->formateur_present ?? true);
                                                 $isDistance = (($seance->mode ?? 'presentiel') === 'distance');
                                                 $groupeCode = $seance->groupe->code ?? 'N/A';
+                                                $salleCode = $seance->salle->code ?? '-';
                                             @endphp
                                             <div class="slot" style="@if($isAbsent) background:#facc15 !important; color:#1f2937 !important; @elseif($isDistance) background:#1f3648 !important; color:#ffffff !important; @else background:#4d8cc3 !important; color:#ffffff !important; @endif">
-                                                
-                                                <div style="font-weight:800; font-size: 6px; margin-bottom: 2px;"><span>Groupe : </span>{{ $groupeCode }}</div>
+                                                <div class="slot-title"><span class="slot-label" data-i18n-app="groupLabelMeta">Groupe</span> : {{ $groupeCode }}</div>
+                                                <div class="slot-room"><span class="slot-label" data-i18n-app="salleLabel">Salle</span> : {{ $salleCode }}</div>
                                                 
                                                 @if($isAbsent)
-                                                    <div style="color:#7c2d12; font-weight:800;">ABSENT</div>
+                                                    <div class="slot-status" style="color:#7c2d12; font-weight:800;" data-i18n-app="statusAbsent">ABSENT</div>
                                                 @elseif($isDistance)
-                                                    <div style="font-weight:700;">A distance</div>
-                                                @else
-                                                    <div style="font-weight:700;">SALLE : {{ $seance->salle->code ?? '' }}</div>
+                                                    <div class="slot-status" style="font-weight:700;" data-i18n-app="statusDistance">A distance</div>
                                                 @endif
                                             </div>
                                         @else
@@ -315,8 +345,72 @@
             </div>
 
             <div class="btn-print no-print">
-                <button onclick="window.print()"> <span data-i18n-app="printTimetableBtn">Imprimer emplois</span></button>
+                <button type="button" onclick="downloadTimetablePdf()"> <span data-i18n-app="savePdfBtn">Enregistrer PDF</span></button>
             </div>
         </div>
     </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var paper = document.getElementById('emploi-paper');
+            if (paper) {
+                paper.style.transform = 'none';
+                paper.style.width = '';
+                paper.style.maxWidth = '';
+            }
+        });
+
+        function downloadTimetablePdf() {
+            var paper = document.getElementById('emploi-paper');
+            if (!paper) return;
+
+            if (typeof html2canvas === 'undefined') {
+                alert('PDF indisponible pour le moment. Rechargez la page puis reessayez.');
+                return;
+            }
+
+            var lang = (document.documentElement.lang || 'fr').toLowerCase();
+            var prefix = lang.startsWith('ar') ? 'emploi-formateur' : (lang.startsWith('en') ? 'trainer-timetable' : 'emploi-formateur');
+            var fileName = prefix + '.pdf';
+
+            var prevTransform = paper.style.transform || '';
+            paper.style.transform = 'none';
+
+            html2canvas(paper, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            }).then(function (canvas) {
+                var orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
+                var jsPDFCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+                if (!jsPDFCtor) {
+                    alert('Generation PDF indisponible. Rechargez la page puis reessayez.');
+                    return;
+                }
+                var pdf = new jsPDFCtor({
+                    orientation: orientation,
+                    unit: 'px',
+                    format: [canvas.width, canvas.height]
+                });
+
+                pdf.addImage(
+                    canvas.toDataURL('image/jpeg', 0.98),
+                    'JPEG',
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+                pdf.save(fileName);
+            }).catch(function () {
+                alert('Erreur de generation PDF. Reessayez dans quelques secondes.');
+            }).finally(function () {
+                paper.style.transform = prevTransform;
+            });
+        }
+    </script>
 </x-app-layout>

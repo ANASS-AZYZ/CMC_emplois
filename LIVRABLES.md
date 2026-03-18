@@ -1,87 +1,71 @@
-# LIVRABLES - Application Emploi du Temps
+# LIVRABLES - Application Emploi Du Temps
 
-Ce document sert de checklist finale avant depot.
+Checklist finale avant remise.
 
-## A) Depot Git (GitHub/GitLab)
+## A) Depot Git
 
 Le depot doit contenir:
 
 - [x] Code source complet
-- [x] Toutes les migrations
-- [x] Tous les seeders
-- [x] Fichiers de configuration necessaires
-- [x] README avec:
-  - [x] Etapes d'installation
-  - [x] Commandes a executer
-  - [x] Acces aux comptes de test (admin, formateur)
+- [x] Migrations
+- [x] Seeders
+- [x] Fichiers de configuration utiles
+- [x] README a jour
 
-## B) Support physique (obligatoire)
+README doit contenir:
 
-Le CD doit contenir:
+- [x] Installation
+- [x] Commandes principales
+- [x] Comptes de test
 
-- [ ] Code source complet du projet
-- [x] Base de donnees exportee `.sql` (fichier: `database/sql/emplois_db_full.sql`)
-- [ ] Rapport complet (PDF) nomme exactement:
-  - `Rapport_EmploiDuTemps_Nom_Prenom_Groupe.pdf`
-- [ ] Presentation PowerPoint exportee en PDF nommee exactement:
-  - `Presentation_EmploiDuTemps_Nom_Prenom_Groupe.pdf`
-- [ ] Video demonstrative (selon format exige) nommee:
-  - `Video_Demo_EmploiDuTemps_Nom_Prenom_Groupe.pdf`
+## B) Support Physique (CD/USB si demande)
 
-Note: verifier avec votre encadrant si la video doit etre en `.mp4` ou selon la consigne fournie.
+Contenu minimum:
 
-## C) Details obligatoires du rapport
+- [ ] Code source du projet
+- [x] Base exportee SQL: database/sql/emplois_db_full.sql
+- [ ] Rapport PDF: Rapport_EmploiDuTemps_Nom_Prenom_Groupe.pdf
+- [ ] Presentation PDF: Presentation_EmploiDuTemps_Nom_Prenom_Groupe.pdf
+- [ ] Video demo: Video_Demo_EmploiDuTemps_Nom_Prenom_Groupe.mp4
 
-### 1. Page de garde
+Note: verifier format video avec l encadrant (mp4 ou autre format impose).
 
-Doit contenir:
+## C) Rapport (obligatoire)
 
-1. Logo de l'etablissement
-2. Intitule du projet: Application de gestion des emplois du temps
-3. Mention: CITE DES METIERS ET DES COMPETENCES RABAT - SALE - KENITRA
-4. Filiere / Module: 2eme annee - Web Full Stack / M205 : Developper en Backend
-5. Annee de formation
-6. Nom du stagiaire + groupe
-7. Encadrant / formateur
+Page de garde:
 
-### 2. Presentation du projet (1 a 2 pages)
+1. Logo etablissement
+2. Intitule du projet
+3. Mention CMC Rabat Sale Kenitra
+4. Filiere / Module
+5. Annee formation
+6. Nom stagiaire + groupe
+7. Encadrant
 
-- Contexte et objectifs
-- Perimetre fonctionnel (Admin / Formateur / Stagiaire)
+Corps du rapport:
 
-### 3. Diagramme de classes UML (obligatoire)
+- [ ] Contexte et objectifs
+- [ ] Perimetre fonctionnel (Admin / Formateur / Stagiaire)
+- [ ] Diagramme UML de classes
+- [ ] Captures d ecran commentees
+- [ ] Conclusion (bilan, difficultes, ameliorations)
 
-- Entites principales
-- Relations entre entites
+## D) Presentation Soutenance
 
-### 4. Captures d'ecran commentees (obligatoire)
+- [ ] Architecture globale
+- [ ] Cas d usage principaux
+- [ ] Demonstration fonctionnelle
 
-- Captures de l'application
-- Description claire de chaque ecran
+## E) Video Demonstrative
 
-### 5. Conclusion
+- [ ] Login Admin + operations principales
+- [ ] Login Formateur + consultation
+- [ ] Consultation des emplois + export PDF
 
-- Resume du travail realise
-- Difficultes rencontrees
-- Ameliorations possibles (ex: notifications)
+## F) Verification Finale
 
-## D) Presentation PowerPoint (soutenance)
-
-- [ ] Presentation claire de l'architecture
-- [ ] Demonstration des cas d'usage principaux
-- [ ] Captures + points techniques importants
-
-## E) Video demonstrative
-
-- [ ] Parcours complet de l'application
-- [ ] Login Admin + principales operations
-- [ ] Login Formateur + consultation/interaction
-- [ ] Impression/consultation emploi
-
-## F) Verification finale avant remise
-
-- [ ] Projet se lance sans erreurs sur machine propre
-- [ ] SQL importable sans erreurs
-- [ ] Comptes de test fonctionnels
-- [ ] Noms des fichiers conformes a la consigne
-- [ ] Tous les livrables copies sur le CD
+- [ ] Projet demarre sans erreur sur machine propre
+- [ ] Import SQL sans erreur
+- [ ] Comptes de test valides
+- [ ] Noms de fichiers conformes
+- [ ] Tous les livrables copies
