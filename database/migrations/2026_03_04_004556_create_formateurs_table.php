@@ -14,7 +14,7 @@ return new class extends Migration
     $table->string('matricule')->unique();
     $table->string('nom');
     $table->string('prenom');
-    $table->string('email_professionnel')->unique(); // <--- Dir had l-smiya s7i7a hna
+    $table->string('email_professionnel')->unique(); 
     $table->string('telephone')->nullable();
     $table->string('specialite');
     $table->timestamps();

@@ -21,12 +21,12 @@ class DashboardController extends Controller
         $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
         $creneaux = ['S1', 'S2', 'S3', 'S4']; 
 
-        // جلب الحصص مع المجموعات والقاعات
+        
         $seances = Seance::with(['groupe', 'salle'])
             ->where('formateur_id', $formateur->id)
             ->get();
 
-        // حساب إجمالي الساعات لتجنب خطأ Undefined variable
+        
         $totalHeures = $seances->count() * 2.5;
 
         $emploi = [];
