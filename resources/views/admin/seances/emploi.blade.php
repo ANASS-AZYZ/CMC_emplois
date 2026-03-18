@@ -140,7 +140,6 @@
             color: #94a3b8;
         }
 
-        /* DARK MODE */
         body.theme-dark .emploi-shell { background: var(--app-surface) !important; border-color: var(--app-border) !important; }
         body.theme-dark .emploi-shell label { color: #f8fafc !important; }
         body.theme-dark .emploi-shell select { background: #ffffff !important; border-color: #64748b !important; color: #0f172a !important; }
@@ -154,7 +153,6 @@
         body.theme-dark .doc-title-fr { color: #0f172a !important; }
         body.theme-dark .doc-meta { color: #0f172a !important; }
 
-        /* RESPONSIVE 768 */
         @media (max-width: 768px) {
             .paper { padding: 6px; }
             .doc-header .logo-cell { display: none; }
@@ -162,7 +160,7 @@
             .doc-title-fr { font-size: 10px; }
             .doc-meta { flex-direction: row; flex-wrap: wrap; font-size: 10px; padding: 4px 8px; gap: 3px; }
             .doc-meta b { font-size: 11px; }
-            .group-table { min-width: 390px; }
+            .group-table { min-width: 420px; }
             .group-table th { font-size: 9px; padding: 2px; height: 28px; }
             .group-table td { height: 45px; font-size: 8px; }
             .day-cell { width: 55px; font-size: 9px; }
@@ -170,13 +168,13 @@
             .times { font-size: 8px; padding: 0 3px; }
         }
 
-        /* RESPONSIVE 480 */
         @media (max-width: 480px) {
             .doc-title-ar { font-size: 8px; }
             .doc-title-fr { font-size: 7px; }
+
             .doc-meta { font-size: 6px; padding: 2px 2px; }
             .doc-meta b { font-size: 8px; }
-            .group-table { min-width: 300px; }
+            .group-table { min-width: 320px; }
             .group-table th { font-size: 8px; padding: 1px; height: 20px; }
             .group-table td { height: 25px; font-size: 6px; }
             .day-cell { width: 42px; font-size: 8px; }
@@ -184,7 +182,6 @@
             .times { font-size: 7px; padding: 0 2px; }
         }
 
-        /* PRINT */
         @media print {
             .no-print, nav, aside { display: none !important; }
             header { display: none !important; }
@@ -212,7 +209,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="emploi-shell overflow-hidden shadow-sm sm:rounded-lg p-6 print-wrap">
 
-                {{-- FILTER FORM --}}
                 <form method="GET" action="{{ auth()->user()?->role === 'admin' ? route('seances.emploi') : route('formateur.emploi.view') }}" class="mb-8 no-print">
                     <input type="hidden" name="type" value="groupe">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end" style="max-width:320px;">
@@ -242,11 +238,9 @@
                     </div>
                 </form>
 
-                {{-- PLANNING --}}
                 @if($hasFilter)
                     <div class="paper">
 
-                        {{-- DOC HEADER --}}
                         <table class="doc-header">
                             <tr>
                                 <td style="width:80px;" class="logo-cell">
@@ -262,14 +256,12 @@
                             </tr>
                         </table>
 
-                        {{-- META --}}
                         <div class="doc-meta">
                             <div><span data-i18n-app="groupLabelMeta">Groupe</span> : <b>{{ strtoupper($currentGroupe?->code ?? '') }}</b></div>
                             <div><span data-i18n-app="weeklyHoursLabel">Masse Horaire Hebdomadaire</span> : <b>{{ rtrim(rtrim(number_format($totalHeures, 1), '0'), '.') }}h</b></div>
                             <div><span data-i18n-app="trainingYearLabel">Année de Formation</span> : <b>2025 / 2026</b></div>
                         </div>
 
-                        {{-- TABLE --}}
                         <div class="table-scroll-wrapper">
                             <table class="group-table">
                                 <thead>
@@ -325,7 +317,6 @@
                             </table>
                         </div>
 
-                        {{-- PDF BUTTON --}}
                         <div class="text-right no-print" style="margin-top:10px;">
                             <button type="button" onclick="downloadTimetablePdf()" class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2 rounded-md transition duration-200 shadow">
                                 <span data-i18n-app="savePdfBtn">Enregistrer PDF</span>
