@@ -26,7 +26,7 @@ class User extends Authenticatable
             return null;
         }
 
-        // Use a root-relative URL so avatar works on localhost and ngrok without APP_URL mismatch.
+        
         return '/storage/' . ltrim($path, '/');
     }
 

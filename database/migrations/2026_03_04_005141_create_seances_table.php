@@ -13,8 +13,8 @@ return new class extends Migration
         $table->foreignId('groupe_id')->constrained()->onDelete('cascade');
         $table->foreignId('formateur_id')->constrained()->onDelete('cascade');
         $table->foreignId('salle_id')->constrained()->onDelete('cascade');
-        $table->string('jour'); // Lundi, Mardi...
-        $table->string('creneau'); // S1, S2, S3, S4 <--- HAD L-STER DARORI
+        $table->string('jour'); 
+        $table->string('creneau'); 
         $table->timestamps();
     });
 }

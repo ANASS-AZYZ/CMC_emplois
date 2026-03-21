@@ -156,7 +156,7 @@ class SeanceController extends Controller
         $selectedType      = $request->input('type', 'groupe');
         $selectedModeFilter = $request->input('mode_filter');
 
-        // ── Groupes ──
+        
         $groupesQuery = Groupe::query()->orderBy('code');
         if ($selectedFiliere) {
             $selectedFiliereModel = Filiere::find($selectedFiliere);
@@ -174,7 +174,7 @@ class SeanceController extends Controller
         $creneaux = ['S1', 'S2', 'S3', 'S4'];
         $emploi   = [];
 
-        // ── Cas: utilisateur NON connecté → vue stagiaire ──
+        
         if (!Auth::check()) {
             if ($selectedGroupe) {
                 $seances = Seance::with(['formateur', 'salle', 'groupe'])
@@ -192,13 +192,13 @@ class SeanceController extends Controller
             ));
         }
 
-        // ── Cas: utilisateur connecté ──
+        
         $user = Auth::user();
 
-        // Formateur: affiche son emploi perso sauf si il filtre par groupe
+        
         if ($user->role === 'formateur') {
             if ($selectedType === 'groupe' && $selectedGroupe) {
-                // Formateur veut voir emploi d'un groupe — on le permet
+                
                 $seances = Seance::with(['formateur', 'salle', 'groupe'])
                     ->where('groupe_id', $selectedGroupe)
                     ->get();
@@ -206,7 +206,7 @@ class SeanceController extends Controller
                     $emploi[$seance->jour][$seance->creneau] = $seance;
                 }
             } else {
-                // Afficher emploi perso du formateur
+                
                 $selectedType = 'formateur';
                 $formateur = $user->formateur;
                 $selectedFormateur = optional($formateur)->id;
@@ -233,7 +233,7 @@ class SeanceController extends Controller
             ));
         }
 
-        // Admin
+        
         $query = Seance::with(['formateur', 'salle', 'groupe']);
         if ($selectedType === 'groupe' && $selectedGroupe) {
             $query->where('groupe_id', $selectedGroupe);

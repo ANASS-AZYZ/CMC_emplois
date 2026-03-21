@@ -278,7 +278,7 @@
 
         .ui-hidden { display: none !important; }
 
-        /* Static UI mode: disable hover visual changes */
+        
         .sidebar-link:not(.sidebar-link-active):hover {
             background: transparent !important;
             color: inherit !important;
@@ -325,7 +325,7 @@
             box-shadow: none !important;
         }
 
-        /* Keep form dropdown text readable in dark theme. */
+        
         body.theme-dark select,
         body.theme-dark input,
         body.theme-dark textarea {
@@ -1105,7 +1105,6 @@
                             }
                         })
                         .catch(function () {
-                            // Keep UI unchanged if mark-read request fails.
                         })
                         .finally(function () {
                             notificationInFlight = false;

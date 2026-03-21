@@ -35,7 +35,7 @@
     </style>
 
     <div class="settings-shell flex flex-col md:flex-row">
-        <!-- Sidebar Paramètres -->
+        
         <aside class="settings-sidebar shrink-0">
             <div class="rounded-2xl bg-white dark:bg-[var(--app-surface)] border border-gray-100 dark:border-[var(--app-border)] shadow-lg overflow-hidden">
                 <div class="px-4 py-3 bg-gray-50 dark:bg-[var(--app-surface-soft)] border-b border-gray-100 dark:border-[var(--app-border)]">
@@ -60,7 +60,7 @@
                 </nav>
             </div>
         </aside>
-        <!-- Contenu principal (centré) -->
+        
         <main class="settings-content flex-1">
             @yield('settings-content')
         </main>
