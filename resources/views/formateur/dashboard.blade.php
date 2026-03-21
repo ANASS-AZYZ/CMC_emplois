@@ -377,6 +377,12 @@
             var prefix = lang.startsWith('ar') ? 'emploi-formateur' : (lang.startsWith('en') ? 'trainer-timetable' : 'emploi-formateur');
             var fileName = prefix + '.pdf';
 
+            var hiddenNodes = [];
+            paper.querySelectorAll('.no-print').forEach(function (node) {
+                hiddenNodes.push({ node: node, display: node.style.display });
+                node.style.display = 'none';
+            });
+
             var prevTransform = paper.style.transform || '';
             paper.style.transform = 'none';
 
@@ -409,6 +415,9 @@
             }).catch(function () {
                 alert('Erreur de generation PDF. Reessayez dans quelques secondes.');
             }).finally(function () {
+                hiddenNodes.forEach(function (entry) {
+                    entry.node.style.display = entry.display;
+                });
                 paper.style.transform = prevTransform;
             });
         }

@@ -335,7 +335,8 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -398,8 +399,8 @@
             var paper = document.querySelector('.paper');
             if (!paper) return;
 
-            if (typeof html2pdf === 'undefined') {
-                window.print();
+            if (typeof html2canvas === 'undefined') {
+                alert('PDF indisponible pour le moment. Rechargez la page puis reessayez.');
                 return;
             }
 
@@ -409,13 +410,56 @@
             var prefix = lang.startsWith('ar') ? 'emploi-groupe' : (lang.startsWith('en') ? 'group-timetable' : 'emploi-groupe');
             var fileName = prefix + '-' + (safeCode || 'groupe') + '.pdf';
 
-            html2pdf().set({
-                margin: 6,
-                filename: fileName,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-            }).from(paper).save();
+            paper.querySelectorAll('.table-scroll-wrapper, .custom-scrollbar, [style*="overflow-x:auto"], [style*="overflow-x: auto"]').forEach(function (node) {
+                node.scrollLeft = 0;
+            });
+
+            var hiddenNodes = [];
+            paper.querySelectorAll('.no-print').forEach(function (node) {
+                hiddenNodes.push({ node: node, display: node.style.display });
+                node.style.display = 'none';
+            });
+
+            var prevTransform = paper.style.transform || '';
+            paper.style.transform = 'none';
+
+            html2canvas(paper, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                scrollX: 0,
+                scrollY: 0
+            }).then(function (canvas) {
+                var orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
+                var jsPDFCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+                if (!jsPDFCtor) {
+                    alert('Generation PDF indisponible. Rechargez la page puis reessayez.');
+                    return;
+                }
+
+                var pdf = new jsPDFCtor({
+                    orientation: orientation,
+                    unit: 'px',
+                    format: [canvas.width, canvas.height]
+                });
+
+                pdf.addImage(
+                    canvas.toDataURL('image/jpeg', 0.98),
+                    'JPEG',
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+                pdf.save(fileName);
+            }).catch(function () {
+                alert('Erreur de generation PDF. Reessayez dans quelques secondes.');
+            }).finally(function () {
+                hiddenNodes.forEach(function (entry) {
+                    entry.node.style.display = entry.display;
+                });
+                paper.style.transform = prevTransform;
+            });
         }
     </script>
 </x-app-layout>
