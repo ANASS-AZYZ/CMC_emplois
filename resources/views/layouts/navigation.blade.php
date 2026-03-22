@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="fixed top-0 inset-x-0 lg:sticky lg:inset-x-auto z-40 bg-white border-b border-gray-100">
     @php
         $authUser = Auth::user();
         $userInitial = $authUser && $authUser->name ? mb_strtoupper(mb_substr($authUser->name, 0, 1)) : '?';

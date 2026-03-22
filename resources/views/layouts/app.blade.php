@@ -23,7 +23,7 @@
             --app-surface: #ffffff;
             --app-surface-soft: #eef2ff;
             --app-text: #0f172a;
-            --app-muted: #475569;
+            --app-muted: #000000;
             --app-border: #dbe4f3;
             --app-accent: #4f46e5;
             --app-accent-strong: #2563eb;
@@ -214,7 +214,12 @@
         body.theme-dark .ui-icon-btn {
             border-color: var(--app-border);
             background: var(--app-surface-soft);
-            color: var(--app-text);
+            color: #ffffff !important;
+        }
+
+        body.theme-dark .ui-icon-btn svg,
+        body.theme-dark .ui-icon-btn i {
+            color: #ffffff !important;
         }
 
         body.theme-dark .ui-search-input {
@@ -368,16 +373,16 @@
 <body class="bg-gray-100 font-sans antialiased">
     <div class="flex min-h-screen">
         @auth
-            <aside class="flex-shrink-0">
+            <aside class="hidden lg:block lg:sticky lg:top-0 lg:h-screen lg:w-72 flex-shrink-0 no-print">
                 @include('layouts.sidebar')
             </aside>
         @endauth
 
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col pt-16 lg:pt-0">
             @include('layouts.navigation')
 
             @isset($header)
-                <header class="bg-white shadow">
+                <header class="bg-white shadow sticky top-16 z-30">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
