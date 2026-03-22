@@ -10,36 +10,63 @@
 
         <div class="group">
             <label class="block text-xs font-bold text-gray-700 mb-1 ml-1 uppercase" data-i18n-app="profileCurrentPasswordLabel">Mot de passe actuel</label>
-            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            <div class="relative">
                 <input type="password" id="current_password" name="current_password" placeholder="••••••••"
-                       class="px-4 py-3 border border-[var(--app-border)] rounded-xl w-full text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
-                <button type="button" onclick="togglePassword('current_password', this)" 
-                        class="w-full sm:w-auto sm:min-w-[96px] px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition-all whitespace-nowrap" data-i18n-app="showPasswordBtn" data-show-text="Afficher" data-hide-text="Masquer">
-                    Afficher
+                       class="px-4 pr-12 py-3 border border-[var(--app-border)] rounded-xl w-full text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                <button type="button" onclick="togglePassword('current_password', this)"
+                        class="absolute inset-y-0 right-0 px-4 text-gray-600 hover:text-gray-900 transition-colors"
+                        aria-label="Afficher ou masquer le mot de passe">
+                    <svg class="h-5 w-5 eye-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12S5.25 6.75 12 6.75 21.75 12 21.75 12 18.75 17.25 12 17.25 2.25 12 2.25 12Z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>
+                    <svg class="h-5 w-5 eye-closed hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.58 10.58a2 2 0 1 0 2.84 2.84" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.88 5.09A10.94 10.94 0 0 1 12 4.88c6.75 0 9.75 5.25 9.75 5.25a16.7 16.7 0 0 1-3.23 3.98M6.6 6.6A16.3 16.3 0 0 0 2.25 12s3 5.25 9.75 5.25c1.86 0 3.43-.4 4.75-1" />
+                    </svg>
                 </button>
             </div>
         </div>
 
         <div class="group">
             <label class="block text-xs font-bold text-gray-700 mb-1 ml-1 uppercase" data-i18n-app="profileNewPasswordLabel">Nouveau mot de passe</label>
-            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            <div class="relative">
                 <input type="password" id="new_password" name="new_password" placeholder="••••••••"
-                       class="px-4 py-3 border border-[var(--app-border)] rounded-xl w-full text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
-                <button type="button" onclick="togglePassword('new_password', this)" 
-                        class="w-full sm:w-auto sm:min-w-[96px] px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition-all whitespace-nowrap" data-i18n-app="showPasswordBtn" data-show-text="Afficher" data-hide-text="Masquer">
-                    Afficher
+                       class="px-4 pr-12 py-3 border border-[var(--app-border)] rounded-xl w-full text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                <button type="button" onclick="togglePassword('new_password', this)"
+                        class="absolute inset-y-0 right-0 px-4 text-gray-600 hover:text-gray-900 transition-colors"
+                        aria-label="Afficher ou masquer le mot de passe">
+                    <svg class="h-5 w-5 eye-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12S5.25 6.75 12 6.75 21.75 12 21.75 12 18.75 17.25 12 17.25 2.25 12 2.25 12Z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>
+                    <svg class="h-5 w-5 eye-closed hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.58 10.58a2 2 0 1 0 2.84 2.84" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.88 5.09A10.94 10.94 0 0 1 12 4.88c6.75 0 9.75 5.25 9.75 5.25a16.7 16.7 0 0 1-3.23 3.98M6.6 6.6A16.3 16.3 0 0 0 2.25 12s3 5.25 9.75 5.25c1.86 0 3.43-.4 4.75-1" />
+                    </svg>
                 </button>
             </div>
         </div>
 
         <div class="group">
             <label class="block text-xs font-bold text-gray-700 mb-1 ml-1 uppercase" data-i18n-app="profileConfirmPasswordLabel">Confirmer le nouveau</label>
-            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            <div class="relative">
                 <input type="password" id="new_password_confirmation" name="new_password_confirmation" placeholder="••••••••"
-                       class="px-4 py-3 border border-[var(--app-border)] rounded-xl w-full text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
-                <button type="button" onclick="togglePassword('new_password_confirmation', this)" 
-                        class="w-full sm:w-auto sm:min-w-[96px] px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition-all whitespace-nowrap" data-i18n-app="showPasswordBtn" data-show-text="Afficher" data-hide-text="Masquer">
-                    Afficher
+                       class="px-4 pr-12 py-3 border border-[var(--app-border)] rounded-xl w-full text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all" required>
+                <button type="button" onclick="togglePassword('new_password_confirmation', this)"
+                        class="absolute inset-y-0 right-0 px-4 text-gray-600 hover:text-gray-900 transition-colors"
+                        aria-label="Afficher ou masquer le mot de passe">
+                    <svg class="h-5 w-5 eye-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12S5.25 6.75 12 6.75 21.75 12 21.75 12 18.75 17.25 12 17.25 2.25 12 2.25 12Z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>
+                    <svg class="h-5 w-5 eye-closed hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.58 10.58a2 2 0 1 0 2.84 2.84" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.88 5.09A10.94 10.94 0 0 1 12 4.88c6.75 0 9.75 5.25 9.75 5.25a16.7 16.7 0 0 1-3.23 3.98M6.6 6.6A16.3 16.3 0 0 0 2.25 12s3 5.25 9.75 5.25c1.86 0 3.43-.4 4.75-1" />
+                    </svg>
                 </button>
             </div>
         </div>
@@ -54,34 +81,22 @@
 </div>
 
 <script>
-    function getToggleLabels() {
-        var lang = localStorage.getItem('cmc_lang') || 'fr';
-        if (lang === 'ar') {
-            return { show: 'اظهار', hide: 'اخفاء' };
-        }
-        if (lang === 'en') {
-            return { show: 'Show', hide: 'Hide' };
-        }
-        return { show: 'Afficher', hide: 'Masquer' };
-    }
-
     function togglePassword(inputId, btn) {
         var input = document.getElementById(inputId);
-        var labels = getToggleLabels();
+        if (!input) return;
+
+        var openIcon = btn.querySelector('.eye-open');
+        var closedIcon = btn.querySelector('.eye-closed');
+
         if (input.type === 'password') {
             input.type = 'text';
-            btn.textContent = labels.hide;
+            if (openIcon) openIcon.classList.add('hidden');
+            if (closedIcon) closedIcon.classList.remove('hidden');
         } else {
             input.type = 'password';
-            btn.textContent = labels.show;
+            if (openIcon) openIcon.classList.remove('hidden');
+            if (closedIcon) closedIcon.classList.add('hidden');
         }
     }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        var labels = getToggleLabels();
-        document.querySelectorAll('button[data-i18n-app="showPasswordBtn"]').forEach(function (btn) {
-            btn.textContent = labels.show;
-        });
-    });
 </script>
 @endsection

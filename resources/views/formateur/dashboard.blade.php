@@ -351,9 +351,6 @@
     </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var paper = document.getElementById('emploi-paper');
@@ -368,58 +365,11 @@
             var paper = document.getElementById('emploi-paper');
             if (!paper) return;
 
-            if (typeof html2canvas === 'undefined') {
-                alert('PDF indisponible pour le moment. Rechargez la page puis reessayez.');
-                return;
-            }
-
-            var lang = (document.documentElement.lang || 'fr').toLowerCase();
-            var prefix = lang.startsWith('ar') ? 'emploi-formateur' : (lang.startsWith('en') ? 'trainer-timetable' : 'emploi-formateur');
-            var fileName = prefix + '.pdf';
-
-            var hiddenNodes = [];
-            paper.querySelectorAll('.no-print').forEach(function (node) {
-                hiddenNodes.push({ node: node, display: node.style.display });
-                node.style.display = 'none';
+            paper.querySelectorAll('.custom-scrollbar, [style*="overflow-x:auto"], [style*="overflow-x: auto"]').forEach(function (node) {
+                node.scrollLeft = 0;
             });
 
-            var prevTransform = paper.style.transform || '';
-            paper.style.transform = 'none';
-
-            html2canvas(paper, {
-                scale: 2,
-                useCORS: true,
-                backgroundColor: '#ffffff'
-            }).then(function (canvas) {
-                var orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
-                var jsPDFCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
-                if (!jsPDFCtor) {
-                    alert('Generation PDF indisponible. Rechargez la page puis reessayez.');
-                    return;
-                }
-                var pdf = new jsPDFCtor({
-                    orientation: orientation,
-                    unit: 'px',
-                    format: [canvas.width, canvas.height]
-                });
-
-                pdf.addImage(
-                    canvas.toDataURL('image/jpeg', 0.98),
-                    'JPEG',
-                    0,
-                    0,
-                    canvas.width,
-                    canvas.height
-                );
-                pdf.save(fileName);
-            }).catch(function () {
-                alert('Erreur de generation PDF. Reessayez dans quelques secondes.');
-            }).finally(function () {
-                hiddenNodes.forEach(function (entry) {
-                    entry.node.style.display = entry.display;
-                });
-                paper.style.transform = prevTransform;
-            });
+            window.print();
         }
     </script>
 </x-app-layout>

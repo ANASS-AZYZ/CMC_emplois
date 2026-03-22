@@ -35,7 +35,7 @@
                         <tr class="text-sm">
                             <td class="border p-4">{{ $seance->jour }}</td>
                             <td class="border p-4 font-bold text-blue-600">{{ $seance->creneau }}</td>
-                            <td class="border p-4">{{ $seance->groupe->code }}</td>
+                            <td class="border p-4">{{ $seance->groupe->code ?? ($groupCodesById[$seance->groupe_id] ?? 'N/A') }}</td>
                             <td class="border p-4">{{ $seance->formateur->nom }}</td>
                             <td class="border p-4 font-bold text-gray-700">{{ $seance->salle->code ?? 'N/A' }}</td>
                             <td class="border p-4">

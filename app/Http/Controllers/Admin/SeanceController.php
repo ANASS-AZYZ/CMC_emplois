@@ -17,7 +17,9 @@ class SeanceController extends Controller
     public function index()
     {
         $seances = Seance::with(['groupe', 'salle', 'formateur'])->get();
-        return view('admin.seances.index', compact('seances'));
+        $groupCodesById = Groupe::query()->pluck('code', 'id');
+
+        return view('admin.seances.index', compact('seances', 'groupCodesById'));
     }
 
     public function create()
